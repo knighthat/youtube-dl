@@ -24,7 +24,7 @@ public abstract class Format {
     @NotNull
     protected final String extension;
     @NotNull
-    protected final String encoder;
+    protected final String codec;
     protected final int    kbps;
     protected final float  size;
 
@@ -42,7 +42,7 @@ public abstract class Format {
         this.type = type;
         this.code = Integer.parseInt( arr[0] );
         this.extension = arr[1];
-        this.encoder = type == Type.VIDEO_ONLY ? arr[6] : arr[7].split( "\\s" )[0];
+        this.codec = type == Type.VIDEO_ONLY ? arr[6] : arr[7].split( "\\s" )[0];
 
         String kbps = arr[type == Type.AUDIO_ONLY ? 5 : 4];
         if ( QUALITY_PATTERN.matcher( kbps ).matches() ) {
