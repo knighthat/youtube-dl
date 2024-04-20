@@ -3,6 +3,7 @@ package me.knighthat.deps;
 import lombok.Getter;
 import me.knighthat.deps.command.Command;
 import me.knighthat.deps.command.Formats;
+import me.knighthat.deps.command.Thumbnails;
 import me.knighthat.deps.exception.UnsupportedVersionException;
 import org.jetbrains.annotations.NotNull;
 
@@ -92,7 +93,7 @@ public class YoutubeDL {
         init();
     }
 
-    public static @NotNull Formats.Builder formats( @NotNull String url ) {
-        return Formats.builder( url );
-    }
+    public static @NotNull Formats.Builder formats( @NotNull String url ) { return Formats.builder( url ); }
+
+    public static @NotNull Thumbnails.Builder thumbnails( @NotNull String url ) { return Thumbnails.builder( url ); }
 }
