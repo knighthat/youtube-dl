@@ -1,16 +1,13 @@
 package me.knighthat.deps;
 
-import lombok.Data;
 import lombok.Getter;
 import me.knighthat.deps.command.Command;
+import me.knighthat.deps.command.Formats;
 import me.knighthat.deps.exception.UnsupportedVersionException;
-import me.knighthat.deps.response.format.AudioOnly;
-import me.knighthat.deps.response.format.Mix;
-import me.knighthat.deps.response.format.VideoOnly;
+import me.knighthat.deps.response.format.Format;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,10 +69,10 @@ public class YoutubeDL {
      */
     public static void init() throws IOException, UnsupportedVersionException, InterruptedException {
         if ( !verifyPython() )
-            throw new UnsupportedVersionException( "Python version " + PYTHON_VERSION + " is required to run this program!" );
+            throw new UnsupportedVersionException( "Python", PYTHON_VERSION );
 
         if ( !verifyYoutubeDL() )
-            throw new UnsupportedVersionException( "Youtube-dl requires version new than " + YTDL_VERSION );
+            throw new UnsupportedVersionException( "youtube-dl", YTDL_VERSION );
     }
 
     /**
@@ -96,95 +93,16 @@ public class YoutubeDL {
         init();
     }
 
-    public static @NotNull YoutubeDL.YtdlCommand command( @NotNull String url ) { return new YtdlCommand( url ); }
-
-    @Data
-    public static class YtdlCommand {
-
-        @NotNull
-        private final String       url;
-        @NotNull
-        private final List<String> flags;
-
-        private YtdlCommand( @NotNull String url ) {
-            this.url = url;
-            this.flags = new ArrayList<>();
-        }
-
-        public @NotNull YtdlCommand getFormats() {
-            flags.add( "-F" );
-            return this;
-        }
-
-        public @NotNull List<String> execute() throws IOException, InterruptedException {
-            List<String> arguments = new ArrayList<>( Arrays.asList( YoutubeDL.getCommand() ) );
-            arguments.addAll( flags );
-            arguments.add( url );
-
-            return me.knighthat.deps.command.Command.captureOutput( arguments.toArray( String[]::new ) );
-        }
+    public static @NotNull Formats formats( @NotNull String url ) {
+        return new Formats( url );
     }
 
-    public static class Format {
+    public static void main( String[] args ) throws IOException, InterruptedException {
+        init( "python", "/mnt/projects/Java/website/knighthat-me/youtube_dl/__main__.py" );
 
-        public static @NotNull Format url( @NotNull String url ) {
-            return new Format( url );
-        }
+        List<Format> responseFormats = YoutubeDL.formats( "https://www.youtube.com/watch?v=YqZfJRu-_zY" ).execute();
+        for (Format response : responseFormats)
+            System.out.println( response );
 
-        private final String url;
-
-        private Format( String url ) {
-            this.url = url;
-        }
-
-        public @NotNull List<me.knighthat.deps.response.format.Format> execute() throws IOException, InterruptedException {
-            List<me.knighthat.deps.response.format.Format> formats = new ArrayList<>();
-
-            YtdlCommand ytdlCommand = YoutubeDL.command( url ).getFormats();
-
-            for (String output : ytdlCommand.execute()) {
-                if ( !Character.isDigit( output.charAt( 0 ) ) )
-                    continue;
-
-                String[] parts = output.trim().split( "," );
-                String[] info = parts[0].trim().split( "\\s+" );
-
-                /*
-                    Video
-                    [400, mp4, 2560x1440, 1440p, 5314k, mp4_dash container, av01.0.12M.08, 24fps, video only, 152.20MiB]
-
-                    Audio
-                    [140, m4a, audio, only, audio_quality_medium, 129k, m4a_dash container, mp4a.40.2 (44100Hz), 3.71MiB]
-
-                    Mix
-                    [18, mp4, 640x360, 360p, 595k, avc1.42001E, 24fps, mp4a.40.2 (44100Hz) (best)]
-                */
-                me.knighthat.deps.response.format.Format.Type type = me.knighthat.deps.response.format.Format.Type.MIX;
-
-                String[] all = new String[parts.length + info.length - 1];
-                for (int i = 0 ; i < info.length ; i++) {
-                    String part = info[i].trim();
-                    if ( part.equals( "audio" ) )
-                        type = me.knighthat.deps.response.format.Format.Type.AUDIO_ONLY;
-                    all[i] = part;
-                }
-                for (int i = 1 ; i < parts.length ; i++) {
-                    String part = parts[i].trim();
-                    if ( part.equals( "video only" ) )
-                        type = me.knighthat.deps.response.format.Format.Type.VIDEO_ONLY;
-                    all[i + info.length - 1] = part;
-                }
-
-                formats.add(
-                        switch (type) {
-                            case VIDEO_ONLY -> new VideoOnly( all );
-                            case AUDIO_ONLY -> new AudioOnly( all );
-                            case MIX -> new Mix( all );
-                        }
-                );
-            }
-
-            return formats;
-        }
     }
 }
