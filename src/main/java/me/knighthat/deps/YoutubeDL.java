@@ -93,8 +93,8 @@ public class YoutubeDL {
         init();
     }
 
-    public static @NotNull Formats formats( @NotNull String url ) {
-        return new Formats( url );
+    public static @NotNull Formats.Builder formats( @NotNull String url ) {
+        return Formats.builder( url );
     }
 
     public static void main( String[] args ) throws IOException, InterruptedException {

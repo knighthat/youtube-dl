@@ -1,13 +1,17 @@
 package me.knighthat.deps.command;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import me.knighthat.deps.YoutubeDL;
 import me.knighthat.deps.command.flag.CommandFlag;
 import me.knighthat.deps.command.flag.GeoConfig;
 import me.knighthat.deps.command.flag.HttpHeader;
 import me.knighthat.deps.command.flag.UserAgent;
+import me.knighthat.deps.response.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,22 +19,25 @@ import java.util.*;
 public abstract class YtdlCommand {
 
     @NotNull
-    private final String           url;
+    protected final String           url;
     @NotNull
-    private final Set<CommandFlag> flags;
+    protected final Set<CommandFlag> flags;
     @NotNull
-    private final Set<HttpHeader>  headers;
-
+    protected final Set<HttpHeader>  headers;
     @NotNull
-    private UserAgent userAgent = UserAgent.FIREFOX_WINDOWS;
+    protected final UserAgent        userAgent;
     @Nullable
-    private GeoConfig geoConfig = null;
+    protected final GeoConfig        geoConfig;
 
-    public YtdlCommand( @NotNull String url ) {
+    YtdlCommand( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         this.url = url;
-        this.flags = new HashSet<>();
-        this.headers = new HashSet<>();
+        this.flags = flags;
+        this.headers = headers;
+        this.userAgent = userAgent;
+        this.geoConfig = geoConfig;
     }
+
+    public abstract @NotNull Response execute();
 
     protected String @NotNull [] command() {
         // UserAgent and GeoConfig take 2 elements;
@@ -62,21 +69,23 @@ public abstract class YtdlCommand {
         return Command.captureOutput( command() );
     }
 
-    public @NotNull String url() { return this.url; }
+    @Getter( AccessLevel.PUBLIC )
+    @Accessors( chain = true, fluent = true )
+    protected static abstract class Builder {
 
-    public @NotNull @Unmodifiable Set<CommandFlag> flags() { return Set.copyOf( flags ); }
+        private final String           url;
+        private final Set<CommandFlag> flags   = new HashSet<>();
+        private final Set<HttpHeader>  headers = new HashSet<>();
 
-    public void flags( @NotNull CommandFlag... flags ) { this.flags.addAll( Arrays.asList( flags ) ); }
+        @Setter( AccessLevel.PROTECTED )
+        private UserAgent userAgent = UserAgent.FIREFOX_WINDOWS;
+        @Setter( AccessLevel.PROTECTED )
+        private GeoConfig geoConfig = null;
 
-    public @NotNull @Unmodifiable Set<HttpHeader> headers() { return Set.copyOf( headers ); }
+        Builder( @NotNull String url ) { this.url = url; }
 
-    public void headers( @NotNull HttpHeader... headers ) { this.headers.addAll( Arrays.asList( headers ) ); }
+        public abstract YtdlCommand build();
 
-    public @NotNull UserAgent userAgent() { return this.userAgent; }
-
-    public void userAgent( @NotNull UserAgent userAgent ) { this.userAgent = userAgent; }
-
-    public @Nullable GeoConfig geoConfig() { return this.geoConfig; }
-
-    public void geoConfig( @NotNull GeoConfig geoConfig ) { this.geoConfig = geoConfig; }
+        public @NotNull Response execute() { return build().execute(); }
+    }
 }

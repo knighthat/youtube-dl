@@ -1,25 +1,32 @@
 package me.knighthat.deps.command;
 
+import me.knighthat.deps.command.flag.CommandFlag;
+import me.knighthat.deps.command.flag.GeoConfig;
+import me.knighthat.deps.command.flag.HttpHeader;
+import me.knighthat.deps.command.flag.UserAgent;
 import me.knighthat.deps.response.ListResponse;
 import me.knighthat.deps.response.format.AudioOnly;
 import me.knighthat.deps.response.format.Format;
 import me.knighthat.deps.response.format.Mix;
 import me.knighthat.deps.response.format.VideoOnly;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class Formats extends YtdlCommand implements ListResponse {
+public class Formats extends YtdlCommand {
 
-    public Formats( @NotNull String url ) {
-        super( url );
-        flags( () -> Map.of( "-F", "" ) );
+    public static @NotNull Builder builder( @NotNull String url ) {
+        return new Builder( url ).flags( () -> Map.of( "-F", "" ) );
     }
 
-    public @NotNull List<Format> execute() {
+    private Formats( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+        super( url, flags, headers, userAgent, geoConfig );
+    }
+
+
+    public @NotNull Results execute() {
         List<Format> responseFormats = new ArrayList<>();
         List<String> outputs = new ArrayList<>();
         try {
@@ -69,6 +76,44 @@ public class Formats extends YtdlCommand implements ListResponse {
             );
         }
 
-        return responseFormats;
+        return new Results( responseFormats );
+    }
+
+    public static class Builder extends YtdlCommand.Builder {
+
+        Builder( @NotNull String url ) { super( url ); }
+
+        public @NotNull Builder flags( @NotNull CommandFlag... flags ) {
+            super.flags().addAll( Arrays.asList( flags ) );
+            return this;
+        }
+
+        public @NotNull Builder headers( @NotNull HttpHeader... headers ) {
+            super.headers().addAll( Arrays.asList( headers ) );
+            return this;
+        }
+
+        public @NotNull Builder userAgent( @NotNull UserAgent userAgent ) {
+            super.userAgent( userAgent );
+            return this;
+        }
+
+        public @NotNull Builder geoConfig( @NotNull GeoConfig geoConfig ) {
+            super.geoConfig( geoConfig );
+            return this;
+        }
+
+        @Override
+        public @NotNull Formats build() {
+            return new Formats( url(), flags(), headers(), userAgent(), geoConfig() );
+        }
+
+        @Override
+        public @NotNull Results execute() {
+            return this.build().execute();
+        }
+    }
+
+    public record Results( @NotNull List<Format> items ) implements ListResponse<Format> {
     }
 }
