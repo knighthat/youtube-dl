@@ -56,7 +56,7 @@ public class Thumbnails extends YtdlCommand {
 
     public static class Builder extends YtdlCommand.Builder {
 
-        Builder( @NotNull String url ) { super( url ); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         public @NotNull Builder flags( @NotNull CommandFlag... flags ) {
             super.flags().addAll( Arrays.asList( flags ) );
