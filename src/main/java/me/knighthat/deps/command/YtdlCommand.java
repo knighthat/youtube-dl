@@ -84,7 +84,7 @@ public abstract class YtdlCommand {
 
         Builder( @NotNull String url ) { this.url = url; }
 
-        public abstract YtdlCommand build();
+        public abstract @NotNull YtdlCommand build();
 
         public @NotNull Response execute() { return build().execute(); }
     }
