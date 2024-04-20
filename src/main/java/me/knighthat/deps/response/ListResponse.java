@@ -2,7 +2,7 @@ package me.knighthat.deps.response;
 
 import java.util.List;
 
-public interface ListResponse extends Response {
+public interface ListResponse<T> extends Response {
 
-    List<?> execute();
+    List<T> items();
 }
