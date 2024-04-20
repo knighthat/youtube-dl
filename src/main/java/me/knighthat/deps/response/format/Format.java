@@ -45,21 +45,19 @@ public abstract class Format {
         this.encoder = type == Type.VIDEO_ONLY ? arr[6] : arr[7].split( "\\s" )[0];
 
         String kbps = arr[type == Type.AUDIO_ONLY ? 5 : 4];
-        if ( !QUALITY_PATTERN.matcher( kbps ).matches() )
-            throw new PatternMismatchException( kbps, "quality", arr );
-        else {
+        if ( QUALITY_PATTERN.matcher( kbps ).matches() ) {
             kbps = kbps.substring( 0, kbps.length() - 1 );
             this.kbps = Integer.parseInt( kbps );
-        }
+        } else
+            throw new PatternMismatchException( kbps, "quality", arr );
 
         if ( type != Type.MIX ) {
             String sizeStr = arr[arr.length - 1];
-            if ( !SIZE_PATTERN.matcher( sizeStr ).matches() )
-                throw new PatternMismatchException( sizeStr, "file's size", arr );
-            else {
+            if ( SIZE_PATTERN.matcher( sizeStr ).matches() ) {
                 sizeStr = sizeStr.substring( 0, sizeStr.length() - 3 );
                 this.size = Float.parseFloat( sizeStr );
-            }
+            } else
+                throw new PatternMismatchException( sizeStr, "file's size", arr );
         } else
             this.size = 0;
     }
