@@ -1,10 +1,10 @@
-package me.knighthat.deps;
+package me.knighthat.youtubedl;
 
 import lombok.Getter;
-import me.knighthat.deps.command.Command;
-import me.knighthat.deps.command.Formats;
-import me.knighthat.deps.command.Thumbnails;
-import me.knighthat.deps.exception.UnsupportedVersionException;
+import me.knighthat.youtubedl.command.Command;
+import me.knighthat.youtubedl.command.Formats;
+import me.knighthat.youtubedl.command.Thumbnails;
+import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

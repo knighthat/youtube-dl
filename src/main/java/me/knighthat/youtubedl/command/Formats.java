@@ -1,14 +1,14 @@
-package me.knighthat.deps.command;
+package me.knighthat.youtubedl.command;
 
-import me.knighthat.deps.command.flag.CommandFlag;
-import me.knighthat.deps.command.flag.GeoConfig;
-import me.knighthat.deps.command.flag.HttpHeader;
-import me.knighthat.deps.command.flag.UserAgent;
-import me.knighthat.deps.response.ListResponse;
-import me.knighthat.deps.response.format.AudioOnly;
-import me.knighthat.deps.response.format.Format;
-import me.knighthat.deps.response.format.Mix;
-import me.knighthat.deps.response.format.VideoOnly;
+import me.knighthat.youtubedl.command.flag.CommandFlag;
+import me.knighthat.youtubedl.command.flag.GeoConfig;
+import me.knighthat.youtubedl.command.flag.HttpHeader;
+import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.response.ListResponse;
+import me.knighthat.youtubedl.response.format.AudioOnly;
+import me.knighthat.youtubedl.response.format.Format;
+import me.knighthat.youtubedl.response.format.Mix;
+import me.knighthat.youtubedl.response.format.VideoOnly;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

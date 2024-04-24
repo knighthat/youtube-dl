@@ -1,7 +1,7 @@
-package me.knighthat.deps.response.format;
+package me.knighthat.youtubedl.response.format;
 
 import lombok.Getter;
-import me.knighthat.deps.exception.InsufficientElementsException;
+import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import org.jetbrains.annotations.NotNull;
 
 @Getter

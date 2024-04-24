@@ -1,12 +1,12 @@
-package me.knighthat.deps.command;
+package me.knighthat.youtubedl.command;
 
-import me.knighthat.deps.command.flag.CommandFlag;
-import me.knighthat.deps.command.flag.GeoConfig;
-import me.knighthat.deps.command.flag.HttpHeader;
-import me.knighthat.deps.command.flag.UserAgent;
-import me.knighthat.deps.exception.InsufficientElementsException;
-import me.knighthat.deps.response.ListResponse;
-import me.knighthat.deps.response.thumbnail.Thumbnail;
+import me.knighthat.youtubedl.command.flag.CommandFlag;
+import me.knighthat.youtubedl.command.flag.GeoConfig;
+import me.knighthat.youtubedl.command.flag.HttpHeader;
+import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.exception.InsufficientElementsException;
+import me.knighthat.youtubedl.response.ListResponse;
+import me.knighthat.youtubedl.response.thumbnail.Thumbnail;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

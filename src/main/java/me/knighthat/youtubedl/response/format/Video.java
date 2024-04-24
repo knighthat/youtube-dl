@@ -1,6 +1,6 @@
-package me.knighthat.deps.response.format;
+package me.knighthat.youtubedl.response.format;
 
-import me.knighthat.deps.exception.PatternMismatchException;
+import me.knighthat.youtubedl.exception.PatternMismatchException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;

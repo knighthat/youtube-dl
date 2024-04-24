@@ -1,4 +1,4 @@
-package me.knighthat.deps.response;
+package me.knighthat.youtubedl.response;
 
 import java.util.List;
 

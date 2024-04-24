@@ -1,15 +1,15 @@
-package me.knighthat.deps.command;
+package me.knighthat.youtubedl.command;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import me.knighthat.deps.YoutubeDL;
-import me.knighthat.deps.command.flag.CommandFlag;
-import me.knighthat.deps.command.flag.GeoConfig;
-import me.knighthat.deps.command.flag.HttpHeader;
-import me.knighthat.deps.command.flag.UserAgent;
-import me.knighthat.deps.response.Response;
+import me.knighthat.youtubedl.YoutubeDL;
+import me.knighthat.youtubedl.command.flag.CommandFlag;
+import me.knighthat.youtubedl.command.flag.GeoConfig;
+import me.knighthat.youtubedl.command.flag.HttpHeader;
+import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.response.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

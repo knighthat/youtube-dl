@@ -1,4 +1,4 @@
-package me.knighthat.deps.command;
+package me.knighthat.youtubedl.command;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;

@@ -1,4 +1,4 @@
-package me.knighthat.deps.command.flag;
+package me.knighthat.youtubedl.command.flag;
 
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;

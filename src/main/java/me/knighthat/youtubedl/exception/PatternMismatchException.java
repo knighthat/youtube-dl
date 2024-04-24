@@ -1,4 +1,4 @@
-package me.knighthat.deps.exception;
+package me.knighthat.youtubedl.exception;
 
 import org.jetbrains.annotations.NotNull;
 

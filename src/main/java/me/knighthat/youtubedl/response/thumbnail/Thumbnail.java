@@ -1,4 +1,4 @@
-package me.knighthat.deps.response.thumbnail;
+package me.knighthat.youtubedl.response.thumbnail;
 
 import org.jetbrains.annotations.NotNull;
 
