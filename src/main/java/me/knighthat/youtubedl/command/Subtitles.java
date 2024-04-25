@@ -25,7 +25,7 @@ public class Subtitles extends YtdlCommand {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Subtitles( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    Subtitles( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
     }
 

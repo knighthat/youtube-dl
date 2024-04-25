@@ -22,7 +22,7 @@ public class Formats extends YtdlCommand {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Formats( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    Formats( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
     }
 

@@ -20,7 +20,7 @@ public class Stream extends YtdlCommand {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Stream( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    Stream( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
     }
 

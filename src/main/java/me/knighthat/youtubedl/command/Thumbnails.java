@@ -20,7 +20,7 @@ public class Thumbnails extends YtdlCommand {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Thumbnails( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    Thumbnails( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
     }
 
