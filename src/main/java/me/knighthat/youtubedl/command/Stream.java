@@ -12,14 +12,13 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class Stream extends YtdlCommand {
 
-    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ).flags( () -> Map.of( "-o", "-" ) ); }
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private Stream( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
@@ -28,6 +27,12 @@ public class Stream extends YtdlCommand {
     @Override
     public @NotNull Result execute() {
         throw new NotImplementedException();
+    }
+
+    @Override
+    protected String @NotNull [] command() {
+        flags.add( CommandFlag.key( "-o" ).value( "-" ) );
+        return super.command();
     }
 
     public interface Result extends Response {

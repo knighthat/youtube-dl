@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Set;
 
 public class Json extends YtdlCommand {
@@ -23,7 +22,7 @@ public class Json extends YtdlCommand {
     @NotNull
     private static final Gson GSON = new Gson();
 
-    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ).flags( () -> Map.of( "-j", "" ) ); }
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private Json( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
@@ -51,6 +50,12 @@ public class Json extends YtdlCommand {
         }
 
         return new JsonResult( result );
+    }
+
+    @Override
+    protected String @NotNull [] command() {
+        flags.add( CommandFlag.noValue( "--dump-json" ) );
+        return super.command();
     }
 
     public static class Builder extends YtdlCommand.Builder {

@@ -11,13 +11,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class Thumbnails extends YtdlCommand {
 
-    public static @NotNull Builder builder( @NotNull String url ) {
-        return new Builder( url ).flags( () -> Map.of( "--list-thumbnails", "" ) );
-    }
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private Thumbnails( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
@@ -52,6 +53,12 @@ public class Thumbnails extends YtdlCommand {
         }
 
         return new Results( responseFormats );
+    }
+
+    @Override
+    protected String @NotNull [] command() {
+        flags.add( CommandFlag.noValue( "--list-thumbnails" ) );
+        return super.command();
     }
 
     public static class Builder extends YtdlCommand.Builder {

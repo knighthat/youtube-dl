@@ -23,7 +23,7 @@ public class Subtitles extends YtdlCommand {
     @NotNull
     private static final Pattern AUTOMATIC_SUBTITLE_PATTERN = Pattern.compile( "Available automatic captions for \\w+:" );
 
-    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ).flags( () -> Map.of( "--list-subs", "" ) ); }
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private Subtitles( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
@@ -96,6 +96,12 @@ public class Subtitles extends YtdlCommand {
         }
 
         return new Results( results );
+    }
+
+    @Override
+    protected String @NotNull [] command() {
+        flags.add( CommandFlag.noValue( "--list-subs" ) );
+        return super.command();
     }
 
     public static class Builder extends YtdlCommand.Builder {
