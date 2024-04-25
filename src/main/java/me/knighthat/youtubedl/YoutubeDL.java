@@ -98,4 +98,6 @@ public class YoutubeDL {
     public static @NotNull Stream.Builder stream( @NotNull String url ) { return Stream.builder( url ); }
 
     public static @NotNull Subtitles.Builder subtitles( @NotNull String url ) { return Subtitles.builder( url ); }
+
+    public static @NotNull Json.Builder json( @NotNull String url ) { return Json.builder( url ); }
 }
