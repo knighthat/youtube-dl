@@ -1,10 +1,7 @@
 package me.knighthat.youtubedl;
 
 import lombok.Getter;
-import me.knighthat.youtubedl.command.Command;
-import me.knighthat.youtubedl.command.Formats;
-import me.knighthat.youtubedl.command.Stream;
-import me.knighthat.youtubedl.command.Thumbnails;
+import me.knighthat.youtubedl.command.*;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import org.jetbrains.annotations.NotNull;
 
@@ -99,4 +96,6 @@ public class YoutubeDL {
     public static @NotNull Thumbnails.Builder thumbnails( @NotNull String url ) { return Thumbnails.builder( url ); }
 
     public static @NotNull Stream.Builder stream( @NotNull String url ) { return Stream.builder( url ); }
+
+    public static @NotNull Subtitles.Builder subtitles( @NotNull String url ) { return Subtitles.builder( url ); }
 }
