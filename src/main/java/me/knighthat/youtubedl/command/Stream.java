@@ -5,7 +5,7 @@ import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.HttpHeader;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.response.Response;
-import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
