@@ -20,7 +20,7 @@ import java.util.Set;
 public class Json extends YtdlCommand {
 
     @NotNull
-    private static final Gson GSON = new Gson();
+    static final Gson GSON = new Gson();
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
