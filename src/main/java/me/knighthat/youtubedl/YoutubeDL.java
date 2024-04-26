@@ -100,4 +100,6 @@ public class YoutubeDL {
     public static @NotNull Subtitles.Builder subtitles( @NotNull String url ) { return Subtitles.builder( url ); }
 
     public static @NotNull Json.Builder json( @NotNull String url ) { return Json.builder( url ); }
+
+    public static @NotNull VideoInfo.Builder videoInfo( @NotNull String url ) { return VideoInfo.builder( url ); }
 }
