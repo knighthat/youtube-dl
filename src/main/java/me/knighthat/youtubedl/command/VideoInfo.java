@@ -48,11 +48,11 @@ public class VideoInfo extends YtdlCommand {
         return new VideoOnly(
                 json.get( "format_id" ).getAsInt(),
                 json.get( "ext" ).getAsString(),
-                codec,
                 (int) json.get( "tbr" ).getAsFloat(),
                 json.get( "filesize" ).getAsInt(),
                 json.get( "format_note" ).getAsString(),
-                json.get( "fps" ).getAsInt()
+                json.get( "fps" ).getAsInt(),
+                codec
         );
     }
 
@@ -69,10 +69,10 @@ public class VideoInfo extends YtdlCommand {
         return new AudioOnly(
                 json.get( "format_id" ).getAsInt(),
                 json.get( "ext" ).getAsString(),
-                codec,
                 (int) json.get( "tbr" ).getAsFloat(),
                 json.get( "filesize" ).getAsInt(),
-                json.get( "asr" ).getAsInt()
+                json.get( "asr" ).getAsInt(),
+                codec
         );
     }
 
@@ -90,11 +90,12 @@ public class VideoInfo extends YtdlCommand {
         return new Mix(
                 json.get( "format_id" ).getAsInt(),
                 json.get( "ext" ).getAsString(),
-                vcodec,
                 (int) json.get( "tbr" ).getAsFloat(),
                 json.get( "format_note" ).getAsString(),
                 json.get( "fps" ).getAsInt(),
-                json.get( "asr" ).getAsInt()
+                json.get( "asr" ).getAsInt(),
+                vcodec,
+                acodec
         );
     }
 

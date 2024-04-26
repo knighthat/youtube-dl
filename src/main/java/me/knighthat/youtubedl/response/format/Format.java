@@ -2,13 +2,14 @@ package me.knighthat.youtubedl.response.format;
 
 import lombok.Getter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.PatternMismatchException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
 @Getter
-@ToString
+@Accessors( chain = true, fluent = true )
 public abstract class Format {
 
     @NotNull
@@ -23,8 +24,6 @@ public abstract class Format {
     protected final int    code;
     @NotNull
     protected final String extension;
-    @NotNull
-    protected final String codec;
     protected final int    kbps;
     protected final float  size;
 
@@ -42,7 +41,6 @@ public abstract class Format {
         this.type = type;
         this.code = Integer.parseInt( arr[0] );
         this.extension = arr[1];
-        this.codec = type == Type.VIDEO_ONLY ? arr[6] : arr[7].split( "\\s" )[0];
 
         String kbps = arr[type == Type.AUDIO_ONLY ? 5 : 4];
         if ( QUALITY_PATTERN.matcher( kbps ).matches() ) {
@@ -66,7 +64,6 @@ public abstract class Format {
         this.type = type;
         this.code = code;
         this.extension = extension;
-        this.codec = codec;
         this.kbps = kbps;
         this.size = size;
     }

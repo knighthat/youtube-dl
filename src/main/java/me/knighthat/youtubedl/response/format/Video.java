@@ -12,6 +12,8 @@ interface Video {
     @NotNull
     Pattern RESOLUTION_PATTERN = Pattern.compile( "^\\d+p$" );
 
+    @NotNull String vCodec();
+
     default int parseFps( String @NotNull [] arr, int pos ) throws PatternMismatchException {
         if ( FPS_PATTERN.matcher( arr[pos] ).matches() ) {
             String framePerSecond = arr[pos].replace( "fps", "" );

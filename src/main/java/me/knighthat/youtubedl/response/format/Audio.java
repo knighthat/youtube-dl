@@ -10,6 +10,8 @@ interface Audio {
     @NotNull
     Pattern SAMPLING_RATE_PATTERN = Pattern.compile( "^\\d+Hz$" );
 
+    @NotNull String aCodec();
+
     default int parseSamplingRate( String @NotNull [] arr, int pos ) throws PatternMismatchException {
         int smplRateStart = arr[pos].indexOf( "(" ) + 1;
         int smplRateEnd = arr[pos].indexOf( ")", smplRateStart );

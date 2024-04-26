@@ -10,6 +10,8 @@ public final class VideoOnly extends Format implements Video {
     @NotNull
     private final String resolution;
     private final int    fps;
+    @NotNull
+    private final String vCodec;
 
     /**
      * A class that represents this array
@@ -27,11 +29,13 @@ public final class VideoOnly extends Format implements Video {
 
         this.resolution = parseResolution( arr, 3 );
         this.fps = parseFps( arr, 7 );
+        this.vCodec = arr[6];
     }
 
-    public VideoOnly( int code, @NotNull String extension, @NotNull String codec, int kbps, float size, @NotNull String resolution, int fps ) {
-        super( Type.VIDEO_ONLY, code, extension, codec, kbps, size );
+    public VideoOnly( int code, @NotNull String extension, int kbps, float size, @NotNull String resolution, int fps, @NotNull String vCodec ) {
+        super( Type.VIDEO_ONLY, code, extension, kbps, size );
         this.resolution = resolution;
         this.fps = fps;
+        this.vCodec = vCodec;
     }
 }

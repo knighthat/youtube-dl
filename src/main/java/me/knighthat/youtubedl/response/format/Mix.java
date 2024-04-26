@@ -1,16 +1,22 @@
 package me.knighthat.youtubedl.response.format;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
+@Accessors( chain = true, fluent = true )
 public final class Mix extends Format implements Video, Audio {
 
     @NotNull
     private final String resolution;
     private final int    fps;
     private final int    samplingRate;
+    @NotNull
+    private final String vCodec;
+    @NotNull
+    private final String aCodec;
 
     /**
      * A class that represents this array
@@ -29,12 +35,16 @@ public final class Mix extends Format implements Video, Audio {
         this.resolution = parseResolution( arr, 3 );
         this.fps = parseFps( arr, 6 );
         this.samplingRate = parseSamplingRate( arr, 7 );
+        this.vCodec = arr[5];
+        this.aCodec = arr[7].split( "\\s" )[0];
     }
 
-    public Mix( int code, @NotNull String extension, @NotNull String codec, int kbps, @NotNull String resolution, int fps, int samplingRate ) {
-        super( Type.MIX, code, extension, codec, kbps, 0 );
+    public Mix( int code, @NotNull String extension, int kbps, @NotNull String resolution, int fps, int samplingRate, @NotNull String vCodec, @NotNull String aCodec ) {
+        super( Type.MIX, code, extension, kbps );
         this.resolution = resolution;
         this.fps = fps;
         this.samplingRate = samplingRate;
+        this.vCodec = vCodec;
+        this.aCodec = aCodec;
     }
 }

@@ -7,7 +7,9 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public final class AudioOnly extends Format implements Audio {
 
-    private final int samplingRate;
+    private final int    samplingRate;
+    @NotNull
+    private final String aCodec;
 
     /**
      * A class that represents this array
@@ -24,10 +26,12 @@ public final class AudioOnly extends Format implements Audio {
             throw new InsufficientElementsException( "AudioOnly", arr.length, 9 );
 
         this.samplingRate = parseSamplingRate( arr, 7 );
+        this.aCodec = arr[7].split( "\\s" )[0];
     }
 
-    public AudioOnly( int code, @NotNull String extension, @NotNull String codec, int kbps, float size, int samplingRate ) {
-        super( Type.AUDIO_ONLY, code, extension, codec, kbps, size );
+    public AudioOnly( int code, @NotNull String extension, int kbps, float size, int samplingRate, @NotNull String aCodec ) {
+        super( Type.AUDIO_ONLY, code, extension, kbps, size );
         this.samplingRate = samplingRate;
+        this.aCodec = aCodec;
     }
 }
