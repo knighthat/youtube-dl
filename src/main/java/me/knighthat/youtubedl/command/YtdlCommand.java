@@ -42,27 +42,29 @@ public abstract class YtdlCommand {
     protected String @NotNull [] command() {
         // UserAgent and GeoConfig take 2 elements;
         int argSize = headers.size() + flags.size() + 2;
-        List<CommandFlag> arguments = new ArrayList<>( argSize );
-
-        arguments.addAll( this.headers );
-        arguments.addAll( this.flags );
-        arguments.add( this.userAgent );
+        Set<CommandFlag> flags = new HashSet<>( argSize );
+        flags.addAll( this.headers );
+        flags.addAll( this.flags );
+        flags.add( this.userAgent );
         if ( this.geoConfig != null )
-            arguments.add( this.geoConfig );
+            flags.add( this.geoConfig );
 
-        List<String> result = new ArrayList<>( YoutubeDL.getCommand().length + argSize );
+        // 3 is reserved spaces for 'python', 'youtube-dl' and url
+        int totalSize = 2 + argSize;
+        List<String> command = new ArrayList<>( totalSize );
 
-        result.addAll( List.of( YoutubeDL.getCommand() ) );
-        arguments.forEach( arg -> {
-            for (Map.Entry<String, String> entry : arg.arguments().entrySet()) {
-                result.add( entry.getKey() );
+        command.add( YoutubeDL.getPythonPath() );
+        command.add( YoutubeDL.getYtdlPath() );
+        flags.forEach( f -> {
+            for (Map.Entry<String, String> entry : f.arguments().entrySet()) {
+                command.add( entry.getKey() );
                 if ( !entry.getValue().isBlank() )
-                    result.add( entry.getValue() );
+                    command.add( entry.getValue() );
             }
         } );
-        result.add( this.url );
+        command.add( url );
 
-        return result.toArray( String[]::new );
+        return command.toArray( String[]::new );
     }
 
     protected @NotNull List<String> execute0() throws IOException, InterruptedException {

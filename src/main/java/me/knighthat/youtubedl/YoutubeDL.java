@@ -4,21 +4,30 @@ import lombok.Getter;
 import me.knighthat.youtubedl.command.*;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class YoutubeDL {
 
     @NotNull
-    private static final String PYTHON_VERSION = "3";
+    private static final Pattern VERSION_PATTERN = Pattern.compile( "\\d+(\\.\\d+)*" );
     @NotNull
-    private static final String YTDL_VERSION   = "2021.12.17";
+    private static final String  PYTHON_VERSION  = "3";
+    @NotNull
+    private static final String  YTDL_VERSION    = "2021.12.17";
 
     @NotNull
     @Getter
-    private static String[] command = { "youtube-dl" };
+    private static String pythonPath = "python";
+    @NotNull
+    @Getter
+    private static String ytdlPath   = "youtube-dl";
 
     private static boolean isVersionLaterThan( @NotNull String curVer, @NotNull String reqVer ) {
         String[] curParts = curVer.split( "\\." );
@@ -39,21 +48,32 @@ public class YoutubeDL {
         return curParts.length >= reqParts.length;
     }
 
-    private static boolean verifyPython() throws IOException, InterruptedException {
-        List<String> pyVerStr = Command.captureOutput( "python", "--version" );
-        if ( pyVerStr.isEmpty() )
-            return false;
+    private static @NotNull String getVersion( @NotNull String command ) throws IOException {
+        String version = null;
 
-        String pyVersion = pyVerStr.get( 0 ).split( "\\s" )[1];
-        return isVersionLaterThan( pyVersion, PYTHON_VERSION );
-    }
+        Process process = new ProcessBuilder( command, "--version" ).start();
 
-    private static boolean verifyYoutubeDL() throws IOException, InterruptedException {
-        String[] command = Arrays.copyOf( YoutubeDL.command, YoutubeDL.command.length + 1 );
-        command[command.length - 1] = "--version";
+        InputStream outputs = process.getInputStream();
+        InputStreamReader reader = new InputStreamReader( outputs );
+        BufferedReader bReader = new BufferedReader( reader );
 
-        List<String> ytdlVerStr = Command.captureOutput( command );
-        return ytdlVerStr.size() > 0 && isVersionLaterThan( ytdlVerStr.get( 0 ), YTDL_VERSION );
+        String line;
+        while ((line = bReader.readLine()) != null) {
+            Matcher matcher = VERSION_PATTERN.matcher( line );
+            if ( matcher.find() ) {
+                version = line.substring( matcher.start(), matcher.end() );
+                break;
+            }
+        }
+
+        bReader.close();
+        reader.close();
+        outputs.close();
+
+        if ( version == null )
+            throw new IOException( "Could not get version of " + command );
+        else
+            return version;
     }
 
     /**
@@ -62,32 +82,32 @@ public class YoutubeDL {
      * by this program.
      *
      * @throws IOException                 when error occurs during command execution
-     * @throws InterruptedException        when thread stops abruptly by outside factor
      * @throws UnsupportedVersionException when version is older than supported version
      */
-    public static void init() throws IOException, UnsupportedVersionException, InterruptedException {
-        if ( !verifyPython() )
+    public static void init() throws IOException, UnsupportedVersionException {
+        if ( !isVersionLaterThan( getVersion( pythonPath ), PYTHON_VERSION ) )
             throw new UnsupportedVersionException( "Python", PYTHON_VERSION );
 
-        if ( !verifyYoutubeDL() )
+        if ( !isVersionLaterThan( getVersion( ytdlPath ), YTDL_VERSION ) )
             throw new UnsupportedVersionException( "youtube-dl", YTDL_VERSION );
     }
 
     /**
-     * Set the path to youtube-dl before validating.
+     * Set the paths to python executable
+     * and youtube-dl executable.
      * <p>
-     * Ensure that Python and Youtube-dl are
-     * installed and their versions are supported
-     * by this program.
+     * Leave blank or 'null' to use default value
      *
-     * @param customPath path to __main__.py of youtube-dl
+     * @param pythonPath path to python executable, blank or 'null' results in default 'python' command
+     * @param ytdlPath   path to youtube-dl executable, blank or 'null' results in default 'youtube-dl' command
      *
-     * @throws IOException                 when error occurs during command execution
-     * @throws InterruptedException        when thread stops abruptly by outside factor
-     * @throws UnsupportedVersionException when version is older than supported version
+     * @throws IOException if any error occurs during version verification
      */
-    public static void init( @NotNull String... customPath ) throws IOException, InterruptedException, UnsupportedVersionException {
-        command = customPath;
+    public static void init( @Nullable String pythonPath, @Nullable String ytdlPath ) throws IOException {
+        if ( pythonPath != null && !pythonPath.isBlank() )
+            YoutubeDL.pythonPath = pythonPath;
+        if ( ytdlPath != null && !ytdlPath.isBlank() )
+            YoutubeDL.ytdlPath = ytdlPath;
         init();
     }
 
