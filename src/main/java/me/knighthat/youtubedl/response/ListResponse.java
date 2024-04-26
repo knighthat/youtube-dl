@@ -1,8 +1,11 @@
 package me.knighthat.youtubedl.response;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
+@FunctionalInterface
 public interface ListResponse<T> extends Response {
 
-    List<T> items();
+    @NotNull List<T> items();
 }
