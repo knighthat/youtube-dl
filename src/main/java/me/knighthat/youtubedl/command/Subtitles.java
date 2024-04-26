@@ -75,17 +75,14 @@ public class Subtitles extends YtdlCommand {
         Boolean isAutomatic = null;
         for (int i = 1 ; i < outputs.size() ; i++) {
             String output = outputs.get( i );
-            System.out.println( output );
 
             if ( NO_SUBTITLE_PATTERN.matcher( output ).matches() )
                 break;
             if ( AUTOMATIC_SUBTITLE_PATTERN.matcher( output ).matches() ) {
-                System.out.println( "Match automatic" );
                 isAutomatic = true;
                 i++;
                 continue;
             } else if ( HUMAN_SUBTITLE_PATTERN.matcher( output ).matches() ) {
-                System.out.println( "Match human" );
                 isAutomatic = false;
                 i++;
                 continue;
