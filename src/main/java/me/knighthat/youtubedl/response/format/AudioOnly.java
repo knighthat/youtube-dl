@@ -1,11 +1,13 @@
 package me.knighthat.youtubedl.response.format;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public final class AudioOnly extends Format implements Audio {
+@Accessors( chain = true, fluent = true )
+public final class AudioOnly extends SizedMedia implements Audio {
 
     private final int    samplingRate;
     @NotNull

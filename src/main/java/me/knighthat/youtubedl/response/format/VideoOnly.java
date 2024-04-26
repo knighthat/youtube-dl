@@ -1,11 +1,13 @@
 package me.knighthat.youtubedl.response.format;
 
 import lombok.Getter;
+import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public final class VideoOnly extends Format implements Video {
+@Accessors( chain = true, fluent = true )
+public final class VideoOnly extends SizedMedia implements Video {
 
     @NotNull
     private final String resolution;

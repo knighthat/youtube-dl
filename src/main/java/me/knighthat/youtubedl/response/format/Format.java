@@ -14,9 +14,6 @@ public abstract class Format {
 
     @NotNull
     static final Pattern QUALITY_PATTERN = Pattern.compile( "^\\d+k$" );
-    @NotNull
-    static final Pattern SIZE_PATTERN    = Pattern.compile( "^\\d+(\\.\\d+)?[KMGTPEZY]?iB$" );
-
 
     @NotNull
     @ToString.Exclude
@@ -25,7 +22,6 @@ public abstract class Format {
     @NotNull
     protected final String extension;
     protected final int    kbps;
-    protected final float  size;
 
     protected Format( @NotNull Type type, String @NotNull [] arr ) throws PatternMismatchException {
         /*
@@ -48,24 +44,13 @@ public abstract class Format {
             this.kbps = Integer.parseInt( kbps );
         } else
             throw new PatternMismatchException( kbps, "quality", arr );
-
-        if ( type != Type.MIX ) {
-            String sizeStr = arr[arr.length - 1];
-            if ( SIZE_PATTERN.matcher( sizeStr ).matches() ) {
-                sizeStr = sizeStr.substring( 0, sizeStr.length() - 3 );
-                this.size = Float.parseFloat( sizeStr );
-            } else
-                throw new PatternMismatchException( sizeStr, "file's size", arr );
-        } else
-            this.size = 0;
     }
 
-    protected Format( @NotNull Type type, int code, @NotNull String extension, @NotNull String codec, int kbps, float size ) {
+    protected Format( @NotNull Type type, int code, @NotNull String extension, int kbps ) {
         this.type = type;
         this.code = code;
         this.extension = extension;
         this.kbps = kbps;
-        this.size = size;
     }
 
     public enum Type {
