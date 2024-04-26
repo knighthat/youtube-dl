@@ -25,4 +25,9 @@ public final class AudioOnly extends Format implements Audio {
 
         this.samplingRate = parseSamplingRate( arr, 7 );
     }
+
+    public AudioOnly( int code, @NotNull String extension, @NotNull String codec, int kbps, float size, int samplingRate ) {
+        super( Type.AUDIO_ONLY, code, extension, codec, kbps, size );
+        this.samplingRate = samplingRate;
+    }
 }

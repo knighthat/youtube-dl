@@ -28,4 +28,10 @@ public final class VideoOnly extends Format implements Video {
         this.resolution = parseResolution( arr, 3 );
         this.fps = parseFps( arr, 7 );
     }
+
+    public VideoOnly( int code, @NotNull String extension, @NotNull String codec, int kbps, float size, @NotNull String resolution, int fps ) {
+        super( Type.VIDEO_ONLY, code, extension, codec, kbps, size );
+        this.resolution = resolution;
+        this.fps = fps;
+    }
 }

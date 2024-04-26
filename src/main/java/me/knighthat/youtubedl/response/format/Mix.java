@@ -30,4 +30,11 @@ public final class Mix extends Format implements Video, Audio {
         this.fps = parseFps( arr, 6 );
         this.samplingRate = parseSamplingRate( arr, 7 );
     }
+
+    public Mix( int code, @NotNull String extension, @NotNull String codec, int kbps, @NotNull String resolution, int fps, int samplingRate ) {
+        super( Type.MIX, code, extension, codec, kbps, 0 );
+        this.resolution = resolution;
+        this.fps = fps;
+        this.samplingRate = samplingRate;
+    }
 }

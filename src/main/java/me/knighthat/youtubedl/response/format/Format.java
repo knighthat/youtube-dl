@@ -62,6 +62,15 @@ public abstract class Format {
             this.size = 0;
     }
 
+    protected Format( @NotNull Type type, int code, @NotNull String extension, @NotNull String codec, int kbps, float size ) {
+        this.type = type;
+        this.code = code;
+        this.extension = extension;
+        this.codec = codec;
+        this.kbps = kbps;
+        this.size = size;
+    }
+
     public enum Type {
         VIDEO_ONLY,
         AUDIO_ONLY,
