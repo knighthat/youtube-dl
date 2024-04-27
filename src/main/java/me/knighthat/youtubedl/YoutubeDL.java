@@ -48,10 +48,10 @@ public class YoutubeDL {
         return curParts.length >= reqParts.length;
     }
 
-    private static @NotNull String getVersion( @NotNull String command ) throws IOException {
+    private static @NotNull String getVersion( @NotNull String... command ) throws IOException {
         String version = null;
 
-        Process process = new ProcessBuilder( command, "--version" ).start();
+        Process process = new ProcessBuilder( command ).start();
 
         InputStream outputs = process.getInputStream();
         InputStreamReader reader = new InputStreamReader( outputs );
@@ -85,10 +85,12 @@ public class YoutubeDL {
      * @throws UnsupportedVersionException when version is older than supported version
      */
     public static void init() throws IOException, UnsupportedVersionException {
-        if ( !isVersionLaterThan( getVersion( pythonPath ), PYTHON_VERSION ) )
+        String pythonVersion = getVersion( pythonPath, "--version" );
+        if ( !isVersionLaterThan( pythonVersion, PYTHON_VERSION ) )
             throw new UnsupportedVersionException( "Python", PYTHON_VERSION );
 
-        if ( !isVersionLaterThan( getVersion( ytdlPath ), YTDL_VERSION ) )
+        String ytdlVersion = getVersion( pythonPath, ytdlPath, "--version" );
+        if ( !isVersionLaterThan( ytdlVersion, YTDL_VERSION ) )
             throw new UnsupportedVersionException( "youtube-dl", YTDL_VERSION );
     }
 
