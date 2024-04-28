@@ -13,7 +13,9 @@ import me.knighthat.youtubedl.response.Response;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public abstract class YtdlCommand {
@@ -68,7 +70,19 @@ public abstract class YtdlCommand {
     }
 
     protected @NotNull List<String> execute0() throws IOException, InterruptedException {
-        return Command.captureOutput( command() );
+        List<String> outputs = new ArrayList<>();
+
+        Process process = new ProcessBuilder( command() ).start();
+        try (
+                InputStreamReader reader = new InputStreamReader( process.getInputStream() ) ;
+                BufferedReader bReader = new BufferedReader( reader )
+        ) {
+            String line;
+            while ((line = bReader.readLine()) != null)
+                outputs.add( line );
+        }
+
+        return outputs;
     }
 
     @Getter( AccessLevel.PUBLIC )
