@@ -1,5 +1,6 @@
 package me.knighthat.youtubedl.response.format;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
@@ -46,5 +47,24 @@ public final class Mix extends Format implements Video, Audio {
         this.samplingRate = samplingRate;
         this.vCodec = vCodec;
         this.aCodec = aCodec;
+    }
+
+    public Mix( @NotNull JsonObject json ) {
+        super( Type.MIX, json );
+
+        if (
+                !json.has( "format_note" ) ||
+                !json.has( "fps" ) ||
+                !json.has( "asr" ) ||
+                !json.has( "vcodec" ) ||
+                !json.has( "acodec" )
+        )
+            throw new NullPointerException();
+
+        this.resolution = json.get( "format_note" ).getAsString();
+        this.fps = json.get( "fps" ).getAsInt();
+        this.samplingRate = json.get( "asr" ).getAsInt();
+        this.vCodec = json.get( "vcodec" ).getAsString();
+        this.aCodec = json.get( "acodec" ).getAsString();
     }
 }

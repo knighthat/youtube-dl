@@ -1,5 +1,6 @@
 package me.knighthat.youtubedl.response.format;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -51,6 +52,20 @@ public abstract class Format {
         this.code = code;
         this.extension = extension;
         this.kbps = kbps;
+    }
+
+    protected Format( @NotNull Type type, @NotNull JsonObject json ) {
+        if (
+                !json.has( "format_id" ) ||
+                !json.has( "ext" ) ||
+                !json.has( "tbr" )
+        )
+            throw new NullPointerException();
+
+        this.type = type;
+        this.code = json.get( "format_id" ).getAsInt();
+        this.extension = json.get( "ext" ).getAsString();
+        this.kbps = (int) json.get( "tbr" ).getAsFloat();
     }
 
     public enum Type {

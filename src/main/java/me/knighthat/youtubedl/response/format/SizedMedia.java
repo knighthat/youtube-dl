@@ -1,5 +1,6 @@
 package me.knighthat.youtubedl.response.format;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.PatternMismatchException;
@@ -30,5 +31,14 @@ public class SizedMedia extends Format {
     protected SizedMedia( @NotNull Type type, int code, @NotNull String extension, int kbps, float size ) {
         super( type, code, extension, kbps );
         this.size = size;
+    }
+
+    protected SizedMedia( @NotNull Type type, @NotNull JsonObject json ) {
+        super( type, json );
+
+        if ( !json.has( "filesize" ) )
+            throw new IllegalArgumentException();
+        else
+            this.size = json.get( "filesize" ).getAsInt();
     }
 }

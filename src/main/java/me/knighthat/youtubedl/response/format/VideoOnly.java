@@ -1,5 +1,6 @@
 package me.knighthat.youtubedl.response.format;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
@@ -39,5 +40,20 @@ public final class VideoOnly extends SizedMedia implements Video {
         this.resolution = resolution;
         this.fps = fps;
         this.vCodec = vCodec;
+    }
+
+    public VideoOnly( @NotNull JsonObject json ) {
+        super( Type.VIDEO_ONLY, json );
+
+        if (
+                !json.has( "format_note" ) ||
+                !json.has( "fps" ) ||
+                !json.has( "vcodec" )
+        )
+            throw new NullPointerException();
+
+        this.resolution = json.get( "format_note" ).getAsString();
+        this.fps = json.get( "fps" ).getAsInt();
+        this.vCodec = json.get( "vcodec" ).getAsString();
     }
 }

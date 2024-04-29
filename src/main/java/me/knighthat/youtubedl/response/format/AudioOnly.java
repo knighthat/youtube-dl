@@ -1,5 +1,6 @@
 package me.knighthat.youtubedl.response.format;
 
+import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
@@ -35,5 +36,18 @@ public final class AudioOnly extends SizedMedia implements Audio {
         super( Type.AUDIO_ONLY, code, extension, kbps, size );
         this.samplingRate = samplingRate;
         this.aCodec = aCodec;
+    }
+
+    public AudioOnly( @NotNull JsonObject json ) {
+        super( Type.AUDIO_ONLY, json );
+
+        if (
+                !json.has( "asr" ) ||
+                !json.has( "acodec" )
+        )
+            throw new NullPointerException();
+
+        this.samplingRate = json.get( "asr" ).getAsInt();
+        this.aCodec = json.get( "acodec" ).getAsString();
     }
 }
