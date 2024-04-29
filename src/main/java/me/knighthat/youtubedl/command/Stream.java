@@ -1,88 +1,86 @@
 package me.knighthat.youtubedl.command;
 
-import me.knighthat.youtubedl.command.flag.CommandFlag;
+import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
-import me.knighthat.youtubedl.command.flag.HttpHeader;
+import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
-import me.knighthat.youtubedl.response.Response;
-import org.apache.commons.lang3.NotImplementedException;
+import me.knighthat.youtubedl.response.RealtimeResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.util.logging.Logger;
 
-public class Stream extends YtdlCommand {
+public final class Stream extends Command {
 
-    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
+    private static void stream( String @NotNull [] command, int bufferSize, @NotNull BiConsumer<byte[], Integer> stream ) throws IOException {
+        Process process = new ProcessBuilder( command ).start();
 
-    Stream( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
-        super( url, flags, headers, userAgent, geoConfig );
-    }
-
-    @Override
-    public @NotNull Result execute() {
-        throw new NotImplementedException();
-    }
-
-    @Override
-    protected String @NotNull [] command() {
-        flags.add( CommandFlag.key( "-o" ).value( "-" ) );
-        return super.command();
-    }
-
-    public interface Result extends Response {
-        void stream( @NotNull Consumer<InputStream> stream );
-    }
-
-    public static class Builder extends YtdlCommand.Builder {
-
-        private Builder( @NotNull String url ) { super( url ); }
-
-        public @NotNull Builder flags( @NotNull CommandFlag... flags ) {
-            super.flags().addAll( Arrays.asList( flags ) );
-            return this;
-        }
-
-        public @NotNull Builder headers( @NotNull HttpHeader... headers ) {
-            super.headers().addAll( Arrays.asList( headers ) );
-            return this;
-        }
-
-        public void stream( int bufferSize, @NotNull BiConsumer<byte[], Integer> stream ) throws IOException, InterruptedException {
-            Process process = new ProcessBuilder( build().command() ).start();
-
-            InputStream inStream = process.getInputStream();
+        try (InputStream inStream = process.getInputStream()) {
             byte[] buffer = new byte[bufferSize];
             int bytesRead;
             while ((bytesRead = inStream.read( buffer )) != -1)
                 stream.accept( buffer, bytesRead );
-
-            inStream.close();
         }
+    }
 
-        public @NotNull Builder userAgent( @NotNull UserAgent userAgent ) {
-            super.userAgent( userAgent );
-            return this;
-        }
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-        public @NotNull Builder geoConfig( @NotNull GeoConfig geoConfig ) {
-            super.geoConfig( geoConfig );
+    private Stream( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+        super( url, flags, headers, userAgent, geoConfig );
+        flags().add( Flag.key( "-o" ).value( "-" ) );
+    }
+
+    @Override
+    public @NotNull RealtimeResponse execute() {
+        return ( bufferSize, stream ) -> {
+            try {
+                Stream.stream( command(), bufferSize, stream );
+            } catch ( IOException e ) {
+                // Temporary
+                Logger logger = Logger.getLogger( "YoutubeDL" );
+                logger.warning( "Stream ended abruptly!" );
+                logger.warning( "Reason:" + e.getMessage() );
+            }
+        };
+    }
+
+    public static class Builder extends Command.Builder {
+        private Builder( @NotNull String url ) { super( url ); }
+
+        public void stream( int bufferSize, @NotNull BiConsumer<byte[], Integer> stream ) { this.execute().stream( bufferSize, stream ); }
+
+        @Override
+        public @NotNull Builder flags( @NotNull Flag... flags ) {
+            super.addFlags( flags );
             return this;
         }
 
         @Override
-        public @NotNull Stream build() {
-            return new Stream( url(), flags(), headers(), userAgent(), geoConfig() );
+        public @NotNull Builder headers( @NotNull Header... headers ) {
+            super.addHeaders( headers );
+            return this;
         }
 
         @Override
-        public @NotNull Result execute() {
-            throw new NotImplementedException();
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
+            super.setUserAgent( userAgent );
+            return this;
         }
+
+        @Override
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
+            super.setGeoConfig( geoConfig );
+            return this;
+        }
+
+        @Override
+        public @NotNull Stream build() { return new Stream( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
+
+        @Override
+        public @NotNull RealtimeResponse execute() { return this.build().execute(); }
     }
 }

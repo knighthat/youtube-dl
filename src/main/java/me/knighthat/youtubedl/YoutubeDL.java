@@ -123,5 +123,5 @@ public class YoutubeDL {
 
     public static @NotNull Json.Builder json( @NotNull String url ) { return Json.builder( url ); }
 
-    public static @NotNull VideoInfo.Builder videoInfo( @NotNull String url ) { return VideoInfo.builder( url ); }
+    public static @NotNull Video.Builder video( @NotNull String url ) { return Video.builder( url ); }
 }

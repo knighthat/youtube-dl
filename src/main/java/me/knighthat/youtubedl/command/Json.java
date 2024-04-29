@@ -4,91 +4,93 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import me.knighthat.youtubedl.command.flag.CommandFlag;
+import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
-import me.knighthat.youtubedl.command.flag.HttpHeader;
+import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
-import me.knighthat.youtubedl.response.Response;
+import me.knighthat.youtubedl.response.SingleResultResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Set;
+import java.util.logging.Logger;
 
-public class Json extends YtdlCommand {
+public final class Json extends Command {
 
     @NotNull
     static final Gson GSON = new Gson();
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    Json( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    private Json( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
+        flags().add( Flag.noValue( "--dump-json" ) );
     }
 
     @Override
-    public @NotNull JsonResult execute() {
-        StringBuilder builder = new StringBuilder();
+    public @NotNull SingleResultResponse<JsonElement> execute() {
+        // Temporary
+        Logger logger = Logger.getLogger( "YoutubeDL" );
 
-        JsonElement result = JsonNull.INSTANCE;
         try {
+            StringBuilder builder = new StringBuilder();
+
             Process process = new ProcessBuilder( command() ).start();
-            InputStream inStream = process.getInputStream();
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inStream.read( buffer )) != -1) {
-                String partial = new String( buffer, 0, bytesRead );
-                builder.append( partial );
+            try (InputStream inStream = process.getInputStream()) {
+                byte[] buffer = new byte[1024];
+                int bytesRead;
+                while ((bytesRead = inStream.read( buffer )) != -1) {
+                    String partial = new String( buffer, 0, bytesRead );
+                    builder.append( partial );
+                }
             }
-            inStream.close();
 
             if ( process.waitFor() == 0 && !builder.isEmpty() )
-                result = GSON.fromJson( builder.toString(), JsonObject.class );
-        } catch ( IOException | InterruptedException ignored ) {
+                return () -> GSON.fromJson( builder.toString(), JsonObject.class );
+        } catch ( IOException e ) {
+            logger.warning( "could not convert object to JsonObject!" );
+            logger.warning( "Reason: " + e.getMessage() );
+        } catch ( InterruptedException e ) {
+            logger.warning( "thread interrupted while converting object to JsonObject!" );
+            logger.warning( "Reason: " + e.getMessage() );
         }
 
-        return new JsonResult( result );
+        return () -> JsonNull.INSTANCE;
     }
 
-    @Override
-    protected String @NotNull [] command() {
-        flags.add( CommandFlag.noValue( "--dump-json" ) );
-        return super.command();
-    }
-
-    public static class Builder extends YtdlCommand.Builder {
-
+    public static class Builder extends Command.Builder {
         private Builder( @NotNull String url ) { super( url ); }
 
-        public @NotNull Builder flags( @NotNull CommandFlag... flags ) {
-            super.flags().addAll( Arrays.asList( flags ) );
-            return this;
-        }
-
-        public @NotNull Builder headers( @NotNull HttpHeader... headers ) {
-            super.headers().addAll( Arrays.asList( headers ) );
-            return this;
-        }
-
-        public @NotNull Builder userAgent( @NotNull UserAgent userAgent ) {
-            super.userAgent( userAgent );
-            return this;
-        }
-
-        public @NotNull Builder geoConfig( @NotNull GeoConfig geoConfig ) {
-            super.geoConfig( geoConfig );
+        @Override
+        public @NotNull Builder flags( @NotNull Flag... flags ) {
+            super.addFlags( flags );
             return this;
         }
 
         @Override
-        public @NotNull Json build() { return new Json( url(), flags(), headers(), userAgent(), geoConfig() ); }
+        public @NotNull Builder headers( @NotNull Header... headers ) {
+            super.addHeaders( headers );
+            return this;
+        }
 
         @Override
-        public @NotNull JsonResult execute() { return this.build().execute(); }
-    }
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
+            super.setUserAgent( userAgent );
+            return this;
+        }
 
-    public record JsonResult( @NotNull JsonElement json ) implements Response {
+        @Override
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
+            super.setGeoConfig( geoConfig );
+            return this;
+        }
+
+        @Override
+        public @NotNull Json build() { return new Json( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
+
+        @Override
+        public @NotNull SingleResultResponse<JsonElement> execute() { return this.build().execute(); }
     }
 }

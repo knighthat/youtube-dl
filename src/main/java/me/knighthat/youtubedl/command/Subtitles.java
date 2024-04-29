@@ -1,20 +1,21 @@
 package me.knighthat.youtubedl.command;
 
-import me.knighthat.youtubedl.command.flag.CommandFlag;
+import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
-import me.knighthat.youtubedl.command.flag.HttpHeader;
+import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.response.ListResponse;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-public class Subtitles extends YtdlCommand {
+public final class Subtitles extends Command {
 
     @NotNull
     private static final Pattern NO_SUBTITLE_PATTERN        = Pattern.compile( "\\w+ has no subtitles" );
@@ -25,37 +26,15 @@ public class Subtitles extends YtdlCommand {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    Subtitles( @NotNull String url, @NotNull Set<CommandFlag> flags, @NotNull Set<HttpHeader> headers, @NotNull UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    private Subtitles( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
-    }
-
-    private @NotNull Set<Subtitle> genSubtitle( @NotNull String str, boolean isAutomatic ) {
-        Set<Subtitle> subtitles = new HashSet<>();
-
-        // af       vtt, ttml, srv3, srv2, srv1, json3
-        String[] parts = str.split( "\\s+" );
-        String[] formats = parts[1].split( "," );
-
-        for (String f : formats) {
-            try {
-                Subtitle.Format format = Subtitle.Format.match( f );
-                subtitles.add( new Subtitle( parts[0], format, isAutomatic ) );
-            } catch ( UnsupportedOperationException e ) {
-                Logger.getLogger( "YoutubeDL" ).warning( e.getMessage() );
-            }
-        }
-
-        return subtitles;
+        flags().add( Flag.noValue( "--list-subs" ) );
     }
 
     @Override
-    public @NotNull Results execute() {
-        List<Subtitle> results = new ArrayList<>();
-        List<String> outputs = new ArrayList<>();
-        try {
-            outputs = super.execute0();
-        } catch ( IOException | InterruptedException ignored ) {
-        }
+    public @NotNull ListResponse<Subtitle> execute() {
+        List<String> outputs = super.outputs();
+        Set<Subtitle> subtitles = new HashSet<>();
 
         /*
             Available automatic captions for videoId:
@@ -73,65 +52,83 @@ public class Subtitles extends YtdlCommand {
             videoId has no subtitles
          */
         Boolean isAutomatic = null;
-        for (int i = 1 ; i < outputs.size() ; i++) {
+        for (int i = 0 ; i < outputs.size() ; i++) {
+            // af       vtt, ttml, srv3, srv2, srv1, json3
             String output = outputs.get( i );
 
             if ( NO_SUBTITLE_PATTERN.matcher( output ).matches() )
+                // Stop iteration if output is "videoId has no subtitles"
                 break;
             if ( AUTOMATIC_SUBTITLE_PATTERN.matcher( output ).matches() ) {
+                /*
+                Set isAutomatic if line matches "Available automatic captions for videoId:"
+                and skip "Language formats"
+                */
                 isAutomatic = true;
                 i++;
                 continue;
             } else if ( HUMAN_SUBTITLE_PATTERN.matcher( output ).matches() ) {
+                /*
+                Set isAutomatic if line matches "Available subtitles for videoId:"
+                and skip "Language formats"
+                */
                 isAutomatic = false;
                 i++;
                 continue;
             }
+
             if ( isAutomatic != null ) {
-                results.addAll( genSubtitle( output, isAutomatic ) );
+                // ["af", "vtt, ttml, srv3, srv2, srv1, json3"]
+                String[] parts = output.split( "(?<!,)\\s+" ); // Split string by spaces but not if it's right after coma
+                // [vtt,  ttml,  srv3,  srv2,  srv1,  json3]
+                String[] formats = parts[1].split( "," );
+
+                for (String f : formats) {
+                    try {
+                        Subtitle.Format format = Subtitle.Format.match( f.trim() );
+                        Subtitle subtitle = new Subtitle( parts[0].trim(), format, isAutomatic );
+                        subtitles.add( subtitle );
+                    } catch ( UnsupportedOperationException e ) {
+                        Logger.getLogger( "YoutubeDL" ).warning( e.getMessage() );
+                    }
+                }
             }
         }
 
-        return new Results( results );
+        return () -> List.copyOf( subtitles );
     }
 
-    @Override
-    protected String @NotNull [] command() {
-        flags.add( CommandFlag.noValue( "--list-subs" ) );
-        return super.command();
-    }
-
-    public static class Builder extends YtdlCommand.Builder {
-
+    public static class Builder extends Command.Builder {
         private Builder( @NotNull String url ) { super( url ); }
 
-        public @NotNull Builder flags( @NotNull CommandFlag... flags ) {
-            super.flags().addAll( Arrays.asList( flags ) );
-            return this;
-        }
-
-        public @NotNull Builder headers( @NotNull HttpHeader... headers ) {
-            super.headers().addAll( Arrays.asList( headers ) );
-            return this;
-        }
-
-        public @NotNull Builder userAgent( @NotNull UserAgent userAgent ) {
-            super.userAgent( userAgent );
-            return this;
-        }
-
-        public @NotNull Builder geoConfig( @NotNull GeoConfig geoConfig ) {
-            super.geoConfig( geoConfig );
+        @Override
+        public @NotNull Builder flags( @NotNull Flag... flags ) {
+            super.addFlags( flags );
             return this;
         }
 
         @Override
-        public @NotNull Subtitles build() { return new Subtitles( url(), flags(), headers(), userAgent(), geoConfig() ); }
+        public @NotNull Builder headers( @NotNull Header... headers ) {
+            super.addHeaders( headers );
+            return this;
+        }
 
         @Override
-        public @NotNull Results execute() { return this.build().execute(); }
-    }
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
+            super.setUserAgent( userAgent );
+            return this;
+        }
 
-    public record Results( @NotNull List<Subtitle> items ) implements ListResponse<Subtitle> {
+        @Override
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
+            super.setGeoConfig( geoConfig );
+            return this;
+        }
+
+        @Override
+        public @NotNull Subtitles build() { return new Subtitles( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
+
+        @Override
+        public @NotNull ListResponse<Subtitle> execute() { return this.build().execute(); }
     }
 }
