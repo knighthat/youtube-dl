@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 @FunctionalInterface
-public interface OptionalResponse<T> extends Response {
+public interface OptionalResponse<T> extends SingleResultResponse<Optional<T>> {
 
     @NotNull Optional<T> result();
 }
