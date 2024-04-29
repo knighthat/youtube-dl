@@ -2,9 +2,7 @@ package me.knighthat.youtubedl.command.flag;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
-public class UserAgent implements CommandFlag {
+public class UserAgent implements Flag {
 
     /*
         Chrome
@@ -44,7 +42,6 @@ public class UserAgent implements CommandFlag {
 
     private UserAgent( @NotNull String userAgent ) { this.userAgent = userAgent; }
 
-
     @Override
-    public @NotNull Map<String, String> arguments() { return Map.of( "--user-agent", userAgent ); }
+    public String @NotNull [] flags() { return new String[]{ "--user-agent", userAgent }; }
 }
