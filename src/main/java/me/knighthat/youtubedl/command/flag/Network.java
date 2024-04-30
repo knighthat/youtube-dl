@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Network implements Flag {
 
+    public static @NotNull Builder builder() { return new Builder(); }
+
     @NotNull
     private final String  proxy;
     private final int     timeout;
