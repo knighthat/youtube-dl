@@ -32,14 +32,25 @@ jobs:
 
         echo "version=$(grep -oP '<version>\K[^<]+' pom.xml | head -n1)" >> $GITHUB_OUTPUT
 
-    - name: Nexus Repo Publish
-      uses: sonatype-nexus-community/nexus-repo-github-action@master
+    - name: maven-settings-xml-action
+      uses: whelk-io/maven-settings-xml-action@v22
       with:
-        serverUrl: https://repo.knighthat.me
-        username: ${{ secrets.REPO_NAME }}
-        password: ${{ secrets.REPO_PASSWD }}
-        format: maven2
-        repository: maven-snapshots
-        coordinates: groupId=${{ steps.extractor.outputs.groupid }} artifactId=${{ steps.extractor.outputs.artifactid }} version=${{ steps.extractor.outputs.version }}
-        assets: extension=jar
-        filename: ./target/${{ steps.extractor.outputs.artifactid }}-${{ steps.extractor.outputs.version }}.jar
+        repositories: >
+          [
+            {
+              "id": "maven-snapshots",
+              "url": "https://repo.knighthat.me/repository/maven-snapshots/",
+            }
+          ]
+        servers: >
+          [
+            {
+              "id": "knighthat",
+              "username": "${{ secrets.REPO_NAME }}",
+              "password": "${{ secrets.REPO_PASSWD }}"
+            }
+          ]
+        output_file: ".m2/settings.xml"
+
+    - name: Deploy to remote repository
+      run: mvn deploy --settings .m2/settings.xml -Dmaven.test.skip=true
