@@ -35,21 +35,8 @@ jobs:
     - name: maven-settings-xml-action
       uses: whelk-io/maven-settings-xml-action@v22
       with:
-        repositories: >
-          [
-            {
-              "id": "maven-snapshots",
-              "url": "https://repo.knighthat.me/repository/maven-snapshots/",
-            }
-          ]
-        servers: >
-          [
-            {
-              "id": "knighthat",
-              "username": "${{ secrets.REPO_NAME }}",
-              "password": "${{ secrets.REPO_PASSWD }}"
-            }
-          ]
+        repositories: '[{"id": "maven-snapshots", "url": "https://repo.knighthat.me/repository/maven-snapshots/"}]'
+        servers: ' [{"id": "knighthat", "username": "${{ secrets.REPO_NAME }}", "password": "${{ secrets.REPO_PASSWD }}"}]'
         output_file: ".m2/settings.xml"
 
     - name: Deploy to remote repository
