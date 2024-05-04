@@ -58,6 +58,39 @@ Translated version:
 
 It may look a bit much. But when you deal with a longer command or when you have some default configuration you can easily save store it for later use.
 
+# Installation
+
+## Maven
+```xml
+<repositories>
+  <repository>
+    <id>youtube-dl-wrapper</id>
+    <url>https://repo.knighthat.me/repository/maven-public/</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>me.knighthat.youtube-dl</groupId>
+    <artifactId>youtube-dl</artifactId>
+    <version>0.0.2-SNAPSHOTS</version>
+  </dependency>
+</dependencies>
+```
+
+## Gradle
+```groovy
+repositories {
+    maven {
+        url 'https://repo.knighthat.me/repository/maven-public/'
+    }
+}
+
+dependencies {
+    implementation 'me.knighthat.youtube-dl:youtube-dl:0.0.2-SNAPSHOT'
+}
+```
+
 # License
 
 This project inherits license from [youtube-dl](https://github.com/ytdl-org/youtube-dl/blob/master/LICENSE) which is [**Unlicense License**](https://unlicense.org/)
