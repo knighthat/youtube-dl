@@ -11,27 +11,47 @@ This wrapper to youtube-dl is similar to ORM to databases, it provides an abstra
 Here is a snippet of raw command:
 
 ```sh
-youtube-dl --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.3' \
+youtube-dl \
+  --user-agent 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.3' \
   --force-ipv4 \
   --proxy 'https://example.org' \
+  --geo-bypass \
+  --rate-limit 1024 \
+  --retries 5 \
+  --add-header "Referer: https://www.example.com" \
+  --add-header "Authorization: Bearer YOUR_ACCESS_TOKEN" \
   --list-formats \
   'https://www.youtube.com/watch?v=AjUQkkT4WFg'
 ```
 Translated version:
 
 ```java
-  GeoConfig geoBypass = GeoConfig.builder()
-                                 .bypass(true)
-                                 .countryCode("US")
-                                 .build();
+  UserAgent userAgent = UserAgent.CHROME_WINDOWS;
+
   NetworkConfig netConfig = NetworkConfig.builder()
-                                         .forceV4(true)
+                                         .forceIPv4()
                                          .proxy("https://example.org")
                                          .build();
+                                    
+  GeoConfig geoConfig = GeoConfig.builder()
+                                 .bypass()
+                                 .build();
+                              
+  Download downloadConfig = Download.builder()
+                                    .rate(1024)
+                                    .retries(5)
+                                    .build();
+
+  Header header = Header.chain()
+                        .key("Referer").value("https://www.example.com")
+                        .key("Authorization").value("Bearer YOUR_ACCESS_TOKEN")
+                        .build();
 
   List<Format> formats = YoutubeDL.formats("https://www.youtube.com/watch?v=AjUQkkT4WFg")
-                                  .flags(geoBypass, netConfig)
-                                  .userAgent(UserAgent.CHROME_WINDOWS)
+                                  .userAgent(userAgent)
+                                  .geoConfig(geoConfig)
+                                  .headers(header)
+                                  .flags(netConfig, downloadConfig)
                                   .execute()
                                   .items();
 ```
