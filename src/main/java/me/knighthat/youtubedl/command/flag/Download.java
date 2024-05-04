@@ -7,6 +7,8 @@ import java.util.Map;
 
 public class Download implements Flag {
 
+    public static @NotNull Builder builder() { return new Builder(); }
+
     private final int rate;
     private final int retries;
 
@@ -32,8 +34,8 @@ public class Download implements Flag {
 
         private Builder() { }
 
-        public @NotNull Builder rate(int rate) {
-            this.rate = rate;
+        public @NotNull Builder rate(int bytes) {
+            this.rate = bytes;
             return this;
         }
 
