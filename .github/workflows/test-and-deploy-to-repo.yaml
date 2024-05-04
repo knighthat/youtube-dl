@@ -3,6 +3,10 @@ name: Test and deploy
 on:
   push:
     branches: [ "dev" ]
+    paths-ignore:
+    - 'README.md'
+    - 'LICENSE'
+    - '.gitignore'
 
 
 jobs:
