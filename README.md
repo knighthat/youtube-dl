@@ -91,6 +91,20 @@ dependencies {
 }
 ```
 
+# Usage
+
+To be able to utilize this wrapper. [youtube-dl](https://github.com/ytdl-org/youtube-dl) must be installed on your machine.
+
+If you can successfully execute `youtube-dl` in your terminal then you're good to use the wrapper (most of the time).
+
+If you have it installed to a custom location, you can use 
+
+```java
+YoutubeDL.init("/path/to/python", "/path/to/youtube_dl/__main__.py");
+```
+
+> Note: `YoutubeDL.init()` can be used to verify `python` and `youtube-dl` before use.
+
 # License
 
 This project inherits license from [youtube-dl](https://github.com/ytdl-org/youtube-dl/blob/master/LICENSE) which is [**Unlicense License**](https://unlicense.org/)
