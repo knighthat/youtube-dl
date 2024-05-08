@@ -2,6 +2,7 @@ package me.knighthat.youtubedl.command.flag;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Header implements Flag {
@@ -27,6 +28,16 @@ public class Header implements Flag {
         return results;
     }
 
+    public interface Key {
+        @NotNull Value key( @NotNull String key );
+
+        @NotNull Header build();
+    }
+
+    public interface Value {
+        @NotNull Key value( @NotNull String value );
+    }
+
     public static class Builder extends Flag.Builder {
         private Builder( @NotNull String key ) { super( key ); }
 
@@ -34,10 +45,28 @@ public class Header implements Flag {
         public @NotNull Header value( @NotNull String value ) { return new Header( Map.of( super.key, value ) ); }
     }
 
-    public static class Chain extends Flag.Chain {
-        private Chain() { super(); }
+    public static class Chain implements Key, Value {
+        private final Map<String, String> pairs;
+        private       String              key;
+
+        private Chain() { this.pairs = new HashMap<>(); }
 
         @Override
-        public @NotNull Header build() { return new Header( super.pairs ); }
+        public @NotNull Key value( @NotNull String value ) {
+            pairs.put( key, value );
+            return this;
+        }
+
+        @Override
+        public @NotNull Value key( @NotNull String key ) {
+            if ( key.isEmpty() )
+                throw new IllegalArgumentException( "empty key!" );
+            else
+                this.key = key;
+            return this;
+        }
+
+        @Override
+        public @NotNull Header build() { return new Header( this.pairs ); }
     }
 }
