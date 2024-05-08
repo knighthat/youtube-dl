@@ -1,0 +1,8 @@
+{
+  "label": "Flags",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "A flag (a tag or a switch) is an additional argument that is optional to the command but leads to different results in some cases."
+  }
+}
