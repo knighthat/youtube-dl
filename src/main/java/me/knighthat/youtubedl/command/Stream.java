@@ -4,6 +4,7 @@ import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.RealtimeResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public final class Stream extends Command {
 
@@ -40,10 +41,7 @@ public final class Stream extends Command {
             try {
                 Stream.stream( command(), bufferSize, stream );
             } catch ( IOException e ) {
-                // Temporary
-                Logger logger = Logger.getLogger( "YoutubeDL" );
-                logger.warning( "Stream ended abruptly!" );
-                logger.warning( "Reason:" + e.getMessage() );
+                Logger.exception( "Stream ended abruptly!", e, Level.WARNING );
             }
         };
     }

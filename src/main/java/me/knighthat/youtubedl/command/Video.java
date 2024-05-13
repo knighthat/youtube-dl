@@ -7,6 +7,7 @@ import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
 import me.knighthat.youtubedl.response.channel.Channel;
 import me.knighthat.youtubedl.response.format.AudioOnly;
@@ -25,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public final class Video extends Command {
 
@@ -40,9 +41,6 @@ public final class Video extends Command {
 
     @Override
     public @NotNull OptionalResponse<me.knighthat.youtubedl.response.video.Video> execute() {
-        // Temporary
-        Logger logger = Logger.getLogger( "YoutubeDL" );
-
         Flag[] flags = this.flags().toArray( Flag[]::new );
         Header[] headers = this.headers().toArray( Header[]::new );
 
@@ -111,8 +109,8 @@ public final class Video extends Command {
 
                 formats.add( format );
             } catch ( NullPointerException ignored ) {
-                logger.warning( "failed to parse format form Json" );
-                logger.warning( Json.GSON.toJson( formatJson ) );
+                Logger.warning( "failed to parse format form Json" );
+                Logger.warning( Json.GSON.toJson( formatJson ) );
             }
         }
 
@@ -134,9 +132,9 @@ public final class Video extends Command {
 
             return () -> Optional.of( video );
         } catch ( ParseException e ) {
-            logger.warning( "failed to parse date" + json.get( "upload_date" ).getAsString() );
-            logger.warning( "Reason:" + e.getMessage() );
-
+            String uploadDate = json.get( "upload_date" ).getAsString();
+            Logger.exception( "failed to parse date" + uploadDate, e, Level.WARNING );
+            
             return Optional::empty;
         }
     }

@@ -4,6 +4,7 @@ import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.ListResponse;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 public final class Subtitles extends Command {
@@ -89,7 +90,7 @@ public final class Subtitles extends Command {
                         Subtitle subtitle = new Subtitle( parts[0].trim(), format, isAutomatic );
                         subtitles.add( subtitle );
                     } catch ( UnsupportedOperationException e ) {
-                        Logger.getLogger( "YoutubeDL" ).warning( e.getMessage() );
+                        Logger.exception( "failed to parse subtitle!", e, Level.WARNING );
                     }
                 }
             }

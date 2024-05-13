@@ -8,6 +8,7 @@ import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.SingleResultResponse;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
-import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public final class Json extends Command {
 
@@ -31,9 +32,6 @@ public final class Json extends Command {
 
     @Override
     public @NotNull SingleResultResponse<JsonElement> execute() {
-        // Temporary
-        Logger logger = Logger.getLogger( "YoutubeDL" );
-
         try {
             StringBuilder builder = new StringBuilder();
 
@@ -49,12 +47,14 @@ public final class Json extends Command {
 
             if ( process.waitFor() == 0 && !builder.isEmpty() )
                 return () -> GSON.fromJson( builder.toString(), JsonObject.class );
-        } catch ( IOException e ) {
-            logger.warning( "could not convert object to JsonObject!" );
-            logger.warning( "Reason: " + e.getMessage() );
-        } catch ( InterruptedException e ) {
-            logger.warning( "thread interrupted while converting object to JsonObject!" );
-            logger.warning( "Reason: " + e.getMessage() );
+        } catch ( IOException | InterruptedException e ) {
+            String message;
+            if ( e instanceof IOException )
+                message = "could not convert object to JsonObject!";
+            else
+                message = "thread interrupted while converting object to JsonObject!";
+
+            Logger.exception( message, e, Level.WARNING );
         }
 
         return () -> JsonNull.INSTANCE;
