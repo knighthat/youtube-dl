@@ -11,17 +11,7 @@ before implementing this wrapper to your project.
 
 ## Default
 
-export const PathVar = () => (
-    <code>
-      {
-        navigator.platform.indexOf('Win') !== -1
-            ? '%PATH%'
-            : '$PATH'
-      }
-    </code>
-)
-
-By default, this wrapper will execute command with **python** and **youtube-dl** from your <PathVar/>
+By default, this wrapper will execute command with **python** and **youtube-dl** from your `PATH`
 
 :::tip
 Invoke `YoutubeDL.init()` will perform checks on both **python** and **youtube-dl**
