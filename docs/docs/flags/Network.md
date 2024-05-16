@@ -7,7 +7,7 @@ slug: network
 
 Looking to route your traffic through a proxy? Or reduce waiting time when a connection hangs. `Network` is here to help you
 
-```javascript
+```java
 Network.builder();
 ```
 
@@ -16,7 +16,7 @@ Network.builder();
 
 Route your requests through a proxy server.
 
-```javascript
+```java
 Network.builder().proxy("https://example.com").build();
 ```
 
@@ -27,7 +27,7 @@ Network.builder().proxy("https://example.com").build();
 
 Increase or decrease waiting time before dropping connection if service is unresponsive.
 
-```javascript
+```java
 Network.builder().timeout(5).build();
 ```
 
@@ -36,7 +36,7 @@ Network.builder().timeout(5).build();
 
 Mask sender IP address
 
-```javascript
+```java
 Network.builder().source("0.0.0.0").build();
 ```
 
@@ -44,7 +44,7 @@ Network.builder().source("0.0.0.0").build();
 
 Make request using IPv4
 
-```javascript
+```java
 Network.builder().forceIPv4().build();
 ```
 
@@ -58,7 +58,7 @@ Adding `forceIPv6` after this will result in `IllegalArgumentException`
 
 Make request using IPv6
 
-```javascript
+```java
 Network.builder().forceIPv6().build();
 ```
 

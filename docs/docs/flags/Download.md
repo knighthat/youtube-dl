@@ -7,7 +7,7 @@ slug: download
 
 `Download` flag lets you configure download options such as **_download rate_** and **_number of retries_**.
 
-```javascript
+```java
 Download.builder();
 ```
 
@@ -16,7 +16,7 @@ Download.builder();
 
 Specify the number of attempts youtube-dl re-execute command before giving up and throw error.
 
-```javascript
+```java
 Download.builder().retries(10).build();
 ```
 
@@ -25,7 +25,7 @@ Download.builder().retries(10).build();
 
 Indicate how many bytes worth of data should be downloaded per second.
 
-```javascript
+```java
 Download.builder().rate(102400).build();
 ```
 

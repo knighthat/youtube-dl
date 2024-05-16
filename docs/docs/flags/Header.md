@@ -10,13 +10,13 @@ or spook user agent with **User-Agent**. [Learn more](https://developer.mozilla.
 
 ## Single field/value header
 
-```javascript
+```java
 Header.key("Content-Type").value("application/json");
 ```
 
 ## Chaining (multiple field/value arguments)
 
-```javascript
+```java
 Header.chain()
       .key("Content-Type").value("application/json")
       .key("Authorization").value("Bearer YOUR_ACCESS_TOKEN")

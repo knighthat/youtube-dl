@@ -9,7 +9,7 @@ Make a request to the provided **URL** and parse return values to an instance of
 
 > As of version 0.0.2, only YouTube links are tested. Other websites are in development.
 
-```javascript
+```java
 YoutubeDL.json(URL);
 ```
 
@@ -34,13 +34,13 @@ This method combines `build()` and `execute()` from **Json**.
 
 So, instead of:
 
-```javascript
+```java
 YoutubeDL.json(URL).build().execute();
 ```
 
 You can do:
 
-```javascript
+```java
 YoutubeDL.json(URL).execute();
 ```
 

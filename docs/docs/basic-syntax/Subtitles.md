@@ -9,7 +9,7 @@ Make a request to the provided **URL** and parse return values to a list of **_S
 
 > As of version 0.0.2, only YouTube links are tested. Other websites are in development.
 
-```javascript
+```java
 YoutubeDL.subtitles(URL);
 ```
 
@@ -34,13 +34,13 @@ This method combines `build()` and `execute()` from **Subtitles**.
 
 So, instead of:
 
-```javascript
+```java
 YoutubeDL.subtitles(URL).build().execute();
 ```
 
 You can do:
 
-```javascript
+```java
 YoutubeDL.subtitles(URL).execute();
 ```
 

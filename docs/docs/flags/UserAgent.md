@@ -10,7 +10,7 @@ Tricking server to believe that you send this request from a specific web browse
 `UserAgent` class already provides common user agent (gets updated once in a while).\
 You can select them by invoking `UserAgent.<browser>_<platform>`
 
-```javascript
+```java
 UserAgent.CHROME_WINDOWS;
 ```
 
@@ -19,6 +19,6 @@ UserAgent.CHROME_WINDOWS;
 If default values are not what you're after. 
 You can specify your own user agent
 
-```javascript
+```java
 UserAgent.custom("Mozilla/5.0 (Android 14; Mobile; rv:125.0) Gecko/125.0 Firefox/125.0");
 ```

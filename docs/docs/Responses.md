@@ -18,7 +18,7 @@ This instance if return in place of [Response](#response).
 `items()` returns the actual `List` that contains classes represent
 the data returned from the server.
 
-```javascript
+```java
 ListResponse#items();
 ```
 

@@ -10,13 +10,13 @@ create a `Flag` by one these **three** means
 
 ## Single key/pair flag
 
-```javascript
+```java
 Flag.key("--output").value("filename.mp4");
 ```
 
 ## Switch (no value argument)
 
-```javascript
+```java
 Flag.noValue("--simulate");
 ```
 
@@ -24,7 +24,7 @@ Flag.noValue("--simulate");
 
 This method requires `build()` to finalize the chain.
 
-```javascript
+```java
 Flag.chain()
     .key("--output").value("filename.mp4")
     .key("--simulate").value()

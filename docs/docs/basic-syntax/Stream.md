@@ -9,7 +9,7 @@ Make a request to the provided **URL** and let user access the datastream return
 
 > As of version 0.0.2, only YouTube links are tested. Other websites are in development.
 
-```javascript
+```java
 YoutubeDL.stream(URL);
 ```
 
@@ -34,13 +34,13 @@ This method combines `build()` and `execute()` from **Stream**.
 
 So, instead of:
 
-```javascript
+```java
 YoutubeDL.stream(URL).build().execute();
 ```
 
 You can do:
 
-```javascript
+```java
 YoutubeDL.stream(URL).execute();
 ```
 

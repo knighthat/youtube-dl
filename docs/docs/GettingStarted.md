@@ -36,7 +36,7 @@ youtube-dl \
 
 To execute this command in Java, here's what you have to do:
 
-```javascript
+```java
 String[] command = {
     "/usr/bin/youtube-dl",
     "--user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.3",
@@ -74,38 +74,38 @@ try {
 
 With YoutubeDL Java:
 
-```javascript
+```java
 UserAgent userAgent = UserAgent.CHROME_WINDOWS;
 ```
 
-```javascript
+```java
 Network netConfig = Network.builder()
                            .forceIPv4()
                            .proxy("https://example.org")
                            .build();
 ```
 
-```javascript
+```java
 GeoConfig geoConfig = GeoConfig.builder()
                                .bypass()
                                .build();
 ```
 
-```javascript
+```java
 Download downloadConfig = Download.builder()
                                   .rate(1024)
                                   .retries(5)
                                   .build();
 ```
 
-```javascript
+```java
 Header header = (Header) Header.chain()
                                .key("Referer").value("https://www.example.com")
                                .key("Authorization").value("Bearer YOUR_ACCESS_TOKEN")
                                .build();
 ```
 
-```javascript
+```java
 List<Format> formats = YoutubeDL.formats("https://www.youtube.com/watch?v=AjUQkkT4WFg")
                                 .userAgent(userAgent)
                                 .geoConfig(geoConfig)

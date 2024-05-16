@@ -7,7 +7,7 @@ slug: geo-config
 
 `GeoConfig` lets you adjust your geographical to appear differently on the server you're connecting to.
 
-```javascript
+```java
 GeoConfig.builder();
 ```
 
@@ -15,7 +15,7 @@ GeoConfig.builder();
 
 Faking an X-Forwarded-For HTTP header and let you access region-lock content.
 
-```javascript
+```java
 GeoConfig.builder().bypass().build();
 ```
 
@@ -26,7 +26,7 @@ GeoConfig.builder().bypass().build();
 
 Pretend to access the server from a different country. (Can be used to access region-lock content)
 
-```javascript
+```java
 GeoConfig.builder().countryCode("AU").build();
 ```
 

@@ -23,7 +23,7 @@ occurs during runtime.
 
 If you happen to install **python** or **youtube-dl** at another location. You can use
 
-```javascript
+```java
 try {
   YoutubeDL.init("/path/to/python", "/path/to/youtube-dl")
 } catch (IOException e) {

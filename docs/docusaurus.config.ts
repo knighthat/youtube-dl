@@ -95,6 +95,9 @@ const config: Config = {
     prism: {
       theme: prismThemes.okaidia,
       darkTheme: prismThemes.oneDark,
+      additionalLanguages: [
+          'java'
+      ]
     },
   } satisfies Preset.ThemeConfig,
 };
