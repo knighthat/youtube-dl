@@ -19,7 +19,7 @@ Note that the code snippet returns `Stream.Builder` instead of `RealtimeResponse
 That's because the code has not been executed yet.
 
 `Stream.Builder` allows you to add additional flags such as **GeoConfig**, **Network**, **Download**, **UserAgent**, and **Header**
-to command before deploying it. [**Explore flags**](/docs/flags).
+to command before deploying it. [**Explore flags**](/docs/category/flags).
 
 ## `.build()`
 

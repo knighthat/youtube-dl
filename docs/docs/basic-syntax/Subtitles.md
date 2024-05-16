@@ -19,7 +19,7 @@ Note that the code snippet returns `Subtitles.Builder` instead of `ListResponse<
 That's because the code has not been executed yet.
 
 `Subtitles.Builder` allows you to add additional flags such as **GeoConfig**, **Network**, **Download**, **UserAgent**, and **Header**
-to command before deploying it. [**Explore flags**](/docs/flags).
+to command before deploying it. [**Explore flags**](/docs/category/flags).
 
 ## `.build()`
 
@@ -45,7 +45,7 @@ YoutubeDL.subtitles(URL).execute();
 ```
 
 And you'll get an instance of `ListResponse` as the result of this method. 
-[Learn more](../responses#listresponse)
+[Learn more](/docs/Responses.md#listresponse)
 
 ## `.flags( Flag... )`
 > This method takes arguments as an **_array_** or **_varargs_**

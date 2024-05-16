@@ -19,7 +19,7 @@ Note that the code snippet returns `Video.Builder` instead of `SingleResultRespo
 That's because the code has not been executed yet.
 
 `Video.Builder` allows you to add additional flags such as **GeoConfig**, **Network**, **Download**, **UserAgent**, and **Header**
-to command before deploying it. [**Explore flags**](/docs/flags).
+to command before deploying it. [**Explore flags**](/docs/category/flags).
 
 ## `.build()`
 
