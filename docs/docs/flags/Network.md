@@ -34,7 +34,7 @@ Network.builder().timeout(5).build();
 ## Source
 > This method can only take **ONE** argument. Any subsequent call overrides the preceding one.
 
-Mask sender IP address
+Bind to specific network interface
 
 ```java
 Network.builder().source("0.0.0.0").build();
