@@ -57,11 +57,11 @@ public class Network implements Flag {
             return this;
         }
 
-        public @NotNull Builder timeout( int timeout ) {
-            if ( timeout < 0 )
+        public @NotNull Builder timeout( int seconds ) {
+            if ( seconds < 0 )
                 throw new IllegalArgumentException( "'timeout' must be a positive number!" );
             else
-                this.timeout = timeout;
+                this.timeout = seconds;
             return this;
         }
 
