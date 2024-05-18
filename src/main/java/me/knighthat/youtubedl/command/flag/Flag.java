@@ -45,6 +45,9 @@ public interface Flag {
     static @NotNull Key chain() { return new Chain(); }
 
     /**
+     * An array represents the arguments
+     * that will be sent along with the request.
+     * 
      * @return an array of arguments following [key, value] format
      */
     String @NotNull [] flags();

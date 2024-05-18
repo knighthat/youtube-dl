@@ -43,6 +43,12 @@ public class Header implements Flag {
 
     private Header( @NotNull Map<String, String> headers ) { this.headers = headers; }
 
+    /**
+     * An array represents the headers
+     * that will be sent along with the request.
+     * 
+     * @return an array of arguments following [key, value] format
+     */
     @Override
     public String @NotNull [] flags() {
         String[] results = new String[headers.size() * 2];

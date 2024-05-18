@@ -100,6 +100,12 @@ public class UserAgent implements Flag {
 
     private UserAgent( @NotNull String userAgent ) { this.userAgent = userAgent; }
 
+    /**
+     * An array represents the user agent
+     * that will be sent along with the request.
+     * 
+     * @return an array of user agent tag and user agent string
+     */
     @Override
     public String @NotNull [] flags() { return new String[]{ "--user-agent", userAgent }; }
 }

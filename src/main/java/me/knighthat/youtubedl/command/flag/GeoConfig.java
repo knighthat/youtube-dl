@@ -25,6 +25,12 @@ public class GeoConfig implements Flag {
         this.countryCode = countryCode;
     }
 
+    /**
+     * An array represents the geographical configurations
+     * that will be sent along with the request.
+     * 
+     * @return an array of arguments following [key, value] format
+     */
     @Override
     public String @NotNull [] flags() {
         // countryCode is never empty

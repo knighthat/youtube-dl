@@ -33,6 +33,12 @@ public class Network implements Flag {
         this.forceIPv6 = forceIPv6;
     }
 
+    /**
+     * An array represents the network configurations
+     * that will be sent along with the request.
+     * 
+     * @return an array of arguments following [key, value] format
+     */
     @Override
     public String @NotNull [] flags() {
         Map<String, String> results = new HashMap<>();
