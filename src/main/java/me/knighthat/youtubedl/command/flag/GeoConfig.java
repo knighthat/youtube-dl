@@ -5,6 +5,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Locale;
 
+/**
+ * A set of configurations that allows user to
+ * fool server about client's geographical origin.
+ * <p>
+ * For example, it can be used to bypass region-lock
+ * for some websites.
+ */
 public class GeoConfig implements Flag {
 
     public static @NotNull Builder builder() { return new Builder(); }
@@ -43,11 +50,27 @@ public class GeoConfig implements Flag {
 
         private Builder() { }
 
+        /**
+         * Include a fake X-Forwarded-For inside the header
+         * to fool the server about its origin.
+         * 
+         * @return same builder instance with updated value
+         */
         public @NotNull Builder bypass() {
             bypass = true;
             return this;
         }
 
+        /**
+         * Bypass region-lock with a different country code.
+         * <p>
+         * Country code must follow ISO 3166 - 2 letters country code.
+         * Read more: https://www.iso.org/iso-3166-country-codes.html
+         * 
+         * @param countryCode unique code of a country that follows ISO 3166 format
+         * 
+         * @return same builder instance with updated value
+         */
         public @NotNull Builder countryCode( @NotNull String countryCode ) {
             int index = Arrays.binarySearch( isoCodes, countryCode );
             if ( index == -1 )
@@ -58,6 +81,11 @@ public class GeoConfig implements Flag {
             return this;
         }
 
+        /**
+         * Finalize the configuration and pack it in {@link me.knighthat.youtubedl.command.flag.GeoConfig} class.
+         * 
+         * @return finalized {@link me.knighthat.youtubedl.command.flag.GeoConfig} class 
+         */
         public @NotNull GeoConfig build() { return new GeoConfig( bypass, countryCode ); }
     }
 }

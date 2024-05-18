@@ -5,6 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A set of configurations that allows user to
+ * modify how youtube-dl handles received data.
+ * <p>
+ * For example, limit the download rate and
+ * how many time to retry the download if failure
+ * happens while running.
+ */
 public class Download implements Flag {
 
     public static @NotNull Builder builder() { return new Builder(); }
@@ -34,16 +42,43 @@ public class Download implements Flag {
 
         private Builder() { }
 
+        /**
+         * How many bytes should youtube-dl download data
+         * from server per second.
+         * <p>
+         * Note: This method overrides the value 
+         * of the same method called previously.
+         * 
+         * @param bytes how big a chunk of data is downloaded per second
+         * 
+         * @return same builder instance with updated value
+         */
         public @NotNull Builder rate(int bytes) {
             this.rate = bytes;
             return this;
         }
 
+        /**
+         * How many times should youtube-dl attempt to 
+         * resume the download when it fails.
+         * <p>
+         * Note: This method overrides the value 
+         * of the same method called previously.
+         * 
+         * @param retries number of times to resume download
+         *
+         * @return same builder instance with updated value
+         */
         public @NotNull Builder retries(int retries) {
             this.retries = retries;
             return this;
         }
 
+        /**
+         * Finalize the configuration and pack it in {@link me.knighthat.youtubedl.command.flag.Download} class.
+         * 
+         * @return finalized {@link me.knighthat.youtubedl.command.flag.Download} class 
+         */
         public @NotNull Download build() { return new Download(rate, retries); }
     }
 }

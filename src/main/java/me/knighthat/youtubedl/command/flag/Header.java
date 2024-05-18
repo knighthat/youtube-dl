@@ -5,10 +5,38 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A set of configurations that represents 
+ * the header of the request.
+ * <p>
+ * Header of a request can be necessary for
+ * the server to be able to complete the request.
+ * <p>
+ * Checkout: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers
+ */
 public class Header implements Flag {
 
+    /**
+     * Initialize single key/value pair header.
+     * 
+     * @param key name of the header.
+     * 
+     * @return {@link me.knighthat.youtubedl.command.flag.Header.Value} that allows value of the key to be typed in
+     */
     public static @NotNull Builder key( @NotNull String key ) { return new Builder( key ); }
 
+    /**
+     * Let you combine multiple key/value pairs together
+     * into 1 single instance of {@link me.knighthat.youtubedl.command.flag.Header}.
+     * <p>
+     * Start with {@link me.knighthat.youtubedl.command.flag.Header.Key}, then it
+     * will move to {@link me.knighthat.youtubedl.command.flag.Header.Value}.
+     * The process keeps repeating until {@link me.knighthat.youtubedl.command.flag.Header.Key#build()} is called.
+     * <p>
+     * Note: {@link me.knighthat.youtubedl.command.flag.Header.Key#build()} only available after both key and value are provided.
+     * 
+     * @return the beginning of the chain.
+     */
     public static @NotNull Chain chain() { return new Chain(); }
 
     private final @NotNull Map<String, String> headers;
@@ -29,18 +57,38 @@ public class Header implements Flag {
     }
 
     public interface Key {
+        /**
+         * @param key name of the header
+         * 
+         * @return an instance that accepts value to complete key/value pair
+         */
         @NotNull Value key( @NotNull String key );
 
+        /**
+         * Finalize the configuration and pack it in {@link me.knighthat.youtubedl.command.flag.Header} class.
+         * 
+         * @return finalized {@link me.knighthat.youtubedl.command.flag.Header} class 
+         */
         @NotNull Header build();
     }
 
     public interface Value {
+        /**
+         * @param value value of the header
+         * 
+         * @return an instance that accepts new key or provide build method
+         */
         @NotNull Key value( @NotNull String value );
     }
 
     public static class Builder extends Flag.Builder {
         private Builder( @NotNull String key ) { super( key ); }
 
+        /**
+         * Finalize the configuration and pack it in {@link me.knighthat.youtubedl.command.flag.Header} class.
+         * 
+         * @return finalized {@link me.knighthat.youtubedl.command.flag.Header} class 
+         */
         @Override
         public @NotNull Header value( @NotNull String value ) { return new Header( Map.of( super.key, value ) ); }
     }

@@ -5,6 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A set of network configurations that allows user to
+ * modify how youtube-dl interacts with the other server.
+ * <p>
+ * For example, if you want to talk to the server through
+ * a proxy server, or connect through IPv6, then this
+ * is the right place to be
+ */
 public class Network implements Flag {
 
     public static @NotNull Builder builder() { return new Builder(); }
@@ -52,11 +60,39 @@ public class Network implements Flag {
 
         private Builder() { }
 
+        /**
+         * Route traffic through a proxy server
+         * <p>
+         * "url" should follow standard url format
+         * scheme://sub.domain.top:port.
+         * E.g. socks5://example.org:1234
+         * <p>
+         * Note: This method overrides the value 
+         * of the same method called previously.
+         * 
+         * @param url the ip address of the proxy server
+         * 
+         * @return same builder instance with updated value
+         */
         public @NotNull Builder proxy( @NotNull String url ) {
             this.proxy = url;
             return this;
         }
 
+        /**
+         * Set how long should program wait for the
+         * response from the server.
+         * By default, this number is 600.
+         * <p>
+         * Note: This method overrides the value 
+         * of the same method called previously.
+         * 
+         * @param seconds how long (in seconds) that youtube-dl should wait before giving up
+         * 
+         * @return same builder instance with updated value
+         * 
+         * @throws IllegalArgumentException when provided number is below zero
+         */
         public @NotNull Builder timeout( int seconds ) {
             if ( seconds < 0 )
                 throw new IllegalArgumentException( "'timeout' must be a positive number!" );
@@ -65,6 +101,22 @@ public class Network implements Flag {
             return this;
         }
 
+        /**
+         * Bind sending traffic to a specific network interface.
+         * <p>
+         * IP address must follow conventional IPv4 format, which
+         * consists of 4 octets with each octet is a number ranging
+         * from 0 to 255.
+         * <p>
+         * Note: This method overrides the value 
+         * of the same method called previously.
+         * 
+         * @param address interface's IPv4 address
+         * 
+         * @return same builder instance with updated value
+         * 
+         * @throws IllegalArgumentException when address is invalid
+         */
         public @NotNull Builder sourceIp( @NotNull String address ) {
             // Verify input 'address' is valid IPv4
             String[] octets = address.split( "\\." );
@@ -86,6 +138,16 @@ public class Network implements Flag {
             return this;
         }
 
+        /**
+         * Instructs program to communicate with the server using IPv4
+         * <p>
+         * Note: This argument can only be turned on. 
+         * Adding multiple calls will not change the outcome.
+         * 
+         * @return same builder instance with updated value
+         * 
+         * @throws IllegalArgumentException when force IPv6 is already enabled
+         */
         public @NotNull Builder forceIPv4() {
             if ( forceIPv6 )
                 throw new IllegalArgumentException( "Choose one! force IPv4 or force IPv6" );
@@ -94,6 +156,16 @@ public class Network implements Flag {
             return this;
         }
 
+        /**
+         * Instructs program to communicate with the server using IPv6
+         * <p>
+         * Note: This argument can only be turned on. 
+         * Adding multiple calls will not change the outcome.
+         * 
+         * @return same builder instance with updated value
+         * 
+         * @throws IllegalArgumentException when force IPv4 is already enabled
+         */
         public @NotNull Builder forceIPv6() {
             if ( forceIPv4 )
                 throw new IllegalArgumentException( "Choose one! force IPv4 or force IPv6" );
@@ -102,8 +174,11 @@ public class Network implements Flag {
             return this;
         }
 
-        public @NotNull Network build() {
-            return new Network( proxy, timeout, source, forceIPv4, forceIPv6 );
-        }
+        /**
+         * Finalize the configuration and pack it in {@link me.knighthat.youtubedl.command.flag.Network} class.
+         * 
+         * @return finalized {@link me.knighthat.youtubedl.command.flag.Network} class 
+         */
+        public @NotNull Network build() { return new Network( proxy, timeout, source, forceIPv4, forceIPv6 ); }
     }
 }
