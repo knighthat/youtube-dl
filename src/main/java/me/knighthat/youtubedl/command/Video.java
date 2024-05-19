@@ -3,13 +3,14 @@ package me.knighthat.youtubedl.command;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+
+import me.knighthat.extractor.youtube.response.Channel;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
-import me.knighthat.youtubedl.response.channel.Channel;
 import me.knighthat.youtubedl.response.format.AudioOnly;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.format.Mix;
@@ -54,10 +55,34 @@ public final class Video extends Command {
         if ( !(videoJson instanceof JsonObject json) )
             return Optional::empty;
 
-        Channel channel = new Channel(
-                json.get( "channel_id" ).getAsString(),
-                json.get( "uploader_id" ).getAsString()
-        );
+        Channel channel = new Channel() {
+
+            @Override
+            public @NotNull String id() {
+                return json.get( "channel_id" ).getAsString();
+            }
+
+            @Override
+            public @NotNull String handle() {
+                return json.get( "uploader_id" ).getAsString();
+            }
+
+            @Override
+            public @NotNull String title() {
+                return json.get("channel").getAsString();
+            }
+
+            @Override
+            public @NotNull String uploaderUrl() {
+                return json.get("uploader_url").getAsString();
+            }
+
+            @Override
+            public @NotNull String channelUrl() {
+                return json.get("channel_url").getAsString();
+            }
+            
+        };
 
         Set<Thumbnail> thumbnails = new HashSet<>();
         for (JsonElement element : json.getAsJsonArray( "thumbnails" )) {

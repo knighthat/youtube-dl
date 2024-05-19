@@ -1,7 +1,6 @@
 package me.knighthat.youtubedl.response.video;
 
-import me.knighthat.youtubedl.response.Response;
-import me.knighthat.youtubedl.response.channel.Channel;
+import me.knighthat.extractor.youtube.response.Channel;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
 import me.knighthat.youtubedl.response.thumbnail.Thumbnail;
@@ -22,5 +21,5 @@ public record Video( @NotNull String id,
                      @NotNull Set<Subtitle> subtitles,
                      @NotNull Set<Format> formats,
                      @NotNull Channel uploader
-) implements Response {
+) {
 }
