@@ -2,5 +2,10 @@ package me.knighthat.youtubedl.response.thumbnail;
 
 import org.jetbrains.annotations.NotNull;
 
-public record Thumbnail( int width, int height, @NotNull String url ) {
+/**
+ * Contains a link to video's thumbnail
+ */
+public interface Thumbnail {
+
+    @NotNull String url();
 }

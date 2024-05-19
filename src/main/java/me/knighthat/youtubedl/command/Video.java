@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.extractor.youtube.response.Channel;
+import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
@@ -19,7 +20,6 @@ import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.format.Mix;
 import me.knighthat.youtubedl.response.format.VideoOnly;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
-import me.knighthat.youtubedl.response.thumbnail.Thumbnail;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -112,11 +112,18 @@ public final class Video extends Command {
             }
             */
             JsonObject thumbJson = element.getAsJsonObject();
-            thumbnails.add( new Thumbnail(
-                    thumbJson.get( "width" ).getAsInt(),
-                    thumbJson.get( "height" ).getAsInt(),
-                    thumbJson.get( "url" ).getAsString()
-            ) );
+            thumbnails.add(
+                new Thumbnail() {
+                    @Override
+                    public @NotNull String url() { return thumbJson.get( "url" ).getAsString(); }
+    
+                    @Override
+                    public int width() { return thumbJson.get( "width" ).getAsInt(); }
+    
+                    @Override
+                    public int height() { return thumbJson.get( "height" ).getAsInt(); }
+                }
+            );
         }
 
         List<Subtitle> subtitles = Subtitles.builder( url() )
