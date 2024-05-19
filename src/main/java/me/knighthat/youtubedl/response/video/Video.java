@@ -18,9 +18,9 @@ public interface Video {
 
     @NotNull String title();
 
-    @NotNull @Unmodifiable Set<Thumbnail> thumbnails();
+    @NotNull @Unmodifiable Set<? extends Thumbnail> thumbnails();
 
-    @NotNull @Unmodifiable Set<Subtitle> subtitles();
+    @NotNull @Unmodifiable Set<? extends Subtitle> subtitles();
 
-    @NotNull @Unmodifiable Set<Format> formats();   
+    @NotNull @Unmodifiable Set<? extends Format> formats();   
 }
