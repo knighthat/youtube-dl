@@ -5,11 +5,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public record Subtitle( @NotNull String language, @NotNull Format format, boolean isAutomatic ) {
+/**
+ * Subtitle
+ */
+public interface Subtitle {
 
-    public @NotNull Locale locale() {
-        return new Locale( language );
-    }
+    @NotNull String language();
+
+    @NotNull Format format();
+
+    boolean isAutomatic();
+
+    default @NotNull Locale locale() { return new Locale( language() ); }
 
     public enum Format {
         VTT,

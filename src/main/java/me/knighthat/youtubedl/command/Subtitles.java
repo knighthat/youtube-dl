@@ -86,9 +86,21 @@ public final class Subtitles extends Command {
 
                 for (String f : formats) {
                     try {
-                        Subtitle.Format format = Subtitle.Format.match( f.trim() );
-                        Subtitle subtitle = new Subtitle( parts[0].trim(), format, isAutomatic );
-                        subtitles.add( subtitle );
+                        boolean automatic_caption = isAutomatic;
+                        subtitles.add(
+                          new Subtitle() {
+
+                            @Override
+                            public @NotNull String language() { return parts[0].trim(); }
+
+                            @Override
+                            public @NotNull Format format() { return Subtitle.Format.match( f.trim() ); }
+
+                            @Override
+                            public boolean isAutomatic() { return automatic_caption; }
+                            
+                          }
+                        );
                     } catch ( UnsupportedOperationException e ) {
                         Logger.exception( "failed to parse subtitle!", e, Level.WARNING );
                     }
