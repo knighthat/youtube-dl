@@ -7,19 +7,20 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.extractor.youtube.response.Channel;
+import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.exception.UnsupportedSubtitleFormatException;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
 import me.knighthat.youtubedl.response.format.AudioOnly;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.format.Mix;
 import me.knighthat.youtubedl.response.format.VideoOnly;
-import me.knighthat.youtubedl.response.subtitle.Subtitle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
@@ -29,7 +30,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
@@ -38,6 +38,41 @@ public final class Video extends Command {
 
     @NotNull
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat( "yyyyMMdd" );
+
+    private static @NotNull Set<Subtitle> subtitleSet( @NotNull JsonObject json, boolean isAutomatic ) {
+        Set<Subtitle> subtitles = new HashSet<>();
+
+        for (String language : json.keySet()) {
+            for (JsonElement formatKey : json.getAsJsonArray(language)) {
+                JsonObject jsonFormat = formatKey.getAsJsonObject();
+
+                try {   
+                    String ext = jsonFormat.get("ext").getAsString();
+                    Subtitle.Format format = Subtitle.Format.match(ext);
+
+                    subtitles.add(
+                        new Subtitle() {
+                            @Override
+                            public @NotNull String language() { return language; }
+
+                            @Override
+                            public @NotNull Format format() { return format; }
+
+                            @Override
+                            public boolean isAutomatic() { return isAutomatic; }
+
+                            @Override
+                            public @NotNull String url() { return jsonFormat.get("url").getAsString(); }
+                        }
+                    );
+                } catch (UnsupportedSubtitleFormatException e) {
+                    Logger.exception("failed to parse subtitle!", e, Level.WARNING);
+                }
+            }
+        }
+
+        return subtitles;
+    }
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
@@ -74,29 +109,19 @@ public final class Video extends Command {
         Channel channel = new Channel() {
 
             @Override
-            public @NotNull String id() {
-                return json.get( "channel_id" ).getAsString();
-            }
+            public @NotNull String id() { return json.get( "channel_id" ).getAsString(); }
 
             @Override
-            public @NotNull String handle() {
-                return json.get( "uploader_id" ).getAsString();
-            }
+            public @NotNull String handle() { return json.get( "uploader_id" ).getAsString(); }
 
             @Override
-            public @NotNull String title() {
-                return json.get("channel").getAsString();
-            }
+            public @NotNull String title() { return json.get("channel").getAsString(); }
 
             @Override
-            public @NotNull String uploaderUrl() {
-                return json.get("uploader_url").getAsString();
-            }
+            public @NotNull String uploaderUrl() { return json.get("uploader_url").getAsString(); }
 
             @Override
-            public @NotNull String channelUrl() {
-                return json.get("channel_url").getAsString();
-            }
+            public @NotNull String channelUrl() { return json.get("channel_url").getAsString(); }
             
         };
 
@@ -126,13 +151,13 @@ public final class Video extends Command {
             );
         }
 
-        List<Subtitle> subtitles = Subtitles.builder( url() )
-                                            .flags( flags )
-                                            .headers( headers )
-                                            .userAgent( userAgent() )
-                                            .geoConfig( geoConfig() )
-                                            .execute()
-                                            .items();
+        /* CAPTIONS */
+        Set<Subtitle> subtitles = new HashSet<>();
+        if (json.has("automatic_captions")) 
+            subtitles.addAll( subtitleSet(json, true) );
+        if (json.has("subtitles")) 
+            subtitles.addAll(subtitleSet(json, false));
+        
 
         JsonArray formatArray = json.getAsJsonArray( "formats" );
         Set<Format> formats = new HashSet<>( formatArray.size() );
@@ -165,8 +190,11 @@ public final class Video extends Command {
         YouTubeVideo video = new YouTubeVideo(
             json.get( "id" ).getAsString(), 
             json.get( "title" ).getAsString(),
-            thumbnails, new HashSet<>(subtitles), 
-            formats, null, uploadDate, 
+            thumbnails, 
+            subtitles, 
+            formats, 
+            json.get("description").getAsString(), 
+            uploadDate, 
             json.get( "duration" ).getAsLong(), 
             Json.GSON.fromJson( json.get( "view_count" ), BigInteger.class ), 
             Json.GSON.fromJson( json.get( "like_count" ), BigInteger.class ), 

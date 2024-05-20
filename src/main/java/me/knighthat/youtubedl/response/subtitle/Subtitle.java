@@ -14,7 +14,7 @@ public interface Subtitle {
 
     @NotNull Format format();
 
-    boolean isAutomatic();
+    @NotNull String url();
 
     default @NotNull Locale locale() { return new Locale( language() ); }
 
