@@ -44,8 +44,7 @@ public final class Thumbnails extends Command {
             if ( parts.length < 4 )
                 throw new InsufficientElementsException( Arrays.toString( parts ), parts.length, 4 );
 
-            int width = Integer.parseInt( parts[1] ), height = Integer.parseInt( parts[2] );
-            results.add( new Thumbnail( width, height, parts[3] ) );
+            results.add( () -> parts[3] );
         }
 
         return () -> List.copyOf( results );
