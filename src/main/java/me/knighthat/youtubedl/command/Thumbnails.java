@@ -15,17 +15,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-public final class Thumbnails extends Command {
+public class Thumbnails extends Command {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Thumbnails( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    protected Thumbnails( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
         flags().add( Flag.noValue( "--list-thumbnails" ) );
     }
 
     @Override
-    public @NotNull ListResponse<Thumbnail> execute() {
+    public @NotNull ListResponse<? extends Thumbnail> execute() {
         List<Thumbnail> results = new ArrayList<>();
 
         /*
@@ -51,7 +51,8 @@ public final class Thumbnails extends Command {
     }
 
     public static class Builder extends Command.Builder {
-        private Builder( @NotNull String url ) { super( url ); }
+        
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) {
@@ -83,6 +84,6 @@ public final class Thumbnails extends Command {
         }
 
         @Override
-        public @NotNull ListResponse<Thumbnail> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<? extends Thumbnail> execute() { return this.build().execute(); }
     }
 }
