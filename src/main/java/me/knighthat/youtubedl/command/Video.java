@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 import me.knighthat.extractor.youtube.response.Channel;
+import me.knighthat.extractor.youtube.response.subtitle.DownloadableSubtitle;
 import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
@@ -39,8 +40,8 @@ public final class Video extends Command {
     @NotNull
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat( "yyyyMMdd" );
 
-    private static @NotNull Set<Subtitle> subtitleSet( @NotNull JsonObject json, boolean isAutomatic ) {
-        Set<Subtitle> subtitles = new HashSet<>();
+    private static @NotNull Set<DownloadableSubtitle> subtitleSet( @NotNull JsonObject json, boolean isAutomatic ) {
+        Set<DownloadableSubtitle> subtitles = new HashSet<>();
 
         for (String language : json.keySet()) {
             for (JsonElement formatKey : json.getAsJsonArray(language)) {
@@ -51,7 +52,7 @@ public final class Video extends Command {
                     Subtitle.Format format = Subtitle.Format.match(ext);
 
                     subtitles.add(
-                        new Subtitle() {
+                        new DownloadableSubtitle() {
                             @Override
                             public @NotNull String language() { return language; }
 
@@ -62,7 +63,7 @@ public final class Video extends Command {
                             public boolean isAutomatic() { return isAutomatic; }
 
                             @Override
-                            public @NotNull String url() { return jsonFormat.get("url").getAsString(); }
+                            public @NotNull String url() { return jsonFormat.get("url").getAsString(); }  
                         }
                     );
                 } catch (UnsupportedSubtitleFormatException e) {
@@ -107,7 +108,6 @@ public final class Video extends Command {
         }
 
         Channel channel = new Channel() {
-
             @Override
             public @NotNull String id() { return json.get( "channel_id" ).getAsString(); }
 
@@ -122,7 +122,6 @@ public final class Video extends Command {
 
             @Override
             public @NotNull String channelUrl() { return json.get("channel_url").getAsString(); }
-            
         };
 
         Set<Thumbnail> thumbnails = new HashSet<>();
@@ -152,7 +151,7 @@ public final class Video extends Command {
         }
 
         /* CAPTIONS */
-        Set<Subtitle> subtitles = new HashSet<>();
+        Set<DownloadableSubtitle> subtitles = new HashSet<>();
         if (json.has("automatic_captions")) 
             subtitles.addAll( subtitleSet(json, true) );
         if (json.has("subtitles")) 
@@ -251,7 +250,7 @@ public final class Video extends Command {
         private final Set<Thumbnail> thumbnails; 
         @NotNull
         @Unmodifiable
-        private final Set<Subtitle> subtitles;
+        private final Set<DownloadableSubtitle> subtitles;
         @NotNull
         @Unmodifiable
         private final Set<Format> formats;
@@ -272,7 +271,7 @@ public final class Video extends Command {
             @NotNull String id, 
             @NotNull String title, 
             @NotNull @Unmodifiable Set<Thumbnail> thumbnails,
-            @NotNull @Unmodifiable Set<Subtitle> subtitles, 
+            @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles, 
             @NotNull @Unmodifiable Set<Format> formats,
             @NotNull String description, 
             @NotNull Date uploadDate, 
