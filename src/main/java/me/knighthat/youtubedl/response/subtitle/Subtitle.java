@@ -14,8 +14,6 @@ public interface Subtitle {
 
     @NotNull Format format();
 
-    @NotNull String url();
-
     default @NotNull Locale locale() { return new Locale( language() ); }
 
     public enum Format {
