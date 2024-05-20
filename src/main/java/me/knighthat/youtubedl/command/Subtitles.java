@@ -1,12 +1,13 @@
 package me.knighthat.youtubedl.command;
 
-import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.ListResponse;
+import me.knighthat.youtubedl.response.subtitle.Subtitle;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,8 +23,6 @@ public final class Subtitles extends Command {
     private static final Pattern NO_SUBTITLE_PATTERN        = Pattern.compile( "\\w+ has no subtitles" );
     @NotNull
     private static final Pattern HUMAN_SUBTITLE_PATTERN     = Pattern.compile( "Available subtitles for \\w+:" );
-    @NotNull
-    private static final Pattern AUTOMATIC_SUBTITLE_PATTERN = Pattern.compile( "Available automatic captions for \\w+:" );
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
@@ -52,7 +51,7 @@ public final class Subtitles extends Command {
 
             videoId has no subtitles
          */
-        Boolean isAutomatic = null;
+        boolean hasCaption = false;
         for (int i = 0 ; i < outputs.size() ; i++) {
             // af       vtt, ttml, srv3, srv2, srv1, json3
             String output = outputs.get( i );
@@ -60,25 +59,17 @@ public final class Subtitles extends Command {
             if ( NO_SUBTITLE_PATTERN.matcher( output ).matches() )
                 // Stop iteration if output is "videoId has no subtitles"
                 break;
-            if ( AUTOMATIC_SUBTITLE_PATTERN.matcher( output ).matches() ) {
-                /*
-                Set isAutomatic if line matches "Available automatic captions for videoId:"
-                and skip "Language formats"
-                */
-                isAutomatic = true;
-                i++;
-                continue;
-            } else if ( HUMAN_SUBTITLE_PATTERN.matcher( output ).matches() ) {
+            if ( HUMAN_SUBTITLE_PATTERN.matcher( output ).matches() ) {
                 /*
                 Set isAutomatic if line matches "Available subtitles for videoId:"
                 and skip "Language formats"
                 */
-                isAutomatic = false;
+                hasCaption = true;
                 i++;
                 continue;
             }
 
-            if ( isAutomatic != null ) {
+            if ( hasCaption ) {
                 // ["af", "vtt, ttml, srv3, srv2, srv1, json3"]
                 String[] parts = output.split( "(?<!,)\\s+" ); // Split string by spaces but not if it's right after coma
                 // [vtt,  ttml,  srv3,  srv2,  srv1,  json3]
@@ -86,7 +77,6 @@ public final class Subtitles extends Command {
 
                 for (String f : formats) {
                     try {
-                        boolean automatic_caption = isAutomatic;
                         subtitles.add(
                           new Subtitle() {
                             @Override
@@ -94,9 +84,6 @@ public final class Subtitles extends Command {
 
                             @Override
                             public @NotNull Format format() { return Subtitle.Format.match( f.trim() ); }
-
-                            @Override
-                            public boolean isAutomatic() { return automatic_caption; }
                           }
                         );
                     } catch ( UnsupportedOperationException e ) {
