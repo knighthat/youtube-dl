@@ -17,32 +17,26 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-public final class Subtitles extends Command {
+public class Subtitles extends Command {
 
     @NotNull
-    private static final Pattern NO_SUBTITLE_PATTERN        = Pattern.compile( "\\w+ has no subtitles" );
+    protected static final Pattern NO_SUBTITLE_PATTERN        = Pattern.compile( "\\w+ has no subtitles" );
     @NotNull
-    private static final Pattern HUMAN_SUBTITLE_PATTERN     = Pattern.compile( "Available subtitles for \\w+:" );
+    protected static final Pattern HUMAN_SUBTITLE_PATTERN     = Pattern.compile( "Available subtitles for \\w+:" );
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Subtitles( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
+    protected Subtitles( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
         flags().add( Flag.noValue( "--list-subs" ) );
     }
 
     @Override
-    public @NotNull ListResponse<Subtitle> execute() {
+    public @NotNull ListResponse<? extends Subtitle> execute() {
         List<String> outputs = super.outputs();
         Set<Subtitle> subtitles = new HashSet<>();
 
         /*
-            Available automatic captions for videoId:
-            Language formats
-            af       vtt, ttml, srv3, srv2, srv1, json3
-            ak       vtt, ttml, srv3, srv2, srv1, json3
-            sq       vtt, ttml, srv3, srv2, srv1, json3
-
             Available subtitles for videoId:
             Language formats
             zh-Hans  vtt, ttml, srv3, srv2, srv1, json3
@@ -50,7 +44,7 @@ public final class Subtitles extends Command {
             hi       vtt, ttml, srv3, srv2, srv1, json3
 
             videoId has no subtitles
-         */
+        */
         boolean hasCaption = false;
         for (int i = 0 ; i < outputs.size() ; i++) {
             // af       vtt, ttml, srv3, srv2, srv1, json3
@@ -97,7 +91,8 @@ public final class Subtitles extends Command {
     }
 
     public static class Builder extends Command.Builder {
-        private Builder( @NotNull String url ) { super( url ); }
+        
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) {
@@ -127,6 +122,6 @@ public final class Subtitles extends Command {
         public @NotNull Subtitles build() { return new Subtitles( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
 
         @Override
-        public @NotNull ListResponse<Subtitle> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<? extends Subtitle> execute() { return this.build().execute(); }
     }
 }
