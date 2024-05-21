@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
@@ -20,6 +21,8 @@ import me.knighthat.youtubedl.response.formats.Format;
  * Extract available streaming formats of a YouTube's video.
  */
 public class Formats extends me.knighthat.youtubedl.command.Formats {
+
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder(url); }
 
     private Formats(
         @NotNull String url, 
@@ -71,10 +74,22 @@ public class Formats extends me.knighthat.youtubedl.command.Formats {
         return () -> formats;
     }
 
-    class Builder extends me.knighthat.youtubedl.command.Formats.Builder {
+    public static class Builder extends me.knighthat.youtubedl.command.Formats.Builder {
 
         private Builder(@NotNull String url) { super(url); }
-    
+
+        @Override
+        public @NotNull Builder flags(@NotNull Flag... flags) { return (Builder) super.flags(flags); }
+
+        @Override
+        public @NotNull Builder headers(@NotNull Header... headers) { return (Builder) super.headers(headers); }
+
+        @Override
+        public @NotNull Builder userAgent(@Nullable UserAgent userAgent) { return (Builder) super.userAgent(userAgent); }
+
+        @Override
+        public @NotNull Builder geoConfig(@Nullable GeoConfig geoConfig) { return (Builder) super.geoConfig(geoConfig); }
+
         @Override
         public @NotNull Formats build() {
             return new Formats( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() );

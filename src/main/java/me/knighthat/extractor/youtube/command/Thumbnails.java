@@ -36,6 +36,8 @@ public class Thumbnails extends me.knighthat.youtubedl.command.Thumbnails {
         return result;
     }
 
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
+
     protected Thumbnails(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
@@ -88,13 +90,20 @@ public class Thumbnails extends me.knighthat.youtubedl.command.Thumbnails {
         protected Builder(@NotNull String url) { super(url); }
 
         @Override
-        public @NotNull Thumbnails build() {
-            return new Thumbnails(getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig());
-        }
+        public @NotNull Builder flags(@NotNull Flag... flags) { return (Builder) super.flags(flags); }
 
         @Override
-        public @NotNull ListResponse<? extends me.knighthat.youtubedl.response.thumbnail.Thumbnail> execute() {
-            return this.build().execute();
+        public @NotNull Builder headers(@NotNull Header... headers) { return (Builder) super.headers(headers); }
+
+        @Override
+        public @NotNull Builder userAgent(@Nullable UserAgent userAgent) { return (Builder) super.userAgent(userAgent); }
+
+        @Override
+        public @NotNull Builder geoConfig(@Nullable GeoConfig geoConfig) { return (Builder) super.geoConfig(geoConfig); }
+
+        @Override
+        public @NotNull Thumbnails build() {
+            return new Thumbnails(getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig());
         }
     }
 }

@@ -94,6 +94,8 @@ public class Video extends me.knighthat.youtubedl.command.Video {
         return formats;
     }
 
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
+
     private Video(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
