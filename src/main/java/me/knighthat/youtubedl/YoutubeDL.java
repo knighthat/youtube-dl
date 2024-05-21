@@ -1,7 +1,12 @@
 package me.knighthat.youtubedl;
 
 import lombok.Getter;
-import me.knighthat.youtubedl.command.*;
+import me.knighthat.extractor.youtube.command.Formats;
+import me.knighthat.extractor.youtube.command.Subtitles;
+import me.knighthat.extractor.youtube.command.Thumbnails;
+import me.knighthat.extractor.youtube.command.Video;
+import me.knighthat.youtubedl.command.Stream;
+import me.knighthat.youtubedl.command.Json;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
