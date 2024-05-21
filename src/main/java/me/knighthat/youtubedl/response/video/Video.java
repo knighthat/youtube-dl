@@ -1,6 +1,6 @@
 package me.knighthat.youtubedl.response.video;
 
-import me.knighthat.youtubedl.response.format.Format;
+import me.knighthat.youtubedl.response.formats.Format;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
 import me.knighthat.youtubedl.response.thumbnail.Thumbnail;
 import org.jetbrains.annotations.NotNull;
