@@ -63,7 +63,7 @@ class FormatUtils {
         if ( !SIZE_PATTERN.matcher( sizeStr ).matches() )
             throw new PatternMismatchException( sizeStr, "file's size", arr );
 
-        int pow = switch ( sizeStr.replaceAll( SIZE_UNIT, "" ) ) {
+        int pow = switch ( sizeStr.replaceAll( SIZE_FORMAT, "" ) ) {
             case "KiB" -> 1;
             case "MiB" -> 2;
             case "GiB" -> 3;
@@ -75,7 +75,7 @@ class FormatUtils {
             default -> 0;
         };
 
-        String actualSize = sizeStr.replaceAll( SIZE_FORMAT, "" );
+        String actualSize = sizeStr.replaceAll( SIZE_UNIT, "" );
         double unconvertedSize = Double.parseDouble( actualSize );
         if ( pow != 0 ) 
             unconvertedSize *= Math.pow( 1024, pow );
