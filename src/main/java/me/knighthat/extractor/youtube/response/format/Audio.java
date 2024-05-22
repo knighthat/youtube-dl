@@ -79,7 +79,7 @@ public class Audio implements AudioFormat, SizedMedia {
         "format": "249 - audio only (audio_quality_low)",
         "http_headers": {}
         */
-        for ( String key : new String[] { "format_id", "ext", "tbr", "acodec", "asr", "size" } )
+        for ( String key : new String[] { "format_id", "ext", "tbr", "acodec", "asr", "filesize" } )
             if ( !json.has(key) )
                 throw new NullPointerException(key + " does not exist!");   
 
