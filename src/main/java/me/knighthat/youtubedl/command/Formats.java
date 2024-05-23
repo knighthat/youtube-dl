@@ -5,7 +5,8 @@ import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.response.ListResponse;
-import me.knighthat.youtubedl.response.formats.Format;
+import me.knighthat.youtubedl.response.format.Format;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

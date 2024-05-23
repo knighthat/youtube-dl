@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.exception.PatternMismatchException;
-import me.knighthat.youtubedl.response.formats.Format;
+import me.knighthat.youtubedl.response.format.Format;
 
 public class TestVideo {
 

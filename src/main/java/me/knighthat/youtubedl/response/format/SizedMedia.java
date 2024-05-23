@@ -1,4 +1,4 @@
-package me.knighthat.youtubedl.response.formats;
+package me.knighthat.youtubedl.response.format;
 
 import java.math.BigInteger;
 

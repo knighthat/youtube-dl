@@ -31,7 +31,7 @@ import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.exception.UnsupportedSubtitleFormatException;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
-import me.knighthat.youtubedl.response.formats.Format;
+import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
 
 /**

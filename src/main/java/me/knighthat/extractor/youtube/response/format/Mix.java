@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
-import me.knighthat.youtubedl.response.formats.Format;
-import me.knighthat.youtubedl.response.formats.MixFormat;
+import me.knighthat.youtubedl.response.format.Format;
+import me.knighthat.youtubedl.response.format.MixFormat;
 
 /**
  * Mix
@@ -36,7 +36,7 @@ public class Mix implements MixFormat {
     private final float fps;
 
     {
-        this.type = me.knighthat.youtubedl.response.formats.Format.Type.MIXED;
+        this.type = me.knighthat.youtubedl.response.format.Format.Type.MIXED;
     }
 
     public Mix( String @NotNull [] arr ) {

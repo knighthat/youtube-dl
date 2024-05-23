@@ -10,9 +10,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
-import me.knighthat.youtubedl.response.formats.AudioFormat;
-import me.knighthat.youtubedl.response.formats.Format;
-import me.knighthat.youtubedl.response.formats.SizedMedia;
+import me.knighthat.youtubedl.response.format.AudioFormat;
+import me.knighthat.youtubedl.response.format.Format;
+import me.knighthat.youtubedl.response.format.SizedMedia;
 
 /**
  * Audio
@@ -36,7 +36,7 @@ public class Audio implements AudioFormat, SizedMedia {
     private final BigInteger size;
 
     {
-        this.type = me.knighthat.youtubedl.response.formats.Format.Type.AUDIO_ONLY;
+        this.type = me.knighthat.youtubedl.response.format.Format.Type.AUDIO_ONLY;
     }
 
     public Audio ( String @NotNull [] arr ) {

@@ -10,9 +10,9 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
-import me.knighthat.youtubedl.response.formats.Format;
-import me.knighthat.youtubedl.response.formats.SizedMedia;
-import me.knighthat.youtubedl.response.formats.VideoFormat;
+import me.knighthat.youtubedl.response.format.Format;
+import me.knighthat.youtubedl.response.format.SizedMedia;
+import me.knighthat.youtubedl.response.format.VideoFormat;
 
 /**
  * VideoOnly
@@ -38,7 +38,7 @@ public class Video implements VideoFormat, SizedMedia {
     private final BigInteger size;
 
     {
-        this.type = me.knighthat.youtubedl.response.formats.Format.Type.VIDEO_ONLY;
+        this.type = me.knighthat.youtubedl.response.format.Format.Type.VIDEO_ONLY;
     }
 
     public Video(String @NotNull [] arr) {
