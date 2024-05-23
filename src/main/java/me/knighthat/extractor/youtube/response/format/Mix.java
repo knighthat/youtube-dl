@@ -77,7 +77,7 @@ public class Mix implements MixFormat {
         "protocol": "https",
         "http_headers": {}
         */
-        for ( String key : new String[] { "format_id", "ext", "tbr", "vcodec", "acodec", "asr", "format_code", "fps" } ) 
+        for ( String key : new String[] { "format_id", "ext", "tbr", "vcodec", "acodec", "asr", "format_note", "fps" } ) 
             if ( !json.has(key) )
                 throw new NullPointerException(key + " does not exist!");
 
@@ -88,7 +88,7 @@ public class Mix implements MixFormat {
         this.vCodec = json.get( "vcodec" ).getAsString();
         this.aCodec = json.get( "acodec" ).getAsString();
         this.sampleRate = json.get( "asr" ).getAsInt();
-        this.resolution = json.get( "format_node" ).getAsString();
+        this.resolution = json.get( "format_note" ).getAsString();
         this.fps = json.get( "fps" ).getAsFloat();  
     }
 }
