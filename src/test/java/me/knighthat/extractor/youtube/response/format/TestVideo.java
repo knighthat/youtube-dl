@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import me.knighthat.youtubedl.exception.InsufficientElementsException;
+import me.knighthat.youtubedl.exception.PatternMismatchException;
 import me.knighthat.youtubedl.response.formats.Format;
 
 public class TestVideo {
@@ -129,5 +131,68 @@ public class TestVideo {
         Assertions.assertEquals( "1440p", video.resolution() );
         Assertions.assertEquals( 24f, video.fps() );
         Assertions.assertEquals( BigInteger.valueOf( 159593267L ), video.size() );
+    }
+
+    @Test
+    void testNotEnoughArgArrayConstructor() {
+        /* MISSING "filesize" */
+        @NotNull
+        String[] NOT_ENOUGH_ARGUMENTS_ARRAY = {
+            "400", 
+            "mp4", 
+            "2560x1440", 
+            "1440p", 
+            "5314k", 
+            "mp4_dash container", 
+            "av01.0.12M.08", 
+            "24fps", 
+            "video only", 
+        };
+
+        Assertions.assertThrows( 
+            InsufficientElementsException.class,
+            () -> new Video( NOT_ENOUGH_ARGUMENTS_ARRAY )
+        );
+    }
+
+    @Test
+    void testWrongTypeArrayConstructor() {
+        /* 5314k -> 5314b */
+        @NotNull
+        final String[] WRONG_BITRATE_FORMAT_ARRAY = {
+            "400", 
+            "mp4", 
+            "2560x1440", 
+            "1440p", 
+            "5314b", 
+            "mp4_dash container", 
+            "av01.0.12M.08", 
+            "24fps", 
+            "video only", 
+            "152.20MiB"
+        };
+        Assertions.assertThrows( 
+            PatternMismatchException.class, 
+            () -> new Video( WRONG_BITRATE_FORMAT_ARRAY )
+        );
+
+        /* 24fps -> 24 */
+        @NotNull
+        final String[] WRONG_FPS_FORMAT_ARRAY = {
+            "400", 
+            "mp4", 
+            "2560x1440", 
+            "1440p", 
+            "5314k", 
+            "mp4_dash container", 
+            "av01.0.12M.08", 
+            "24", 
+            "video only", 
+            "152.20MiB"
+        };
+        Assertions.assertThrows(
+            PatternMismatchException.class,
+            () -> new Video( WRONG_FPS_FORMAT_ARRAY )
+        );
     }
 }
