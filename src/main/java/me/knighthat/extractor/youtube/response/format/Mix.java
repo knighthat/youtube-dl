@@ -50,8 +50,8 @@ public class Mix implements MixFormat {
         this.vCodec = arr[5];
         this.aCodec = arr[7].split( "\\s+" )[0];
         this.sampleRate = FormatUtils.sampleRateParser( arr, 7 );
-        this.resolution = FormatUtils.parseResolution( arr, 3 );
-        this.fps = FormatUtils.parseFps( arr, 6 );
+        this.resolution = FormatUtils.reolutionParser( arr, 3 );
+        this.fps = FormatUtils.fpsParser( arr, 6 );
     }
 
     public Mix( @NotNull JsonObject json ) {

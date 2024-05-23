@@ -33,7 +33,7 @@ class FormatUtils {
     @NotNull
     static final Gson GSON = new Gson();
 
-    static float parseFps( String @NotNull [] arr, int pos ) throws PatternMismatchException {
+    static float fpsParser( String @NotNull [] arr, int pos ) throws PatternMismatchException {
         if ( FPS_PATTERN.matcher( arr[pos] ).matches() ) {
             String framePerSecond = arr[pos].replace( "fps", "" );
             return Float.parseFloat( framePerSecond );
@@ -41,7 +41,7 @@ class FormatUtils {
             throw new PatternMismatchException( arr[pos], "fps", arr );
     }
 
-    static @NotNull String parseResolution( String @NotNull [] arr, int pos ) throws PatternMismatchException {
+    static @NotNull String reolutionParser( String @NotNull [] arr, int pos ) throws PatternMismatchException {
         if ( RESOLUTION_PATTERN.matcher( arr[pos] ).matches() )
             return arr[pos];
         else

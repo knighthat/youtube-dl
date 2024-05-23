@@ -49,9 +49,9 @@ public class Video implements VideoFormat, SizedMedia {
         this.code = arr[0];
         this.extension = arr[1];
         this.tbr = FormatUtils.tbrParser( arr, 4 );
-        this.fps = FormatUtils.parseFps(arr, 7);
+        this.fps = FormatUtils.fpsParser(arr, 7);
         this.vCodec = arr[6];
-        this.resolution = FormatUtils.parseResolution(arr, 3);
+        this.resolution = FormatUtils.reolutionParser(arr, 3);
         this.size = FormatUtils.sizeParser( arr, arr.length - 1 );
     }
 
