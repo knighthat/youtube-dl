@@ -92,7 +92,7 @@ public class Video implements VideoFormat, SizedMedia {
         float tbr = json.get( "tbr" ).getAsFloat();
         this.tbr = Math.round( tbr) ;
         this.vCodec = json.get( "vcodec" ).getAsString();
-        this.resolution = json.get( "format_node" ).getAsString();
+        this.resolution = json.get( "format_note" ).getAsString();
         this.fps = json.get( "fps" ).getAsFloat();
         this.size = FormatUtils.GSON.fromJson( json.get( "filesize" ), BigInteger.class );
     }
