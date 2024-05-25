@@ -108,4 +108,7 @@ public class UserAgent implements Flag {
      */
     @Override
     public String @NotNull [] flags() { return new String[]{ "--user-agent", userAgent }; }
+
+    @Override
+    public final String toString() { return userAgent; }
 }
