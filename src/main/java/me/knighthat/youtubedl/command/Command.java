@@ -44,7 +44,7 @@ public abstract class Command {
 
     public abstract @NotNull Response execute();
 
-    protected String @NotNull [] command() {
+    public String @NotNull [] command() {
         List<String> command = new ArrayList<>();
 
         command.add( YoutubeDL.getPythonPath() );
