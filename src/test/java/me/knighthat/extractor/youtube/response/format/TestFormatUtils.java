@@ -23,9 +23,9 @@ public class TestFormatUtils {
         Assertions.assertDoesNotThrow( 
             () -> FormatUtils.fpsParser( SAMPLES, 0 )
         );
-        // Assertions.assertDoesNotThrow(
-        //     () -> FormatUtils.fpsParser( SAMPLES, 1 )
-        // );
+        Assertions.assertDoesNotThrow(
+            () -> FormatUtils.fpsParser( SAMPLES, 1 )
+        );
         
         /* Invalid format */
         Assertions.assertThrows(

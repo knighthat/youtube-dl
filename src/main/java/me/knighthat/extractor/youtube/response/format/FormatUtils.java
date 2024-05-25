@@ -21,7 +21,7 @@ class FormatUtils {
     private static String SIZE_UNIT = "[KMGTPEZY]?iB$";
 
     @NotNull
-    static final Pattern FPS_PATTERN        = Pattern.compile( "^\\d+fps$" );
+    static final Pattern FPS_PATTERN        = Pattern.compile( "^\\d+(\\.\\d+)?\s*fps$" );
     @NotNull
     static final Pattern RESOLUTION_PATTERN = Pattern.compile( "^\\d+p$" );
     @NotNull
