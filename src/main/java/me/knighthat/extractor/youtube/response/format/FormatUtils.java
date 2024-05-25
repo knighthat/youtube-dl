@@ -1,6 +1,7 @@
 package me.knighthat.extractor.youtube.response.format;
 
 import java.math.BigInteger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,7 @@ class FormatUtils {
     @NotNull
     static final Pattern SIZE_PATTERN = Pattern.compile( SIZE_FORMAT + SIZE_UNIT );
     @NotNull
-    static final Pattern SAMPLING_RATE_PATTERN = Pattern.compile( "^\\d+Hz$" );
+    static final Pattern SAMPLING_RATE_PATTERN = Pattern.compile( "\\d+\s*Hz" );
 
     @NotNull
     static final Gson GSON = new Gson();
@@ -84,14 +85,12 @@ class FormatUtils {
     }
 
     static int sampleRateParser( String @NotNull [] arr, int pos ) {
-        int smplRateStart = arr[pos].indexOf( "(" ) + 1;
-        int smplRateEnd = arr[pos].indexOf( ")", smplRateStart );
+        String smplStr = arr[pos];
+        Matcher matcher = SAMPLING_RATE_PATTERN.matcher( smplStr );
+        if ( !matcher.find() )
+            throw new PatternMismatchException( smplStr, "sampling rate", arr );
 
-        String smplRate = arr[pos].substring( smplRateStart, smplRateEnd );
-        if ( SAMPLING_RATE_PATTERN.matcher( smplRate ).matches() ) {
-            smplRate = smplRate.substring( 0, smplRate.length() - 2 );
-            return Integer.parseInt( smplRate );
-        } else
-            throw new PatternMismatchException( smplRate, "sampling rate", arr );
+        smplStr = smplStr.substring( matcher.start(), matcher.end() - 2 );
+        return Integer.parseInt( smplStr );
     }
 }
