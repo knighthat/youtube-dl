@@ -35,22 +35,24 @@ class FormatUtils {
     static final Gson GSON = new Gson();
 
     static float fpsParser( String @NotNull [] arr, int pos ) throws PatternMismatchException {
-        if ( FPS_PATTERN.matcher( arr[pos] ).matches() ) {
-            String framePerSecond = arr[pos].replace( "fps", "" );
+        String fpsStr = arr[pos].trim();
+        if ( FPS_PATTERN.matcher( fpsStr ).matches() ) {
+            String framePerSecond = fpsStr.replace( "fps", "" );
             return Float.parseFloat( framePerSecond );
         } else
-            throw new PatternMismatchException( arr[pos], "fps", arr );
+            throw new PatternMismatchException( fpsStr, "fps", arr );
     }
 
     static @NotNull String reolutionParser( String @NotNull [] arr, int pos ) throws PatternMismatchException {
-        if ( RESOLUTION_PATTERN.matcher( arr[pos] ).matches() )
-            return arr[pos];
+        String resStr = arr[pos].trim();
+        if ( RESOLUTION_PATTERN.matcher( resStr ).matches() )
+            return resStr;
         else
-            throw new PatternMismatchException( arr[pos], "resolution", arr );
+            throw new PatternMismatchException( resStr, "resolution", arr );
     }
 
     static @NotNull int tbrParser( String @NotNull [] arr, int pos ) {
-        String tbrStr = arr[pos];
+        String tbrStr = arr[pos].trim();
         if ( QUALITY_PATTERN.matcher( tbrStr ).matches() ) {
             // Remove the letter 'k'
             tbrStr = tbrStr.substring( 0, tbrStr.length() - 1 );
@@ -60,7 +62,7 @@ class FormatUtils {
     }
 
     static @NotNull BigInteger sizeParser( String @NotNull [] arr, int pos ) {
-        String sizeStr = arr[pos];
+        String sizeStr = arr[pos].trim();
         if ( !SIZE_PATTERN.matcher( sizeStr ).matches() )
             throw new PatternMismatchException( sizeStr, "file's size", arr );
 
@@ -85,7 +87,7 @@ class FormatUtils {
     }
 
     static int sampleRateParser( String @NotNull [] arr, int pos ) {
-        String smplStr = arr[pos];
+        String smplStr = arr[pos].trim();
         Matcher matcher = SAMPLING_RATE_PATTERN.matcher( smplStr );
         if ( !matcher.find() )
             throw new PatternMismatchException( smplStr, "sampling rate", arr );
