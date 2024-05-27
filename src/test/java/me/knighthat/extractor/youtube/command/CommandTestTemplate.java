@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.command.Command;
-import me.knighthat.youtubedl.logging.Logger;
 
 abstract class CommandTestTemplate {
 
@@ -35,8 +34,6 @@ abstract class CommandTestTemplate {
         result[0] = YoutubeDL.getYtdlPath();
         System.arraycopy( args, 0, result, 1, args.length );
         result[result.length - 1] = URL;
-
-        Logger.warning( String.valueOf( Arrays.toString( result ) ) );
 
         return new HashSet<>( Arrays.asList( result ) );
     }
