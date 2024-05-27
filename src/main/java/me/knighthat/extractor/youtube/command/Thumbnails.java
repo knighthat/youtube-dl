@@ -49,8 +49,8 @@ public class Thumbnails extends me.knighthat.youtubedl.command.Thumbnails {
     }
 
     @Override
-    public @NotNull ListResponse<Thumbnail> execute() {
-        List<Thumbnail> thumbnails = new ArrayList<>();
+    public @NotNull ListResponse<me.knighthat.youtubedl.response.thumbnail.Thumbnail> execute() {
+        List<me.knighthat.youtubedl.response.thumbnail.Thumbnail> thumbnails = new ArrayList<>();
 
         /*
         0   168    94     https://i.ytimg.com/vi/videoId/hqdefault.jpg
@@ -63,7 +63,7 @@ public class Thumbnails extends me.knighthat.youtubedl.command.Thumbnails {
             if ( !Character.isDigit( output.charAt( 0 ) ) )
                 continue;
 
-            // [0, 168, 94, https://i.ytimg.com/vi/JLQTiFwBVyI/hqdefault.jpg]
+            // [0, 168, 94, https://i.ytimg.com/vi/videoId/hqdefault.jpg]
             String[] parts = output.trim().split( "\\s+" );
             if ( parts.length < 4 )
                 throw new InsufficientElementsException( Arrays.toString( parts ), parts.length, 4 );

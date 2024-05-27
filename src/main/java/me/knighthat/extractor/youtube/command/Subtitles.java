@@ -35,8 +35,8 @@ public class Subtitles extends me.knighthat.youtubedl.command.Subtitles {
     }
 
     @Override
-    public @NotNull ListResponse<Subtitle> execute() {
-        List<Subtitle> subtitles = new ArrayList<>();
+    public @NotNull ListResponse<me.knighthat.youtubedl.response.subtitle.Subtitle> execute() {
+        List<me.knighthat.youtubedl.response.subtitle.Subtitle> subtitles = new ArrayList<>();
 
         /*
             Available automatic captions for videoId:
@@ -136,11 +136,6 @@ public class Subtitles extends me.knighthat.youtubedl.command.Subtitles {
         @Override
         public @NotNull Subtitles build() {
             return new Subtitles(getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig());
-        }
-
-        @Override
-        public @NotNull ListResponse<? extends me.knighthat.youtubedl.response.subtitle.Subtitle> execute() {
-            return this.build().execute();
         }
     }
 }

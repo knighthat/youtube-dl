@@ -20,7 +20,7 @@ public abstract class Formats extends Command {
     }
 
     @Override
-    public abstract @NotNull ListResponse<? extends Format> execute();
+    public abstract @NotNull ListResponse<Format> execute();
 
     public static abstract class Builder extends Command.Builder {
 
@@ -54,6 +54,6 @@ public abstract class Formats extends Command {
         public abstract @NotNull Formats build();
 
         @Override
-        public @NotNull ListResponse<? extends Format> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<Format> execute() { return this.build().execute(); }
     }
 }

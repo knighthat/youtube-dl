@@ -32,7 +32,7 @@ public class Subtitles extends Command {
     }
 
     @Override
-    public @NotNull ListResponse<? extends Subtitle> execute() {
+    public @NotNull ListResponse<Subtitle> execute() {
         List<String> outputs = super.outputs();
         Set<Subtitle> subtitles = new HashSet<>();
 
@@ -122,6 +122,6 @@ public class Subtitles extends Command {
         public @NotNull Subtitles build() { return new Subtitles( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
 
         @Override
-        public @NotNull ListResponse<? extends Subtitle> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<Subtitle> execute() { return this.build().execute(); }
     }
 }

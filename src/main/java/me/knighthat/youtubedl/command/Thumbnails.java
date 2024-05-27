@@ -25,7 +25,7 @@ public class Thumbnails extends Command {
     }
 
     @Override
-    public @NotNull ListResponse<? extends Thumbnail> execute() {
+    public @NotNull ListResponse<Thumbnail> execute() {
         List<Thumbnail> results = new ArrayList<>();
 
         /*
@@ -84,6 +84,6 @@ public class Thumbnails extends Command {
         }
 
         @Override
-        public @NotNull ListResponse<? extends Thumbnail> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<Thumbnail> execute() { return this.build().execute(); }
     }
 }

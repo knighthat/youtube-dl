@@ -107,7 +107,7 @@ public class Video extends me.knighthat.youtubedl.command.Video {
     }
 
     @Override
-    public @NotNull OptionalResponse<me.knighthat.extractor.youtube.response.Video> execute() {
+    public @NotNull OptionalResponse<me.knighthat.youtubedl.response.video.Video> execute() {
         Flag[] flags = this.flags().toArray( Flag[]::new );
         Header[] headers = this.headers().toArray( Header[]::new );
 

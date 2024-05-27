@@ -35,7 +35,7 @@ public class Formats extends me.knighthat.youtubedl.command.Formats {
     }
 
     @Override
-    public @NotNull ListResponse<? extends Format> execute() {
+    public @NotNull ListResponse<Format> execute() {
         List<Format> formats = new ArrayList<>();
 
         /*

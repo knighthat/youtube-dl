@@ -65,7 +65,7 @@ public abstract class Video extends Command {
     }
 
     @Override
-    public abstract @NotNull OptionalResponse<? extends me.knighthat.youtubedl.response.video.Video> execute();
+    public abstract @NotNull OptionalResponse<me.knighthat.youtubedl.response.video.Video> execute();
 
     public abstract static class Builder extends Command.Builder {
         
@@ -99,6 +99,6 @@ public abstract class Video extends Command {
         public abstract @NotNull Video build();
 
         @Override
-        public @NotNull OptionalResponse<? extends me.knighthat.youtubedl.response.video.Video> execute() { return this.build().execute(); }
+        public @NotNull OptionalResponse<me.knighthat.youtubedl.response.video.Video> execute() { return this.build().execute(); }
     }
 }
