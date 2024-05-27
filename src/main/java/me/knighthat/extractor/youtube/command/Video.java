@@ -154,9 +154,9 @@ public class Video extends me.knighthat.youtubedl.command.Video {
         /* CAPTION */
         Set<DownloadableSubtitle> subtitles = new HashSet<>();
         if (json.has("automatic_captions")) 
-            subtitles.addAll( subtitleSet(json, true) );
+            subtitles.addAll( subtitleSet( json.getAsJsonObject( "automatic_captions" ), true) );
         if (json.has("subtitles")) 
-            subtitles.addAll(subtitleSet(json, false));
+            subtitles.addAll(subtitleSet(json.getAsJsonObject( "subtitles" ), false));
 
         Set<Format> formats = formatSet( json );
 
