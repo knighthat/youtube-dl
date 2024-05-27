@@ -46,8 +46,6 @@ public abstract class Command {
 
     public String @NotNull [] command() {
         List<String> command = new ArrayList<>();
-
-        command.add( YoutubeDL.getPythonPath() );
         command.add( YoutubeDL.getYtdlPath() );
 
         Set<Flag> flags = new HashSet<>();

@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.command.Command;
+import me.knighthat.youtubedl.logging.Logger;
 
 abstract class CommandTestTemplate {
 
@@ -29,11 +30,13 @@ abstract class CommandTestTemplate {
     }
 
     protected @NotNull Set<String> commandContains( @NotNull String... args ) {
-        String[] result = new String[ args.length + 3 ];
-        result[0] = YoutubeDL.getPythonPath();
-        result[1] = YoutubeDL.getYtdlPath();
-        System.arraycopy( args, 0, result, 2, args.length );
+        // +1 for youtube-dl executable, +1 for url
+        String[] result = new String[ args.length + 2 ];
+        result[0] = YoutubeDL.getYtdlPath();
+        System.arraycopy( args, 0, result, 1, args.length );
         result[result.length - 1] = URL;
+
+        Logger.warning( String.valueOf( Arrays.toString( result ) ) );
 
         return new HashSet<>( Arrays.asList( result ) );
     }
