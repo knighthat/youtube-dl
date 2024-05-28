@@ -79,7 +79,7 @@ public class Video extends me.knighthat.youtubedl.command.Video {
                 Format format;
                 if ( !vcodecNull && !acodecNull )
                     format = new Mix( formatJson );
-                if ( !vcodecNull )
+                else if ( vcodecNull )
                     format = new Audio( formatJson );
                 else
                     format = new me.knighthat.extractor.youtube.response.format.Video( formatJson );
