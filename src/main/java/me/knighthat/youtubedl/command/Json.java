@@ -64,31 +64,21 @@ public final class Json extends Command {
         private Builder( @NotNull String url ) { super( url ); }
 
         @Override
-        public @NotNull Builder flags( @NotNull Flag... flags ) {
-            super.addFlags( flags );
-            return this;
-        }
+        public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }
 
         @Override
-        public @NotNull Builder headers( @NotNull Header... headers ) {
-            super.addHeaders( headers );
-            return this;
-        }
+        public @NotNull Builder headers( @NotNull Header... headers ) { return (Builder) super.headers( headers ); }
 
         @Override
-        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
-            super.setUserAgent( userAgent );
-            return this;
-        }
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) { return (Builder) super.userAgent( userAgent ); }
 
         @Override
-        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
-            super.setGeoConfig( geoConfig );
-            return this;
-        }
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
-        public @NotNull Json build() { return new Json( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
+        public @NotNull Json build() { 
+            return new Json( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); 
+        }
 
         @Override
         public @NotNull SingleResultResponse<JsonElement> execute() { return this.build().execute(); }

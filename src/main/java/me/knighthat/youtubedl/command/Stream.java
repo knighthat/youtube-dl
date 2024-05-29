@@ -52,31 +52,21 @@ public final class Stream extends Command {
         public void stream( int bufferSize, @NotNull BiConsumer<byte[], Integer> stream ) { this.execute().stream( bufferSize, stream ); }
 
         @Override
-        public @NotNull Builder flags( @NotNull Flag... flags ) {
-            super.addFlags( flags );
-            return this;
-        }
+        public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }
 
         @Override
-        public @NotNull Builder headers( @NotNull Header... headers ) {
-            super.addHeaders( headers );
-            return this;
-        }
+        public @NotNull Builder headers( @NotNull Header... headers ) { return (Builder) super.headers( headers ); }
 
         @Override
-        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
-            super.setUserAgent( userAgent );
-            return this;
-        }
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) { return (Builder) super.userAgent( userAgent ); }
 
         @Override
-        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
-            super.setGeoConfig( geoConfig );
-            return this;
-        }
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
-        public @NotNull Stream build() { return new Stream( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); }
+        public @NotNull Stream build() { 
+            return new Stream( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() ); 
+        }
 
         @Override
         public @NotNull RealtimeResponse execute() { return this.build().execute(); }

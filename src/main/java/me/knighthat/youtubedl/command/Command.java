@@ -2,7 +2,6 @@ package me.knighthat.youtubedl.command;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.command.flag.Flag;
@@ -87,7 +86,6 @@ public abstract class Command {
     }
 
     @Getter( AccessLevel.PROTECTED )
-    @Setter( AccessLevel.PROTECTED )
     @Accessors( fluent = false, chain = false )
     protected static abstract class Builder {
         private final String      url;
@@ -102,20 +100,28 @@ public abstract class Command {
             this.headers = new HashSet<>();
         }
 
-        public abstract @NotNull Builder flags( @NotNull Flag... flags );
-
-        public abstract @NotNull Builder headers( @NotNull Header... headers );
-
-        public abstract @NotNull Builder userAgent( @Nullable UserAgent userAgent );
-
-        public abstract @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig );
-
         public abstract @NotNull Command build();
 
-        public abstract @NotNull Response execute();
+        public @NotNull Builder flags( @NotNull Flag... flags ) {
+            this.flags.addAll( Arrays.asList( flags ) );
+            return this;
+        }
 
-        protected void addFlags( @NotNull Flag... flags ) { this.flags.addAll( Arrays.asList( flags ) ); }
+        public @NotNull Builder headers( @NotNull Header... headers ) {
+            this.headers.addAll( Arrays.asList( headers ) );
+            return this;
+        }
 
-        protected void addHeaders( @NotNull Header... headers ) { this.headers.addAll( Arrays.asList( headers ) ); }
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
+            this.userAgent = userAgent;
+            return this;
+        }
+
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
+            this.geoConfig = geoConfig;
+            return this;
+        }
+
+        public @NotNull Response execute() { return this.build().execute(); }
     }
 }

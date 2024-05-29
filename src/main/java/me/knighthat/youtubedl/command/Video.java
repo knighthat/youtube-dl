@@ -24,28 +24,16 @@ public abstract class Video extends Command {
         protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
-        public @NotNull Builder flags( @NotNull Flag... flags ) {
-            super.addFlags( flags );
-            return this;
-        }
+        public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }
 
         @Override
-        public @NotNull Builder headers( @NotNull Header... headers ) {
-            super.addHeaders( headers );
-            return this;
-        }
+        public @NotNull Builder headers( @NotNull Header... headers ) { return (Builder) super.headers( headers ); }
 
         @Override
-        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
-            super.setUserAgent( userAgent );
-            return this;
-        }
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) { return (Builder) super.userAgent( userAgent ); }
 
         @Override
-        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
-            super.setGeoConfig( getGeoConfig() );
-            return this;
-        }
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
         public abstract @NotNull Video build();
