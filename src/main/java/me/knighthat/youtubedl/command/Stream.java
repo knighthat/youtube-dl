@@ -32,7 +32,7 @@ public final class Stream extends Command {
 
     private Stream( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
-        flags().add( Flag.key( "-o" ).value( "-" ) );
+        flags.add( Flag.key( "-o" ).value( "-" ) );
     }
 
     @Override

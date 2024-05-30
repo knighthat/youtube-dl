@@ -28,7 +28,7 @@ public class Subtitles extends Command {
 
     protected Subtitles( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
-        flags().add( Flag.noValue( "--list-subs" ) );
+        flags.add( Flag.noValue( "--list-subs" ) );
     }
 
     @Override

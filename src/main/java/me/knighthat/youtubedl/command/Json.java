@@ -27,7 +27,7 @@ public final class Json extends Command {
 
     private Json( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
-        flags().add( Flag.noValue( "--dump-json" ) );
+        flags.add( Flag.noValue( "--dump-json" ) );
     }
 
     @Override

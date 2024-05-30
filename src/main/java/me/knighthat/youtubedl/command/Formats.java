@@ -16,7 +16,7 @@ public abstract class Formats extends Command {
 
     protected Formats( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @NotNull UserAgent userAgent, @NotNull GeoConfig geoConfig ) {
         super( url, flags, headers, userAgent, geoConfig );
-        flags().add( Flag.noValue( "--list-formats" ) );
+        flags.add( Flag.noValue( "--list-formats" ) );
     }
 
     @Override
