@@ -16,6 +16,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Install youtube-dl
+      run: |
+        git clone --depth 1 https://github.com/ytdl-org/youtube-dl ytdl
+        
+        echo "#\!/bin/bash\n\n/usr/bin/python $PWD/ytdl/youtube_dl/__main__.py" > youtube-dl
+        
+        chmod +x youtube-dl
+        
+        sudo mv youtube-dl /usr/bin/youtube-dl
+        
+        youtube-dl --version
+
     - uses: actions/checkout@v4
 
     - name: Set up JDK 17
