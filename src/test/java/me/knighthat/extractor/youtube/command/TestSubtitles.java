@@ -1,6 +1,7 @@
 package me.knighthat.extractor.youtube.command;
 
 import me.knighthat.extractor.youtube.YouTube;
+import me.knighthat.youtubedl.command.Subtitles;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;

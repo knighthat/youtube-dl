@@ -9,18 +9,19 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.command.SubtitlesImpl;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.ListResponse;
+import me.knighthat.youtubedl.response.subtitle.Subtitle;
 
-/**
- * YouTube's subtitles extractor.
- */
-public class Subtitles extends me.knighthat.youtubedl.command.Subtitles {
+public class Subtitles extends SubtitlesImpl {
+
+    @NotNull
+    private static final Pattern AUTOMATIC_SUBTITLE_PATTERN = Pattern.compile( "Available automatic captions for \\w+:" );
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
@@ -30,13 +31,13 @@ public class Subtitles extends me.knighthat.youtubedl.command.Subtitles {
         @NotNull Set<Header> headers,
         @Nullable UserAgent userAgent, 
         @Nullable GeoConfig geoConfig
-        ) {
+    ) {
         super(url, flags, headers, userAgent, geoConfig);
     }
 
     @Override
-    public @NotNull ListResponse<me.knighthat.youtubedl.response.subtitle.Subtitle> execute() {
-        List<me.knighthat.youtubedl.response.subtitle.Subtitle> subtitles = new ArrayList<>();
+    public @NotNull ListResponse<Subtitle> execute() {
+        List<Subtitle> subtitles = new ArrayList<>();
 
         /*
             Available automatic captions for videoId:
@@ -93,7 +94,7 @@ public class Subtitles extends me.knighthat.youtubedl.command.Subtitles {
                     try {
                         boolean automatic_caption = isAutomatic;
                         subtitles.add(
-                            new Subtitle() {
+                            new me.knighthat.extractor.youtube.response.subtitle.Subtitle() {
                                 @Override
                                 public @NotNull String language() { return parts[0].trim(); }
 
@@ -114,28 +115,13 @@ public class Subtitles extends me.knighthat.youtubedl.command.Subtitles {
         return () -> subtitles;
     }
 
-    @NotNull
-    private static final Pattern AUTOMATIC_SUBTITLE_PATTERN = Pattern.compile( "Available automatic captions for \\w+:" );
+    public static class Builder extends SubtitlesImpl.Builder {
 
-    public static class Builder extends me.knighthat.youtubedl.command.Subtitles.Builder {
-
-        private Builder(@NotNull String url) { super(url); }
-
-        @Override
-        public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }
-
-        @Override
-        public @NotNull Builder headers( @NotNull Header... headers ) { return (Builder) super.headers( headers ); }
-
-        @Override
-        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) { return (Builder) super.userAgent( userAgent ); }
-
-        @Override
-        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
+        private Builder(String url) { super(url); }
 
         @Override
         public @NotNull Subtitles build() {
-            return new Subtitles(getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig());
+            return new Subtitles( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() );
         }
     }
 }

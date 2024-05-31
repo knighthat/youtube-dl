@@ -7,30 +7,28 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import me.knighthat.extractor.youtube.response.format.Audio;
-import me.knighthat.extractor.youtube.response.format.Mix;
-import me.knighthat.extractor.youtube.response.format.Video;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.command.FormatsImpl;
 import me.knighthat.youtubedl.response.ListResponse;
 import me.knighthat.youtubedl.response.format.Format;
+import me.knighthat.extractor.youtube.response.format.Video;
+import me.knighthat.extractor.youtube.response.format.Audio;
+import me.knighthat.extractor.youtube.response.format.Mix;
 
-/**
- * Extract available streaming formats of a YouTube's video.
- */
-public class Formats extends me.knighthat.youtubedl.command.Formats {
+public class Formats extends FormatsImpl {
 
-    public static @NotNull Builder builder( @NotNull String url ) { return new Builder(url); }
+    public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Formats(
+    protected Formats(
         @NotNull String url, 
-        @NotNull Set<Flag> flags,
+        @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
-        @NotNull UserAgent userAgent, 
-        @NotNull GeoConfig geoConfig
-        ) {
+        @Nullable UserAgent userAgent, 
+        @Nullable GeoConfig geoConfig
+    ) {
         super(url, flags, headers, userAgent, geoConfig);
     }
 
@@ -74,25 +72,13 @@ public class Formats extends me.knighthat.youtubedl.command.Formats {
         return () -> formats;
     }
 
-    public static class Builder extends me.knighthat.youtubedl.command.Formats.Builder {
+    public static class Builder extends FormatsImpl.Builder {
 
-        private Builder(@NotNull String url) { super(url); }
-
-        @Override
-        public @NotNull Builder flags(@NotNull Flag... flags) { return (Builder) super.flags(flags); }
-
-        @Override
-        public @NotNull Builder headers(@NotNull Header... headers) { return (Builder) super.headers(headers); }
-
-        @Override
-        public @NotNull Builder userAgent(@Nullable UserAgent userAgent) { return (Builder) super.userAgent(userAgent); }
-
-        @Override
-        public @NotNull Builder geoConfig(@Nullable GeoConfig geoConfig) { return (Builder) super.geoConfig(geoConfig); }
+        private Builder(String url) { super(url); }
 
         @Override
         public @NotNull Formats build() {
             return new Formats( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() );
         }
-    }    
+    }
 }

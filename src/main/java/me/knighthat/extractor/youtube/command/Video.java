@@ -23,21 +23,19 @@ import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.extractor.youtube.response.subtitle.DownloadableSubtitle;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
-import me.knighthat.youtubedl.command.Json;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
+import me.knighthat.youtubedl.command.JsonImpl;
+import me.knighthat.youtubedl.command.VideoImpl;
 import me.knighthat.youtubedl.exception.UnsupportedSubtitleFormatException;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
 
-/**
- * YouTube's video's information extractor.
- */
-public class Video extends me.knighthat.youtubedl.command.Video {
+public class Video extends VideoImpl {
 
     @NotNull
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat( "yyyyMMdd" );
@@ -52,7 +50,7 @@ public class Video extends me.knighthat.youtubedl.command.Video {
                 JsonObject jsonFormat = formatKey.getAsJsonObject();
 
                 try {   
-                    subtitles.add( SubtitleImpl.fromJson(language, isAutomatic, jsonFormat) );
+                    subtitles.add( YouTubeSubtitle.fromJson(language, isAutomatic, jsonFormat) );
                 } catch (UnsupportedSubtitleFormatException e) {
                     Logger.exception("failed to parse subtitle!", e, Level.WARNING);
                 }
@@ -96,22 +94,22 @@ public class Video extends me.knighthat.youtubedl.command.Video {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    private Video(
+    protected Video(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
         @Nullable UserAgent userAgent, 
         @Nullable GeoConfig geoConfig
-        ) {
+    ) {
         super(url, flags, headers, userAgent, geoConfig);
     }
 
     @Override
     public @NotNull OptionalResponse<me.knighthat.youtubedl.response.video.Video> execute() {
-        Flag[] flags = this.flags().toArray( Flag[]::new );
+         Flag[] flags = this.flags().toArray( Flag[]::new );
         Header[] headers = this.headers().toArray( Header[]::new );
 
-        JsonElement videoJson = Json.builder( url() )
+        JsonElement videoJson = JsonImpl.builder( url() )
                                     .flags( flags )
                                     .headers( headers )
                                     .userAgent( userAgent() )
@@ -133,7 +131,7 @@ public class Video extends me.knighthat.youtubedl.command.Video {
         }
 
         /* CHANNEL */
-        Channel channel = ChannelImpl.fromJson( json );
+        Channel channel = YouTubeChannel.fromJson( json );
 
         /* THUMBNAILS */
         Set<Thumbnail> thumbnails = new HashSet<>();
@@ -148,7 +146,7 @@ public class Video extends me.knighthat.youtubedl.command.Video {
             }
             */
             JsonObject thumbJson = element.getAsJsonObject();
-            thumbnails.add( ThumbnailImpl.fromJson( thumbJson ) );
+            thumbnails.add( YouTubeThumbnail.fromJson( thumbJson ) );
         }
 
         /* CAPTION */
@@ -177,21 +175,9 @@ public class Video extends me.knighthat.youtubedl.command.Video {
         );
     }
 
-    public static class Builder extends me.knighthat.youtubedl.command.Video.Builder {
+    public static class Builder extends VideoImpl.Builder {
 
-        private Builder(@NotNull String url) { super(url); }
-    
-        @Override
-        public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }
-
-        @Override
-        public @NotNull Builder headers( @NotNull Header... headers ) { return (Builder) super.headers( headers ); }
-
-        @Override
-        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) { return (Builder) super.userAgent( userAgent ); }
-
-        @Override
-        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( getGeoConfig() ); }
+        private Builder(String url) { super(url); }
 
         @Override
         public @NotNull Video build() {
@@ -199,32 +185,29 @@ public class Video extends me.knighthat.youtubedl.command.Video {
         }
     }
 
-    private static record SubtitleImpl(
-        @NotNull String language,
-        @NotNull Subtitle.Format format,
-        boolean isAutomatic,
-        @NotNull String url
-    ) implements DownloadableSubtitle {
-
-        static @NotNull SubtitleImpl fromJson( @NotNull String language, boolean isAutomatic, @NotNull JsonObject json ) {
-            String ext = json.get( "ext" ).getAsString();
-            return new SubtitleImpl(
-                language, 
-                Subtitle.Format.match( ext ), 
-                isAutomatic, 
-                json.get("url").getAsString()
-            );
-        }
+    private static record YoutubeVideo(
+        @NotNull String id,
+        @NotNull String title,
+        @NotNull @Unmodifiable Set<Thumbnail> thumbnails,
+        @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles,
+        @NotNull @Unmodifiable Set<Format> formats,
+        @NotNull String description,
+        @NotNull Date uploadDate,
+        @Second long duration,
+        @NotNull BigInteger views,
+        @NotNull BigInteger likes,
+        @NotNull Channel uploader
+    ) implements me.knighthat.extractor.youtube.response.Video {
     }
 
-    private static record ChannelImpl(
+    private static record YouTubeChannel(
         @NotNull String id,
         @NotNull String handle,
         @NotNull String title
     ) implements Channel {
 
-        static @NotNull ChannelImpl fromJson( @NotNull JsonObject json ) {
-            return new ChannelImpl(
+        static @NotNull YouTubeChannel fromJson( @NotNull JsonObject json ) {
+            return new YouTubeChannel(
                 json.get( "channel_id" ).getAsString(), 
                 json.get( "uploader_id" ).getAsString(), 
                 json.get("channel").getAsString()
@@ -238,33 +221,36 @@ public class Video extends me.knighthat.youtubedl.command.Video {
         public @NotNull String channelUrl() { return "https://youtube.com/channel/" + id; }
     }
 
-    private static record ThumbnailImpl(
+    private static record YouTubeSubtitle(
+        @NotNull String language,
+        @NotNull Subtitle.Format format,
+        boolean isAutomatic,
+        @NotNull String url
+    ) implements DownloadableSubtitle {
+
+        static @NotNull YouTubeSubtitle fromJson( @NotNull String language, boolean isAutomatic, @NotNull JsonObject json ) {
+            String ext = json.get( "ext" ).getAsString();
+            return new YouTubeSubtitle(
+                language, 
+                Subtitle.Format.match( ext ), 
+                isAutomatic, 
+                json.get("url").getAsString()
+            );
+        }
+    }
+
+    private static record YouTubeThumbnail(
         @NotNull String url,
         int width,
         int height
     ) implements Thumbnail {
 
-        static @NotNull ThumbnailImpl fromJson( @NotNull JsonObject json ) {
-            return new ThumbnailImpl(
+        static @NotNull YouTubeThumbnail fromJson( @NotNull JsonObject json ) {
+            return new YouTubeThumbnail(
                 json.get( "url" ).getAsString(), 
                 json.get( "width" ).getAsInt(), 
                 json.get( "height" ).getAsInt()
             );
         }
-    }
-
-    private static record YoutubeVideo (
-        @NotNull String id,
-        @NotNull String title,
-        @NotNull @Unmodifiable Set<Thumbnail> thumbnails,
-        @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles,
-        @NotNull @Unmodifiable Set<Format> formats,
-        @NotNull String description,
-        @NotNull Date uploadDate,
-        @Second long duration,
-        @NotNull BigInteger views,
-        @NotNull BigInteger likes,
-        @NotNull Channel uploader
-    ) implements me.knighthat.extractor.youtube.response.Video {
     }
 }

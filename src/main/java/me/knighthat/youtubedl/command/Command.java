@@ -1,127 +1,45 @@
 package me.knighthat.youtubedl.command;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.experimental.Accessors;
-import me.knighthat.youtubedl.YoutubeDL;
+import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
-import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.Response;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
+public interface Command {
 
-@Getter
-@Accessors( fluent = true )
-public abstract class Command {
+    @NotNull String url();
 
-    @NotNull
-    private final String      url;
-    @NotNull
-    private final Set<Flag>   flags;
-    @NotNull
-    private final Set<Header> headers;
-    @Nullable
-    private final UserAgent   userAgent;
-    @Nullable
-    private final GeoConfig   geoConfig;
+    @NotNull @Unmodifiable Set<Flag> flags();
 
-    protected Command( @NotNull String url, @NotNull Set<Flag> flags, @NotNull Set<Header> headers, @Nullable UserAgent userAgent, @Nullable GeoConfig geoConfig ) {
-        this.url = url;
-        this.flags = flags;
-        this.headers = headers;
-        this.userAgent = userAgent;
-        this.geoConfig = geoConfig;
-    }
+    @NotNull @Unmodifiable Set<Header> headers();
 
-    public abstract @NotNull Response execute();
+    @Nullable UserAgent userAgent();
 
-    public String @NotNull [] command() {
-        List<String> command = new ArrayList<>();
-        command.add( YoutubeDL.getYtdlPath() );
+    @Nullable GeoConfig geoConfig();
 
-        Set<Flag> flags = new HashSet<>();
-        flags.addAll( flags() );
-        flags.addAll( headers() );
-        if ( userAgent() != null )
-            flags.add( userAgent() );
-        if ( geoConfig() != null )
-            flags.add( geoConfig() );
+    @NotNull Response execute();
 
-        flags.parallelStream()
-             .map( Flag::flags )
-             .flatMap( Arrays::stream )
-             .forEach( command::add );
+    String @NotNull [] command();
 
-        command.add( url );
+    public interface Builder {
+    
+        @NotNull Builder flags( @NotNull Flag... flags );
+       
+        @NotNull Builder headers( @NotNull Header... headers );
 
-        return command.toArray( String[]::new );
-    }
+        @NotNull Builder userAgent( @Nullable UserAgent userAgent );
 
-    protected @NotNull List<String> outputs() {
-        List<String> outputs = new ArrayList<>();
+        @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig );
 
-        try {
-            Process process = new ProcessBuilder( command() ).start();
+        @NotNull Command build();
 
-            try (BufferedReader reader = process.inputReader()) {
-                String line;
-                while ((line = reader.readLine()) != null)
-                    outputs.add( line );
-            }
-        } catch ( IOException e ) {
-            String command = Arrays.toString( command() );
-            String message = "error occurs while executing command: " + command;
-            Logger.exception( message, e, Level.SEVERE );
-        }
-
-        return outputs;
-    }
-
-    @Getter( AccessLevel.PROTECTED )
-    @Accessors( fluent = false, chain = false )
-    protected static abstract class Builder {
-        private final String      url;
-        private final Set<Flag>   flags;
-        private final Set<Header> headers;
-        private       UserAgent   userAgent;
-        private       GeoConfig   geoConfig;
-
-        protected Builder( String url ) {
-            this.url = url;
-            this.flags = new HashSet<>();
-            this.headers = new HashSet<>();
-        }
-
-        public abstract @NotNull Command build();
-
-        public @NotNull Builder flags( @NotNull Flag... flags ) {
-            this.flags.addAll( Arrays.asList( flags ) );
-            return this;
-        }
-
-        public @NotNull Builder headers( @NotNull Header... headers ) {
-            this.headers.addAll( Arrays.asList( headers ) );
-            return this;
-        }
-
-        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
-            this.userAgent = userAgent;
-            return this;
-        }
-
-        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
-            this.geoConfig = geoConfig;
-            return this;
-        }
-
-        public @NotNull Response execute() { return this.build().execute(); }
+        @NotNull Response execute();
     }
 }
