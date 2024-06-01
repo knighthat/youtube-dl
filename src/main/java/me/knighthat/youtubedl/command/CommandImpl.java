@@ -90,6 +90,7 @@ abstract class CommandImpl implements Command {
         flags.parallelStream()
              .map( Flag::flags )
              .flatMap( Arrays::stream )
+             .filter( arg -> !arg.isBlank() )
              .forEach( command::add );
 
         command.add( url );

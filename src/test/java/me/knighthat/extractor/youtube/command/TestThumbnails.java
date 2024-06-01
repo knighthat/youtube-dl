@@ -22,7 +22,7 @@ public class TestThumbnails extends CommandTestTemplate {
         Set<String> actualSet = super.cmdToSet( thumbnails );
         Assertions.assertTrue( actualSet.contains( "--list-thumbnails" ) );
 
-        Set<String> expectedSet = super.commandContains( "--list-thumbnails", "" );
+        Set<String> expectedSet = super.commandContains( "--list-thumbnails" );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 
@@ -37,7 +37,7 @@ public class TestThumbnails extends CommandTestTemplate {
         Set<String> actualSet = super.cmdToSet( thumbnails );
         Assertions.assertTrue( actualSet.contains( toBeIncluded ) );
 
-        Set<String> expectedSet = super.commandContains( "--force-ipv4", "" );
+        Set<String> expectedSet = super.commandContains( "--force-ipv4" );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 

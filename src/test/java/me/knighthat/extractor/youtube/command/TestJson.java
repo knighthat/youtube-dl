@@ -22,7 +22,7 @@ public class TestJson extends CommandTestTemplate {
         Set<String> actualSet = super.cmdToSet( json );
         Assertions.assertTrue( actualSet.contains( "--dump-json" ) );
 
-        Set<String> expectedSet = super.commandContains( "--dump-json", "" );
+        Set<String> expectedSet = super.commandContains( "--dump-json" );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 
@@ -37,7 +37,7 @@ public class TestJson extends CommandTestTemplate {
         Set<String> actualSet = super.cmdToSet( json );
         Assertions.assertTrue( actualSet.contains( toBeIncluded ) );
 
-        Set<String> expectedSet = super.commandContains( "--force-ipv4", "" );
+        Set<String> expectedSet = super.commandContains( "--force-ipv4" );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 

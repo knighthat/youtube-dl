@@ -22,7 +22,7 @@ public class TestSubtitles extends CommandTestTemplate {
         Set<String> actualSet = super.cmdToSet( subtitles );
         Assertions.assertTrue( actualSet.contains( "--list-subs" ) );
 
-        Set<String> expectedSet = super.commandContains( "--list-subs", "" );
+        Set<String> expectedSet = super.commandContains( "--list-subs" );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 
@@ -37,7 +37,7 @@ public class TestSubtitles extends CommandTestTemplate {
         Set<String> actualSet = super.cmdToSet( subtitles );
         Assertions.assertTrue( actualSet.contains( toBeIncluded ) );
 
-        Set<String> expectedSet = super.commandContains( "--force-ipv4", "" );
+        Set<String> expectedSet = super.commandContains( "--force-ipv4" );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 
