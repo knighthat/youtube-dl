@@ -20,7 +20,7 @@ jobs:
       uses: actions/checkout@v4
       with:
         repository: ytdl-org/youtube-dl
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.CHECKOUT_TOKEN }}
         path: ./ytdl
       
     - name: Make executable
