@@ -11,37 +11,26 @@ on:
 
 
 jobs:
-  install_ytdl:
+  build_and_test:
 
     runs-on: ubuntu-latest
 
     steps:
     - name: Download YTDL
-      run: git clone --depth 1 https://github.com/ytdl-org/youtube-dl ytdl
-
+      uses: actions/checkout@v4
+      with:
+        repository: ytdl-org/youtube-dl
+        token: ${{ secrets.GITHUB_TOKEN }}
+        path: ./ytdl
+      
     - name: Make executable
       run: |
-        echo "#\!/bin/bash\n\n/usr/bin/python $PWD/ytdl/youtube_dl/__main__.py \$@" > youtube-dl
-        
-        chmod +x youtube-dl
-        
-        echo "$(youtube-dl --version)"
+        sudo ln -s $PWD/ytdl/youtube_dl/__main__.py /usr/bin/youtube-dl
 
-    - name: Move executable to PATH
-      run: |
-        sudo mv youtube-dl /usr/bin/youtube-dl
-        
-        echo "$(/usr/bin/youtube-dl --version)"
+        sudo chmod +x /usr/bin/youtube-dl
 
-
-  build:
-
-    runs-on: ubuntu-latest
-    needs: install_ytdl
-
-    steps:
-    - name: Verify youtube-dl
-      run: echo "$(/usr/bin/youtube-dl --version)"
+    - name: Verify youtube-dl command
+      run: echo "$(youtube-dl --version)"
 
     - uses: actions/checkout@v4
 
@@ -52,17 +41,11 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Test project
+      run: mvn test --file pom.xml
+
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
-
-    - id: extractor
-      name: Extract version from pom.xml
-      run: |
-        echo "groupid=$(grep -oP '<groupId>\K[^<]+' pom.xml | head -n1)" >> $GITHUB_OUTPUT
-
-        echo "artifactid=$(grep -oP '<artifactId>\K[^<]+' pom.xml | head -n1)" >> $GITHUB_OUTPUT
-
-        echo "version=$(grep -oP '<version>\K[^<]+' pom.xml | head -n1)" >> $GITHUB_OUTPUT
+      run: mvn package -Dmaven.test.skip
 
     - name: maven-settings-xml-action
       uses: whelk-io/maven-settings-xml-action@v22
@@ -72,4 +55,4 @@ jobs:
         output_file: ".m2/settings.xml"
 
     - name: Deploy to remote repository
-      run: mvn deploy --settings .m2/settings.xml -Dmaven.test.skip=true
+      run: mvn deploy --settings .m2/settings.xml -Dmaven.test.skip
