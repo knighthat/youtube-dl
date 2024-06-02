@@ -2,6 +2,8 @@ package me.knighthat.extractor.asiancrush.response.format;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.google.gson.JsonObject;
+
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -50,5 +52,36 @@ public class Mix implements MixFormat {
         this.sampleRate = 0;    // Doesn't have sample rate
         this.resolution = FormatUtils.reolutionParser( arr, 2 );
         this.fps = FormatUtils.fpsParser( arr, 5 );
+    }
+
+    public Mix( @NotNull JsonObject json ) {
+        /*
+        "format_id": "hls-361",
+        "url": "https://asiancrush-asiancrush.cdn-ak.matchpoint.tv/cinedigm/1000000030080/650b488ef1039d36ff29b1b1/hls/235.m3u8",
+        "manifest_url": "https://asiancrush-asiancrush.cdn-ak.matchpoint.tv/cinedigm/1000000030080/650b488ef1039d36ff29b1b1/hls/master.m3u8",
+        "tbr": 361.96,
+        "ext": "mp4",
+        "fps": 23.976,
+        "protocol": "m3u8",
+        "preference": null,
+        "width": 426,
+        "height": 240,
+        "vcodec": "avc1.64001F",
+        "acodec": "mp4a.40.2",
+        "http_headers": {},
+        "format": "hls-361 - 426x240" 
+        */
+        for ( String key : new String[] { "format_id", "ext", "tbr", "vcodec", "acodec", "fps", "height" } ) 
+            if ( !json.has(key) )
+                throw new NullPointerException(key + " does not exist!");
+
+        this.code = json.get( "format_id" ).getAsString();
+        this.extension = json.get( "ext" ).getAsString();
+        this.tbr = json.get( "tbr" ).getAsInt();
+        this.vCodec = json.get( "vcodec" ).getAsString();
+        this.aCodec = json.get( "acodec" ).getAsString();
+        this.sampleRate = 0;
+        this.resolution = json.get( "height" ).getAsString() + "p";
+        this.fps = json.get( "fps" ).getAsFloat();
     }
 }
