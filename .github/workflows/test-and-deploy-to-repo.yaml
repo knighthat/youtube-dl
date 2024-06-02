@@ -1,4 +1,4 @@
-name: Test and deploy
+name: Test and deploy snapshot
 
 on:
   push:
@@ -16,22 +16,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Download YTDL
-      uses: actions/checkout@v4
-      with:
-        repository: ytdl-org/youtube-dl
-        token: ${{ secrets.CHECKOUT_TOKEN }}
-        path: ./ytdl
-      
-    - name: Make executable
-      run: |
-        sudo ln -s $PWD/ytdl/youtube_dl/__main__.py /usr/bin/youtube-dl
-
-        sudo chmod +x /usr/bin/youtube-dl
-
-    - name: Verify youtube-dl command
-      run: echo "$(youtube-dl --version)"
-
     - uses: actions/checkout@v4
 
     - name: Set up JDK 17
