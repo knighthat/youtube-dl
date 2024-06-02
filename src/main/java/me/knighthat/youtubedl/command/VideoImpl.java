@@ -25,7 +25,7 @@ public abstract class VideoImpl extends CommandImpl implements Video {
 
     public static abstract class Builder extends CommandImpl.Builder implements Video.Builder {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }

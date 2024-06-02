@@ -117,7 +117,7 @@ public class Subtitles extends SubtitlesImpl {
 
     public static class Builder extends SubtitlesImpl.Builder {
 
-        private Builder(String url) { super(url); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Subtitles build() {

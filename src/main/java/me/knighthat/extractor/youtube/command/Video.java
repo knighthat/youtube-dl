@@ -177,7 +177,7 @@ public class Video extends VideoImpl {
 
     public static class Builder extends VideoImpl.Builder {
 
-        private Builder(String url) { super(url); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Video build() {

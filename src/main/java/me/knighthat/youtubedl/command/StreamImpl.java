@@ -58,7 +58,7 @@ public class StreamImpl extends CommandImpl implements Stream {
 
     public static class Builder extends CommandImpl.Builder implements Stream.Builder  {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }

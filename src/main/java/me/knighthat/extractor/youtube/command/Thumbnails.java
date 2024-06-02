@@ -85,7 +85,7 @@ public class Thumbnails extends ThumbnailsImpl {
 
     public static class Builder extends ThumbnailsImpl.Builder {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Thumbnails build() {

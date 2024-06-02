@@ -27,7 +27,7 @@ public abstract class ThumbnailsImpl extends CommandImpl implements Thumbnails{
 
     public static abstract class Builder extends CommandImpl.Builder implements Thumbnails.Builder {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }

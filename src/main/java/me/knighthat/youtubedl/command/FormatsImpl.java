@@ -27,7 +27,7 @@ public abstract class FormatsImpl extends CommandImpl implements Formats {
 
     public static abstract class Builder extends CommandImpl.Builder implements Formats.Builder {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }

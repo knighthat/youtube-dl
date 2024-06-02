@@ -70,7 +70,7 @@ public class JsonImpl extends CommandImpl implements Json {
 
     public static class  Builder extends CommandImpl.Builder implements Json.Builder {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }

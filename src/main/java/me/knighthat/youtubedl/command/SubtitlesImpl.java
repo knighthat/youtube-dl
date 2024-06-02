@@ -33,7 +33,7 @@ public abstract class SubtitlesImpl extends CommandImpl implements Subtitles {
 
     public abstract static class Builder extends CommandImpl.Builder implements Subtitles.Builder {
 
-        protected Builder(String url) { super(url); }
+        protected Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) { return (Builder) super.flags( flags ); }

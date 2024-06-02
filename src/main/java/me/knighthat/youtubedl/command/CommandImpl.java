@@ -114,7 +114,7 @@ abstract class CommandImpl implements Command {
         private       UserAgent   userAgent;
         private       GeoConfig   geoConfig;
 
-        protected Builder( String url ) {
+        protected Builder( @NotNull String url ) {
             this.url = url;
             this.flags = new HashSet<>();
             this.headers = new HashSet<>();
@@ -127,19 +127,19 @@ abstract class CommandImpl implements Command {
         }
 
         @Override
-        public Command.@NotNull Builder headers(@NotNull Header... headers) {
+        public Command.@NotNull Builder headers( @NotNull Header... headers) {
             this.headers.addAll( Arrays.asList( headers ) );
             return this;
         }
 
         @Override
-        public Command.@NotNull Builder userAgent(@Nullable UserAgent userAgent) {
+        public Command.@NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
             this.userAgent = userAgent;
             return this;
         }
 
         @Override
-        public @NotNull Builder geoConfig(@Nullable GeoConfig geoConfig) {
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
             this.geoConfig = geoConfig;
             return this;
         }
