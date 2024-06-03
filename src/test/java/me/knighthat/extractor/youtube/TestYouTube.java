@@ -87,7 +87,7 @@ public class TestYouTube {
 
         assertDoesNotThrow( () -> video.get() );
         Assertions.assertInstanceOf(
-            me.knighthat.extractor.youtube.response.Video.class, 
+            me.knighthat.extractor.youtube.response.YouTubeVideo.class, 
             video.get()
         );
     }

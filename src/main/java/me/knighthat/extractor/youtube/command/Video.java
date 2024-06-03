@@ -17,7 +17,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import me.knighthat.extractor.youtube.response.Channel;
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.extractor.youtube.response.subtitle.DownloadableSubtitle;
@@ -131,7 +130,7 @@ public class Video extends VideoImpl {
         }
 
         /* CHANNEL */
-        Channel channel = YouTubeChannel.fromJson( json );
+        YouTubeChannel channel = YouTubeChannel.fromJson( json );
 
         /* THUMBNAILS */
         Set<Thumbnail> thumbnails = new HashSet<>();
@@ -196,15 +195,15 @@ public class Video extends VideoImpl {
         @Second long duration,
         @NotNull BigInteger views,
         @NotNull BigInteger likes,
-        @NotNull Channel uploader
-    ) implements me.knighthat.extractor.youtube.response.Video {
+        @NotNull YouTubeChannel uploader
+    ) implements me.knighthat.extractor.youtube.response.YouTubeVideo {
     }
 
     private static record YouTubeChannel(
         @NotNull String id,
         @NotNull String handle,
         @NotNull String title
-    ) implements Channel {
+    ) implements me.knighthat.extractor.youtube.response.YouTubeChannel {
 
         static @NotNull YouTubeChannel fromJson( @NotNull JsonObject json ) {
             return new YouTubeChannel(

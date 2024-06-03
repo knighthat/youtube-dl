@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * An interface represents basic information of a YouTube channel
  */
-public interface Channel {
+public interface YouTubeChannel {
 
     /**
      * Id of a channel remains even when
@@ -22,7 +22,7 @@ public interface Channel {
      * <p>
      * A channel's handle is not persistent and 
      * can be changed by the owner.
-     * To ensure the persistence, use {@link me.knighthat.youtubedl.extractor.youtube.response.Channel#id()}.
+     * To ensure the persistence, use {@link me.knighthat.youtubedl.YouTubeChannel.youtube.response.Channel#id()}.
      * 
      * @return unique and readable string. Always starts with '@'
      */

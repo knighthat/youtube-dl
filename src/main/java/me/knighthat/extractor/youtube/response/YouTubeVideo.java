@@ -14,7 +14,7 @@ import me.knighthat.internal.annotation.Second;
 /**
  * Detail information of a YouTube video.
  */
-public interface Video extends me.knighthat.youtubedl.response.video.Video {
+public interface YouTubeVideo extends me.knighthat.youtubedl.response.video.Video {
 
     @NotNull String description();
 
@@ -26,7 +26,7 @@ public interface Video extends me.knighthat.youtubedl.response.video.Video {
 
     @NotNull BigInteger likes();
     
-    @NotNull Channel uploader();
+    @NotNull YouTubeChannel uploader();
 
     @NotNull @Unmodifiable Set<Thumbnail> thumbnails();
 
