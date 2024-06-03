@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
@@ -121,7 +122,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         if ( !(videoJson instanceof JsonObject json) )
             return Optional::empty;
 
-            /* UPLOAD DATE */
+        /* UPLOAD DATE */
         Date uploadDate;
         try {
             uploadDate = DATE_FORMAT.parse( json.get( "upload_date" ).getAsString() );
@@ -136,7 +137,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         YouTubeChannelImpl channel = YouTubeChannelImpl.fromJson( json );
 
         /* THUMBNAILS */
-        Set<Thumbnail> thumbnails = new HashSet<>();
+        Set<YouTube.Thumbnail> thumbnails = new HashSet<>();
         for (JsonElement element : json.getAsJsonArray( "thumbnails" )) {
             /*
             {
@@ -148,7 +149,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
             }
             */
             JsonObject thumbJson = element.getAsJsonObject();
-            thumbnails.add( YouTubeThumbnailImpl.fromJson( thumbJson ) );
+            thumbnails.add( new Thumbnail(thumbJson) );
         }
 
         /* CAPTION */
@@ -217,7 +218,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     private record YouTubeVideoImpl(
         @NotNull String id,
         @NotNull String title,
-        @NotNull @Unmodifiable Set<Thumbnail> thumbnails,
+        @NotNull @Unmodifiable Set<YouTube.Thumbnail> thumbnails,
         @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles,
         @NotNull @Unmodifiable Set<Format> formats,
         @NotNull String description,
@@ -264,21 +265,6 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
                 Subtitle.Format.match( ext ), 
                 isAutomatic, 
                 json.get("url").getAsString()
-            );
-        }
-    }
-
-    private record YouTubeThumbnailImpl(
-        @NotNull String url,
-        int width,
-        int height
-    ) implements Thumbnail {
-
-        static @NotNull YouTubeThumbnailImpl fromJson( @NotNull JsonObject json ) {
-            return new YouTubeThumbnailImpl(
-                json.get( "url" ).getAsString(), 
-                json.get( "width" ).getAsInt(), 
-                json.get( "height" ).getAsInt()
             );
         }
     }

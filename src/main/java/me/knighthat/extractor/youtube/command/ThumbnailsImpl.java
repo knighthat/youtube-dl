@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
@@ -46,8 +47,8 @@ public class ThumbnailsImpl extends me.knighthat.youtubedl.command.ThumbnailsImp
     }
 
     @Override
-    public @NotNull ListResponse<Thumbnail> execute() {
-        List<Thumbnail> thumbnails = new ArrayList<>();
+    public @NotNull ListResponse<YouTube.Thumbnail> execute() {
+        List<YouTube.Thumbnail> thumbnails = new ArrayList<>();
 
         /*
         0   168    94     https://i.ytimg.com/vi/videoId/hqdefault.jpg
@@ -65,17 +66,8 @@ public class ThumbnailsImpl extends me.knighthat.youtubedl.command.ThumbnailsImp
             if ( parts.length < 4 )
                 throw new InsufficientElementsException( Arrays.toString( parts ), parts.length, 4 );
 
-            thumbnails.add(
-                new Thumbnail() {
-                    @Override
-                    public @NotNull String url() { return parts[3]; }
-
-                    @Override
-                    public int width() { return dimParser( parts[1] ); }
-
-                    @Override
-                    public int height() { return dimParser( parts[2] ); }
-                }
+            thumbnails.add( 
+                new Thumbnail( parts[3], dimParser(parts[1]), dimParser(parts[2]) ) 
             );
         }
 
@@ -116,8 +108,6 @@ public class ThumbnailsImpl extends me.knighthat.youtubedl.command.ThumbnailsImp
         }
 
         @Override
-        public @NotNull ListResponse<Thumbnail> execute() { return this.build().execute(); }
-    
-        
+        public @NotNull ListResponse<YouTube.Thumbnail> execute() { return this.build().execute(); }
     }
 }

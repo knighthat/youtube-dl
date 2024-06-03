@@ -58,4 +58,14 @@ public class YouTube {
         public static interface Mix extends MixFormat {
         }
     }
+
+    /**
+     * Contains more details about a thumbnail, such as width and height.
+     */
+    public static interface Thumbnail extends me.knighthat.youtubedl.response.thumbnail.Thumbnail {
+    
+        int width();
+
+        int height();
+    }
 }

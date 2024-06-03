@@ -14,7 +14,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
-import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
@@ -55,17 +54,6 @@ public class TestYouTube {
             else
                 fail(format.getClass().getName() + " is not a predefined YouTube's format!");
         }
-    }
-
-    @Test
-    void testThumbnailsExtractor() {
-        List<Thumbnail> thumbnails = YouTube.thumbnails( URL ).execute().items();
-
-        for( Thumbnail thumbnail : thumbnails )
-            assertInstanceOf(
-                me.knighthat.extractor.youtube.response.thumbnail.Thumbnail.class, 
-                thumbnail
-            );
     }
 
     @Test

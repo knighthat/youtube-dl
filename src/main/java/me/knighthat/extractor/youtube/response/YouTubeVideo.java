@@ -7,8 +7,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
+import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.extractor.youtube.response.subtitle.DownloadableSubtitle;
-import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
 
 /**
@@ -28,7 +28,7 @@ public interface YouTubeVideo extends me.knighthat.youtubedl.response.video.Vide
     
     @NotNull YouTubeChannel uploader();
 
-    @NotNull @Unmodifiable Set<Thumbnail> thumbnails();
+    @NotNull @Unmodifiable Set<YouTube.Thumbnail> thumbnails();
 
     @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles();
 }

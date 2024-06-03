@@ -1,12 +1,22 @@
 package me.knighthat.extractor.youtube.response.thumbnail;
 
+import org.jetbrains.annotations.NotNull;
 
-/**
- * Contains more details about a thumbnail, such as width and height.
- */
-public interface Thumbnail extends me.knighthat.youtubedl.response.thumbnail.Thumbnail {
+import com.google.gson.JsonObject;
 
-    int width();
+import me.knighthat.extractor.youtube.YouTube;
 
-    int height();
+public record Thumbnail(
+    @NotNull String url,
+    int width,
+    int height
+) implements YouTube.Thumbnail {
+
+    public Thumbnail( @NotNull JsonObject json ) {
+        this(
+            json.get( "url" ).getAsString(), 
+            json.get( "width" ).getAsInt(), 
+            json.get( "height" ).getAsInt()
+        );
+    }
 }
