@@ -133,7 +133,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         }
 
         /* CHANNEL */
-        YouTubeChannelImpl channel = YouTubeChannelImpl.fromJson( json );
+        YouTube.Channel channel = new YouTubeChannelImpl( json );
 
         /* THUMBNAILS */
         Set<YouTube.Thumbnail> thumbnails = new HashSet<>();
@@ -225,7 +225,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         @Second long duration,
         @NotNull BigInteger views,
         @NotNull BigInteger likes,
-        @NotNull YouTubeChannelImpl uploader
+        @NotNull YouTube.Channel uploader
     ) implements YouTubeVideo {
     }
 
@@ -233,10 +233,10 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         @NotNull String id,
         @NotNull String handle,
         @NotNull String title
-    ) implements me.knighthat.extractor.youtube.response.YouTubeChannel {
+    ) implements YouTube.Channel {
 
-        static @NotNull YouTubeChannelImpl fromJson( @NotNull JsonObject json ) {
-            return new YouTubeChannelImpl(
+        private YouTubeChannelImpl( @NotNull JsonObject json ) {
+            this(
                 json.get( "channel_id" ).getAsString(), 
                 json.get( "uploader_id" ).getAsString(), 
                 json.get("channel").getAsString()

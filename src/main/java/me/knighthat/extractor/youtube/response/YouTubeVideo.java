@@ -25,7 +25,7 @@ public interface YouTubeVideo extends me.knighthat.youtubedl.response.video.Vide
 
     @NotNull BigInteger likes();
     
-    @NotNull YouTubeChannel uploader();
+    @NotNull YouTube.Channel uploader();
 
     @NotNull @Unmodifiable Set<YouTube.Thumbnail> thumbnails();
 
