@@ -68,4 +68,20 @@ public class YouTube {
 
         int height();
     }
+
+    /**
+     * A class represents youtube's subtitle.
+     */
+    public static interface Subtitle extends me.knighthat.youtubedl.response.subtitle.Subtitle {
+    
+        boolean isAutomatic();
+    }
+
+    /**
+     * DownloadableSubtitle
+     */
+    public static interface DownloadableSubtitle extends me.knighthat.youtubedl.response.subtitle.DownloadableSubtitle {
+    
+        boolean isAutomatic();
+    }
 }

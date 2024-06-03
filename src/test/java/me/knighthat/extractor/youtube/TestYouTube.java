@@ -1,7 +1,6 @@
 package me.knighthat.extractor.youtube;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
@@ -54,17 +52,6 @@ public class TestYouTube {
             else
                 fail(format.getClass().getName() + " is not a predefined YouTube's format!");
         }
-    }
-
-    @Test
-    void testSubtitlesExtractor() {
-        List<Subtitle> subtitles = YouTube.subtitles( URL ).execute().items();
-
-        for( Subtitle subtitle : subtitles )
-            assertInstanceOf(
-                me.knighthat.extractor.youtube.response.subtitle.Subtitle.class, 
-                subtitle 
-            );
     }
 
     @Test

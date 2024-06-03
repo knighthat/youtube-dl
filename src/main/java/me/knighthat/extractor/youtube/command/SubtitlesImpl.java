@@ -9,13 +9,14 @@ import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
+import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.ListResponse;
+import me.knighthat.youtubedl.response.subtitle.Subtitle;
 
 public class SubtitlesImpl extends me.knighthat.youtubedl.command.SubtitlesImpl implements Subtitles {
 
@@ -35,8 +36,8 @@ public class SubtitlesImpl extends me.knighthat.youtubedl.command.SubtitlesImpl 
     }
 
     @Override
-    public @NotNull ListResponse<Subtitle> execute() {
-        List<Subtitle> subtitles = new ArrayList<>();
+    public @NotNull ListResponse<YouTube.Subtitle> execute() {
+        List<YouTube.Subtitle> subtitles = new ArrayList<>();
 
         /*
             Available automatic captions for videoId:
@@ -91,18 +92,8 @@ public class SubtitlesImpl extends me.knighthat.youtubedl.command.SubtitlesImpl 
 
                 for (String f : formats) {
                     try {
-                        boolean automatic_caption = isAutomatic;
                         subtitles.add(
-                            new me.knighthat.extractor.youtube.response.subtitle.Subtitle() {
-                                @Override
-                                public @NotNull String language() { return parts[0].trim(); }
-
-                                @Override
-                                public @NotNull Format format() { return Subtitle.Format.match( f.trim() ); }
-
-                                @Override
-                                public boolean isAutomatic() { return automatic_caption; }
-                            }
+                            new SubtitleImpl( parts[0].trim(), Subtitle.Format.match( f.trim() ), isAutomatic )
                         );
                     } catch ( UnsupportedOperationException e ) {
                         Logger.exception( "failed to parse subtitle!", e, Level.WARNING );
@@ -148,6 +139,13 @@ public class SubtitlesImpl extends me.knighthat.youtubedl.command.SubtitlesImpl 
         }
 
         @Override
-        public @NotNull ListResponse<Subtitle> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<YouTube.Subtitle> execute() { return this.build().execute(); }
+    }
+
+    private record SubtitleImpl (
+        @NotNull String language,
+        @NotNull me.knighthat.youtubedl.response.subtitle.Subtitle.Format format,
+        boolean isAutomatic
+    ) implements YouTube.Subtitle {
     }
 }

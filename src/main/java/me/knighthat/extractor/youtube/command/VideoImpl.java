@@ -21,7 +21,6 @@ import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
-import me.knighthat.extractor.youtube.response.subtitle.DownloadableSubtitle;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
 import me.knighthat.youtubedl.command.JsonImpl;
@@ -45,15 +44,15 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     @NotNull
     private static final Gson GSON = new Gson();
 
-    private static @NotNull Set<DownloadableSubtitle> subtitleSet( @NotNull JsonObject json, boolean isAutomatic ) {
-        Set<DownloadableSubtitle> subtitles = new HashSet<>();
+    private static @NotNull Set<YouTube.DownloadableSubtitle> subtitleSet( @NotNull JsonObject json, boolean isAutomatic ) {
+        Set<YouTube.DownloadableSubtitle> subtitles = new HashSet<>();
 
         for (String language : json.keySet()) {
             for (JsonElement formatKey : json.getAsJsonArray(language)) {
                 JsonObject jsonFormat = formatKey.getAsJsonObject();
 
                 try {   
-                    subtitles.add( YouTubeSubtitleImpl.fromJson(language, isAutomatic, jsonFormat) );
+                    subtitles.add( new YouTubeSubtitleImpl( language, isAutomatic, jsonFormat ) );
                 } catch (UnsupportedSubtitleFormatException e) {
                     Logger.exception("failed to parse subtitle!", e, Level.WARNING);
                 }
@@ -153,7 +152,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         }
 
         /* CAPTION */
-        Set<DownloadableSubtitle> subtitles = new HashSet<>();
+        Set<YouTube.DownloadableSubtitle> subtitles = new HashSet<>();
         if (json.has("automatic_captions")) 
             subtitles.addAll( subtitleSet( json.getAsJsonObject( "automatic_captions" ), true) );
         if (json.has("subtitles")) 
@@ -219,7 +218,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         @NotNull String id,
         @NotNull String title,
         @NotNull @Unmodifiable Set<YouTube.Thumbnail> thumbnails,
-        @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles,
+        @NotNull @Unmodifiable Set<YouTube.DownloadableSubtitle> subtitles,
         @NotNull @Unmodifiable Set<Format> formats,
         @NotNull String description,
         @NotNull Date uploadDate,
@@ -256,14 +255,13 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         @NotNull Subtitle.Format format,
         boolean isAutomatic,
         @NotNull String url
-    ) implements DownloadableSubtitle {
+    ) implements YouTube.DownloadableSubtitle {
 
-        static @NotNull YouTubeSubtitleImpl fromJson( @NotNull String language, boolean isAutomatic, @NotNull JsonObject json ) {
-            String ext = json.get( "ext" ).getAsString();
-            return new YouTubeSubtitleImpl(
-                language, 
-                Subtitle.Format.match( ext ), 
-                isAutomatic, 
+        private YouTubeSubtitleImpl( @NotNull String language, boolean isAutomatic, @NotNull JsonObject json ) {
+            this(
+                language,
+                Subtitle.Format.match( json.get( "ext" ).getAsString() ),
+                isAutomatic,
                 json.get("url").getAsString()
             );
         }
