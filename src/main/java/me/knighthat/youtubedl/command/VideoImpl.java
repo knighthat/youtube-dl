@@ -40,10 +40,8 @@ public abstract class VideoImpl extends CommandImpl implements Video {
         public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
-        public @NotNull OptionalResponse<me.knighthat.youtubedl.response.video.Video> execute() {
+        public @NotNull OptionalResponse<? extends me.knighthat.youtubedl.response.video.Video> execute() {
             return this.build().execute();
         }
-    
-        
     }
 }
