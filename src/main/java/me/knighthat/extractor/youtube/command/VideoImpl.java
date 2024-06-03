@@ -18,7 +18,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import me.knighthat.extractor.youtube.YouTube;
-import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
@@ -107,7 +106,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     }
 
     @Override
-    public @NotNull OptionalResponse<YouTubeVideo> execute() {
+    public @NotNull OptionalResponse<YouTube.Video> execute() {
         Flag[] flags = this.flags().toArray( Flag[]::new );
         Header[] headers = this.headers().toArray( Header[]::new );
 
@@ -211,7 +210,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         }
 
         @Override
-        public @NotNull OptionalResponse<YouTubeVideo> execute() { return this.build().execute(); }
+        public @NotNull OptionalResponse<YouTube.Video> execute() { return this.build().execute(); }
     }
 
     private record YouTubeVideoImpl(
@@ -226,7 +225,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         @NotNull BigInteger views,
         @NotNull BigInteger likes,
         @NotNull YouTube.Channel uploader
-    ) implements YouTubeVideo {
+    ) implements YouTube.Video {
     }
 
     private record YouTubeChannelImpl(

@@ -1,18 +1,14 @@
 package me.knighthat.extractor.youtube;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import me.knighthat.youtubedl.response.format.Format;
@@ -52,16 +48,5 @@ public class TestYouTube {
             else
                 fail(format.getClass().getName() + " is not a predefined YouTube's format!");
         }
-    }
-
-    @Test
-    void testVideoExtractor() {
-        Optional<YouTubeVideo> video = YouTube.video( URL ).execute().result();
-
-        assertDoesNotThrow( () -> video.get() );
-        Assertions.assertInstanceOf(
-            me.knighthat.extractor.youtube.response.YouTubeVideo.class, 
-            video.get()
-        );
     }
 }

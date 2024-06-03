@@ -1,12 +1,18 @@
 package me.knighthat.extractor.youtube;
 
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.Set;
+
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 
 import me.knighthat.extractor.youtube.command.Subtitles;
 import me.knighthat.extractor.youtube.command.SubtitlesImpl;
 import me.knighthat.extractor.youtube.command.Thumbnails;
 import me.knighthat.extractor.youtube.command.ThumbnailsImpl;
 import me.knighthat.extractor.youtube.command.VideoImpl;
+import me.knighthat.internal.annotation.Second;
 import me.knighthat.youtubedl.command.Formats;
 import me.knighthat.youtubedl.command.Json;
 import me.knighthat.youtubedl.command.JsonImpl;
@@ -137,5 +143,27 @@ public class YouTube {
          * @return legacy youtube channel's URL
          */
         @NotNull String channelUrl();
+    }
+
+    /**
+     * Detail information of a YouTube video.
+     */
+    public static interface Video extends me.knighthat.youtubedl.response.video.Video {
+    
+        @NotNull String description();
+
+        @NotNull Date uploadDate();
+
+        @Second long duration();
+        
+        @NotNull BigInteger views();
+
+        @NotNull BigInteger likes();
+        
+        @NotNull Channel uploader();
+
+        @NotNull @Unmodifiable Set<Thumbnail> thumbnails();
+
+        @NotNull @Unmodifiable Set<DownloadableSubtitle> subtitles();
     }
 }

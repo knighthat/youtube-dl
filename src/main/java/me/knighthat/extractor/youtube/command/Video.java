@@ -3,7 +3,7 @@ package me.knighthat.extractor.youtube.command;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import me.knighthat.extractor.youtube.response.YouTubeVideo;
+import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
@@ -16,7 +16,7 @@ import me.knighthat.youtubedl.response.OptionalResponse;
 public interface Video extends me.knighthat.youtubedl.command.Video {
 
     @Override
-    @NotNull OptionalResponse<YouTubeVideo> execute();
+    @NotNull OptionalResponse<YouTube.Video> execute();
 
     public static interface Builder extends me.knighthat.youtubedl.command.Video.Builder {
 
@@ -36,6 +36,6 @@ public interface Video extends me.knighthat.youtubedl.command.Video {
         @NotNull Video build();
 
         @Override
-        @NotNull OptionalResponse<YouTubeVideo> execute();
+        @NotNull OptionalResponse<YouTube.Video> execute();
     }
 }
