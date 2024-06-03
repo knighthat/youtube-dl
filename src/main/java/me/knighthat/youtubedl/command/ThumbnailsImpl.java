@@ -42,6 +42,6 @@ public abstract class ThumbnailsImpl extends CommandImpl implements Thumbnails{
         public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
-        public @NotNull ListResponse<Thumbnail> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<? extends Thumbnail> execute() { return this.build().execute(); }
     }
 }

@@ -13,7 +13,7 @@ import me.knighthat.youtubedl.response.thumbnail.Thumbnail;
 public interface Thumbnails extends Command {
 
     @Override
-    @NotNull ListResponse<Thumbnail> execute();
+    @NotNull ListResponse<? extends Thumbnail> execute();
 
     public static interface Builder extends Command.Builder {
 
@@ -33,6 +33,6 @@ public interface Thumbnails extends Command {
         @NotNull Thumbnails build();
 
         @Override
-        @NotNull ListResponse<Thumbnail> execute();
+        @NotNull ListResponse<? extends Thumbnail> execute();
     }
 }
