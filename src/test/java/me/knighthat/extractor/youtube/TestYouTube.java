@@ -13,12 +13,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import me.knighthat.extractor.youtube.response.format.Video;
 import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.extractor.youtube.response.YouTubeVideo;
-import me.knighthat.extractor.youtube.response.format.Audio;
-import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import me.knighthat.youtubedl.response.format.Format;
@@ -50,9 +47,9 @@ public class TestYouTube {
 
         for( Format format : formats ) {
             if ( 
-                format instanceof Audio
-                || format instanceof Video
-                || format instanceof Mix
+                format instanceof YouTube.Format.Audio
+                || format instanceof YouTube.Format.Video
+                || format instanceof YouTube.Format.Mix
             )
                 continue;
             else

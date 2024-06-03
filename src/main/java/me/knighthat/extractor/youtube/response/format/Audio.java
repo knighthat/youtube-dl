@@ -10,16 +10,15 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
-import me.knighthat.youtubedl.response.format.AudioFormat;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.youtubedl.response.format.SizedMedia;
+import me.knighthat.extractor.youtube.YouTube;
 
 /**
  * Audio
  */
 @Getter
 @Accessors( fluent = true )
-public class Audio implements AudioFormat, SizedMedia {
+public class Audio implements YouTube.Format.Audio {
 
     @NotNull
     @ToString.Exclude

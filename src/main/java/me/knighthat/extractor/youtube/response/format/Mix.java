@@ -7,16 +7,16 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.youtubedl.response.format.MixFormat;
 
 /**
  * Mix
  */
 @Getter
 @Accessors( fluent = true )
-public class Mix implements MixFormat {
+public class Mix implements YouTube.Format.Mix {
 
     @NotNull
     @ToString.Exclude

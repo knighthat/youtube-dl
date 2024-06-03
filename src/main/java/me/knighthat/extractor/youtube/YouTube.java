@@ -6,13 +6,16 @@ import me.knighthat.extractor.youtube.command.Subtitles;
 import me.knighthat.extractor.youtube.command.SubtitlesImpl;
 import me.knighthat.extractor.youtube.command.Thumbnails;
 import me.knighthat.extractor.youtube.command.ThumbnailsImpl;
-import me.knighthat.extractor.youtube.command.Video;
 import me.knighthat.extractor.youtube.command.VideoImpl;
 import me.knighthat.youtubedl.command.Formats;
 import me.knighthat.youtubedl.command.Json;
 import me.knighthat.youtubedl.command.JsonImpl;
 import me.knighthat.youtubedl.command.Stream;
 import me.knighthat.youtubedl.command.StreamImpl;
+import me.knighthat.youtubedl.response.format.AudioFormat;
+import me.knighthat.youtubedl.response.format.MixFormat;
+import me.knighthat.youtubedl.response.format.SizedMedia;
+import me.knighthat.youtubedl.response.format.VideoFormat;
 
 
 /**
@@ -40,7 +43,19 @@ public class YouTube {
         return JsonImpl.builder( url ); 
     }
 
-    public static @NotNull Video.Builder video( @NotNull String url ) { 
+    public static @NotNull me.knighthat.extractor.youtube.command.Video.Builder video( @NotNull String url ) { 
         return VideoImpl.builder( url ); 
+    }
+
+    public static interface Format {
+    
+        public static interface Video extends VideoFormat, SizedMedia {
+        }
+
+        public static interface Audio extends AudioFormat, SizedMedia {
+        }
+
+        public static interface Mix extends MixFormat {
+        }
     }
 }

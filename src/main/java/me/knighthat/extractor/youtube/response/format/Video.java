@@ -11,15 +11,14 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.youtubedl.response.format.SizedMedia;
-import me.knighthat.youtubedl.response.format.VideoFormat;
+import me.knighthat.extractor.youtube.YouTube;
 
 /**
  * VideoOnly
  */
 @Getter
 @Accessors( fluent = true )
-public class Video implements VideoFormat, SizedMedia {
+public class Video implements YouTube.Format.Video {
 
     @NotNull
     @ToString.Exclude
