@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import me.knighthat.extractor.youtube.response.format.Video;
+import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.youtubedl.YoutubeDL;
@@ -83,7 +84,7 @@ public class TestYouTube {
 
     @Test
     void testVideoExtractor() {
-        Optional<me.knighthat.youtubedl.response.video.Video> video = YouTube.video( URL ).execute().result();
+        Optional<YouTubeVideo> video = YouTube.video( URL ).execute().result();
 
         assertDoesNotThrow( () -> video.get() );
         Assertions.assertInstanceOf(
