@@ -1,6 +1,5 @@
 package me.knighthat.extractor.asiancrush.command;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -24,8 +23,6 @@ import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.youtubedl.response.subtitle.Subtitle;
-import me.knighthat.youtubedl.response.thumbnail.Thumbnail;
 
 /**
  * Video's information extractor for AsianCrush
@@ -97,12 +94,5 @@ public class Video extends VideoImpl {
         @NotNull String id,
         @NotNull String title,
         @NotNull @Unmodifiable Set<Format> formats
-    ) implements me.knighthat.youtubedl.response.video.Video {
-
-        @Override
-        public @NotNull @Unmodifiable Set<Thumbnail> thumbnails() { return Collections.emptySet(); }
-
-        @Override
-        public @NotNull @Unmodifiable Set<Subtitle> subtitles() { return Collections.emptySet(); }
-    }
+    ) implements me.knighthat.youtubedl.response.video.Video { }
 }
