@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import me.knighthat.extractor.youtube.response.format.Video;
+import me.knighthat.extractor.youtube.response.subtitle.Subtitle;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.extractor.youtube.response.YouTubeVideo;
 import me.knighthat.extractor.youtube.response.format.Audio;
@@ -21,7 +22,6 @@ import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.youtubedl.YoutubeDL;
 import me.knighthat.youtubedl.exception.UnsupportedVersionException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.youtubedl.response.subtitle.Subtitle;
 
 /*
  * This class tests "formats", "thumbnails", "subtitles", and "video"

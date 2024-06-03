@@ -2,6 +2,8 @@ package me.knighthat.extractor.youtube;
 
 import org.jetbrains.annotations.NotNull;
 
+import me.knighthat.extractor.youtube.command.Subtitles;
+import me.knighthat.extractor.youtube.command.SubtitlesImpl;
 import me.knighthat.extractor.youtube.command.Thumbnails;
 import me.knighthat.extractor.youtube.command.ThumbnailsImpl;
 import me.knighthat.extractor.youtube.command.Video;
@@ -11,7 +13,6 @@ import me.knighthat.youtubedl.command.Json;
 import me.knighthat.youtubedl.command.JsonImpl;
 import me.knighthat.youtubedl.command.Stream;
 import me.knighthat.youtubedl.command.StreamImpl;
-import me.knighthat.youtubedl.command.Subtitles;
 
 
 /**
@@ -32,7 +33,7 @@ public class YouTube {
     }
 
     public static @NotNull Subtitles.Builder subtitles( @NotNull String url ) { 
-        return me.knighthat.extractor.youtube.command.Subtitles.builder( url ); 
+        return SubtitlesImpl.builder( url ); 
     }
 
     public static @NotNull Json.Builder json( @NotNull String url ) { 
