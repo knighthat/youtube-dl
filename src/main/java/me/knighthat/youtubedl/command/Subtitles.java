@@ -16,7 +16,7 @@ import me.knighthat.youtubedl.response.subtitle.Subtitle;
 public interface Subtitles extends Command {
 
     @Override
-    @NotNull ListResponse<Subtitle> execute();
+    @NotNull ListResponse<? extends Subtitle> execute();
 
     public static interface Builder extends Command.Builder {
 
@@ -36,6 +36,6 @@ public interface Subtitles extends Command {
         @NotNull Subtitles build();
 
         @Override
-        @NotNull ListResponse<Subtitle> execute();
+        @NotNull ListResponse<? extends Subtitle> execute();
     }
 }

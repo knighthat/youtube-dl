@@ -48,6 +48,6 @@ public abstract class SubtitlesImpl extends CommandImpl implements Subtitles {
         public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
-        public @NotNull ListResponse<Subtitle> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<? extends Subtitle> execute() { return this.build().execute(); }
     }
 }
