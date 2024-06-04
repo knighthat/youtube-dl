@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.extractor.youtube.YouTube;
+import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
 
@@ -50,7 +51,7 @@ public class Mix implements YouTube.Format.Mix {
         this.vCodec = arr[5];
         this.aCodec = arr[7].split( "\\s+" )[0];
         this.sampleRate = FormatUtils.sampleRateParser( arr, 7 );
-        this.resolution = FormatUtils.reolutionParser( arr, 3 );
+        this.resolution = FormatUtils.resolutionParser( arr, 3 );
         this.fps = FormatUtils.fpsParser( arr, 6 );
     }
 
@@ -89,6 +90,6 @@ public class Mix implements YouTube.Format.Mix {
         this.aCodec = json.get( "acodec" ).getAsString();
         this.sampleRate = json.get( "asr" ).getAsInt();
         this.resolution = json.get( "format_note" ).getAsString();
-        this.fps = json.get( "fps" ).getAsFloat();  
+        this.fps = json.get( "fps" ).getAsFloat();
     }
 }

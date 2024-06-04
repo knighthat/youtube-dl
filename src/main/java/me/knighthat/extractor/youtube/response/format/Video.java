@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import me.knighthat.extractor.youtube.YouTube;
+import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.extractor.youtube.YouTube;
@@ -50,7 +52,7 @@ public class Video implements YouTube.Format.Video {
         this.tbr = FormatUtils.tbrParser( arr, 4 );
         this.fps = FormatUtils.fpsParser(arr, 7);
         this.vCodec = arr[6];
-        this.resolution = FormatUtils.reolutionParser(arr, 3);
+        this.resolution = FormatUtils.resolutionParser( arr, 3 );
         this.size = FormatUtils.sizeParser( arr, arr.length - 1 );
     }
 
@@ -93,6 +95,6 @@ public class Video implements YouTube.Format.Video {
         this.vCodec = json.get( "vcodec" ).getAsString();
         this.resolution = json.get( "format_note" ).getAsString();
         this.fps = json.get( "fps" ).getAsFloat();
-        this.size = FormatUtils.GSON.fromJson( json.get( "filesize" ), BigInteger.class );
+        this.size = BigInteger.valueOf( json.get( "filesize" ).getAsLong() );
     }
 }

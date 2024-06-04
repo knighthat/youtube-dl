@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.extractor.asiancrush.AsianCrush;
+import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
 
@@ -48,7 +49,7 @@ public class Movie implements AsianCrush.Movie{
         this.tbr = FormatUtils.tbrParser( arr, 3 );
         this.vCodec = arr[4];
         this.aCodec = arr[6];
-        this.resolution = FormatUtils.reolutionParser( arr, 2 );
+        this.resolution = FormatUtils.resolutionParser( arr, 2 );
         this.fps = FormatUtils.fpsParser( arr, 5 );
     }
 

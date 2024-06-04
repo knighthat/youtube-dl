@@ -9,6 +9,8 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import me.knighthat.extractor.youtube.YouTube;
+import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.extractor.youtube.YouTube;
@@ -88,6 +90,6 @@ public class Audio implements YouTube.Format.Audio {
         this.tbr = Math.round( tbr) ;
         this.aCodec = json.get( "acodec" ).getAsString();
         this.sampleRate = json.get( "asr" ).getAsInt();
-        this.size = FormatUtils.GSON.fromJson( json.get( "filesize" ), BigInteger.class );
+        this.size = BigInteger.valueOf( json.get( "filesize" ).getAsLong() );
     }
 }
