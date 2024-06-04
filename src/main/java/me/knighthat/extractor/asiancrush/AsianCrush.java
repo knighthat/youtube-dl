@@ -2,12 +2,12 @@ package me.knighthat.extractor.asiancrush;
 
 import org.jetbrains.annotations.NotNull;
 
+import me.knighthat.extractor.asiancrush.command.VideoImpl;
 import me.knighthat.youtubedl.command.Formats;
 import me.knighthat.youtubedl.command.Json;
 import me.knighthat.youtubedl.command.JsonImpl;
 import me.knighthat.youtubedl.command.Stream;
 import me.knighthat.youtubedl.command.StreamImpl;
-import me.knighthat.youtubedl.command.Video;
 import me.knighthat.youtubedl.response.format.MixFormat;
 
 /**
@@ -27,13 +27,16 @@ public class AsianCrush {
         return JsonImpl.builder( url ); 
     }
 
-    public static @NotNull Video.Builder video( @NotNull String url ) { 
-        return me.knighthat.extractor.asiancrush.command.Video.builder( url ); 
+    public static @NotNull me.knighthat.extractor.asiancrush.command.Video.Builder video( @NotNull String url ) { 
+        return VideoImpl.builder( url ); 
     }
 
     public static interface Format {
     
-        public static interface Mix extends MixFormat{
+        public static interface Mix extends MixFormat {
         }
+    }
+
+    public static interface Video extends me.knighthat.youtubedl.response.video.Video {
     }
 }
