@@ -42,6 +42,6 @@ public abstract class FormatsImpl extends CommandImpl implements Formats {
         public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) { return (Builder) super.geoConfig( geoConfig ); }
 
         @Override
-        public @NotNull ListResponse<Format> execute() { return this.build().execute(); }
+        public @NotNull ListResponse<? extends Format> execute() { return this.build().execute(); }
     }
 }

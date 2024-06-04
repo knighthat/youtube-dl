@@ -12,7 +12,7 @@ import me.knighthat.youtubedl.response.format.Format;
 
 public interface Formats extends Command {
 
-    @NotNull ListResponse<Format> execute();
+    @NotNull ListResponse<? extends Format> execute();
 
     public static interface Builder extends Command.Builder {
 
@@ -26,6 +26,6 @@ public interface Formats extends Command {
     
         @NotNull Formats build();
 
-        @NotNull ListResponse<Format> execute();
+        @NotNull ListResponse<? extends Format> execute();
     }
 }
