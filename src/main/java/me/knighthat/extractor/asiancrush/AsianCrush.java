@@ -16,7 +16,7 @@ import me.knighthat.youtubedl.response.format.MixFormat;
 public class AsianCrush {
 
     public static @NotNull Formats.Builder formats( @NotNull String url ) { 
-        return me.knighthat.extractor.asiancrush.command.Formats.builder( url ); 
+        return me.knighthat.extractor.asiancrush.command.FormatsImpl.builder( url ); 
     }
 
     public static @NotNull Stream.Builder stream( @NotNull String url ) { 
@@ -31,10 +31,7 @@ public class AsianCrush {
         return VideoImpl.builder( url ); 
     }
 
-    public static interface Format {
-    
-        public static interface Mix extends MixFormat {
-        }
+    public static interface Movie extends MixFormat {
     }
 
     public static interface Video extends me.knighthat.youtubedl.response.video.Video {

@@ -7,16 +7,16 @@ import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import me.knighthat.extractor.asiancrush.AsianCrush;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.extractor.asiancrush.AsianCrush;
 
 /**
  * Represents media from AsianCrush
  */
 @Getter
 @Accessors( fluent = true )
-public class Mix implements AsianCrush.Format.Mix {
+public class Movie implements AsianCrush.Movie{
 
     @NotNull
     @ToString.Exclude
@@ -38,7 +38,7 @@ public class Mix implements AsianCrush.Format.Mix {
         this.type = me.knighthat.youtubedl.response.format.Format.Type.MIXED;
     }
 
-    public Mix( String @NotNull [] arr ) {
+    public Movie( String @NotNull [] arr ) {
         // [hls-361, mp4, 426x240, 361k, avc1.64001F, 23.976fps, mp4a.40.2]
         if ( arr.length < 7 )
             throw new InsufficientElementsException( "Mix", arr.length, 7 );
@@ -52,7 +52,7 @@ public class Mix implements AsianCrush.Format.Mix {
         this.fps = FormatUtils.fpsParser( arr, 5 );
     }
 
-    public Mix( @NotNull JsonObject json ) {
+    public Movie( @NotNull JsonObject json ) {
         /*
         "format_id": "hls-361",
         "url": "https://asiancrush-asiancrush.cdn-ak.matchpoint.tv/cinedigm/1000000030080/650b488ef1039d36ff29b1b1/hls/235.m3u8",
