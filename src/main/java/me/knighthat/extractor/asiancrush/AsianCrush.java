@@ -8,6 +8,7 @@ import me.knighthat.youtubedl.command.JsonImpl;
 import me.knighthat.youtubedl.command.Stream;
 import me.knighthat.youtubedl.command.StreamImpl;
 import me.knighthat.youtubedl.command.Video;
+import me.knighthat.youtubedl.response.format.MixFormat;
 
 /**
  * AsianCrush extractor
@@ -28,5 +29,11 @@ public class AsianCrush {
 
     public static @NotNull Video.Builder video( @NotNull String url ) { 
         return me.knighthat.extractor.asiancrush.command.Video.builder( url ); 
+    }
+
+    public static interface Format {
+    
+        public static interface Mix extends MixFormat{
+        }
     }
 }

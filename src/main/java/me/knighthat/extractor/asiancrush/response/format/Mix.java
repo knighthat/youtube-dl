@@ -9,14 +9,14 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.youtubedl.response.format.MixFormat;
+import me.knighthat.extractor.asiancrush.AsianCrush;
 
 /**
  * Represents media from AsianCrush
  */
 @Getter
 @Accessors( fluent = true )
-public class Mix implements MixFormat {
+public class Mix implements AsianCrush.Format.Mix {
 
     @NotNull
     @ToString.Exclude
