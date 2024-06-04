@@ -20,6 +20,7 @@ import me.knighthat.youtubedl.command.Stream;
 import me.knighthat.youtubedl.command.StreamImpl;
 import me.knighthat.youtubedl.response.format.AudioFormat;
 import me.knighthat.youtubedl.response.format.MixFormat;
+import me.knighthat.youtubedl.response.format.SampleRateProvider;
 import me.knighthat.youtubedl.response.format.SizedMedia;
 import me.knighthat.youtubedl.response.format.VideoFormat;
 
@@ -58,10 +59,10 @@ public class YouTube {
         public static interface Video extends VideoFormat, SizedMedia {
         }
 
-        public static interface Audio extends AudioFormat, SizedMedia {
+        public static interface Audio extends AudioFormat, SizedMedia, SampleRateProvider {
         }
 
-        public static interface Mix extends MixFormat {
+        public static interface Mix extends MixFormat, SampleRateProvider {
         }
     }
 

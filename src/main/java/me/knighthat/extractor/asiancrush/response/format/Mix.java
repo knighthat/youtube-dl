@@ -30,7 +30,6 @@ public class Mix implements MixFormat {
     private final String vCodec;
     @NotNull
     private final String aCodec;
-    private final int sampleRate;
     @NotNull
     private final String resolution;
     private final float fps;
@@ -49,7 +48,6 @@ public class Mix implements MixFormat {
         this.tbr = FormatUtils.tbrParser( arr, 3 );
         this.vCodec = arr[4];
         this.aCodec = arr[6];
-        this.sampleRate = 0;    // Doesn't have sample rate
         this.resolution = FormatUtils.reolutionParser( arr, 2 );
         this.fps = FormatUtils.fpsParser( arr, 5 );
     }
@@ -80,7 +78,6 @@ public class Mix implements MixFormat {
         this.tbr = json.get( "tbr" ).getAsInt();
         this.vCodec = json.get( "vcodec" ).getAsString();
         this.aCodec = json.get( "acodec" ).getAsString();
-        this.sampleRate = 0;
         this.resolution = json.get( "height" ).getAsString() + "p";
         this.fps = json.get( "fps" ).getAsFloat();
     }
