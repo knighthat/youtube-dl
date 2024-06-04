@@ -95,7 +95,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    protected VideoImpl(
+    private VideoImpl(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
@@ -178,7 +178,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
     public static class Builder extends me.knighthat.youtubedl.command.VideoImpl.Builder implements Video.Builder {
 
-        protected Builder(@NotNull String url) { super(url); }
+        private Builder(@NotNull String url) { super(url); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) {

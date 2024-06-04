@@ -25,7 +25,7 @@ public class SubtitlesImpl extends me.knighthat.youtubedl.command.SubtitlesImpl 
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    protected SubtitlesImpl(
+    private SubtitlesImpl(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
@@ -107,7 +107,7 @@ public class SubtitlesImpl extends me.knighthat.youtubedl.command.SubtitlesImpl 
 
     public static class Builder extends me.knighthat.youtubedl.command.SubtitlesImpl.Builder implements Subtitles.Builder {
 
-        protected Builder( @NotNull String url ) { super( url ); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) {

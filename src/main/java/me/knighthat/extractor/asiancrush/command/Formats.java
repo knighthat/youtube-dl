@@ -27,7 +27,7 @@ public class Formats extends FormatsImpl {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    protected Formats(
+    private Formats(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
@@ -67,7 +67,7 @@ public class Formats extends FormatsImpl {
 
     public static class Builder extends FormatsImpl.Builder {
 
-        protected Builder( @NotNull String url ) { super( url ); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Formats build() {

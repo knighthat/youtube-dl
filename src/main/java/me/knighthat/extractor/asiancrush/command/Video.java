@@ -34,7 +34,7 @@ public class Video extends VideoImpl {
     
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    protected Video(
+    private Video(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
@@ -82,7 +82,7 @@ public class Video extends VideoImpl {
 
     public static class Builder extends VideoImpl.Builder {
 
-        protected Builder( @NotNull String url ) { super( url ); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Video build() {

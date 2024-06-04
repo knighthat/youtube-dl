@@ -36,7 +36,7 @@ public class ThumbnailsImpl extends me.knighthat.youtubedl.command.ThumbnailsImp
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    protected ThumbnailsImpl(
+    private ThumbnailsImpl(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
@@ -76,7 +76,7 @@ public class ThumbnailsImpl extends me.knighthat.youtubedl.command.ThumbnailsImp
 
     public static class Builder extends me.knighthat.youtubedl.command.ThumbnailsImpl.Builder implements Thumbnails.Builder {
 
-        protected Builder( @NotNull String url ) { super( url ); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) {

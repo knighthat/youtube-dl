@@ -22,7 +22,7 @@ public class Formats extends FormatsImpl {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
-    protected Formats(
+    private Formats(
         @NotNull String url, 
         @NotNull Set<Flag> flags, 
         @NotNull Set<Header> headers,
