@@ -1,17 +1,15 @@
 package me.knighthat.extractor.youtube.response.format;
 
-import java.math.BigInteger;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import me.knighthat.youtubedl.exception.InsufficientElementsException;
+import me.knighthat.youtubedl.exception.PatternMismatchException;
+import me.knighthat.youtubedl.response.format.Format;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import me.knighthat.youtubedl.exception.InsufficientElementsException;
-import me.knighthat.youtubedl.exception.PatternMismatchException;
-import me.knighthat.youtubedl.response.format.Format;
+import java.math.BigInteger;
 
 public class TestAudio {
 
@@ -20,63 +18,63 @@ public class TestAudio {
 
     @NotNull
     static final String VALID_FORMAT = """
-        {
-            "format_id": "249",
-            "url": "",
-            "source_preference": -1,
-            "quality": -1,
-            "language": null,
-            "language_preference": -1,
-            "preference": null,
-            "asr": 48000,
-            "filesize": 1553825,
-            "format_note": "audio_quality_low",
-            "audio_channels": 2,
-            "tbr": 51.733,
-            "ext": "webm",
-            "vcodec": "none",
-            "acodec": "opus",
-            "container": "webm_dash",
-            "protocol": "http_dash_segments",
-            "fragments": [
-                {
-                    "url": ""
-                }
-            ],
-            "format": "249 - audio only (audio_quality_low)",
-            "http_headers": {}
-        }
-    """;
+            {
+                "format_id": "249",
+                "url": "",
+                "source_preference": -1,
+                "quality": -1,
+                "language": null,
+                "language_preference": -1,
+                "preference": null,
+                "asr": 48000,
+                "filesize": 1553825,
+                "format_note": "audio_quality_low",
+                "audio_channels": 2,
+                "tbr": 51.733,
+                "ext": "webm",
+                "vcodec": "none",
+                "acodec": "opus",
+                "container": "webm_dash",
+                "protocol": "http_dash_segments",
+                "fragments": [
+                    {
+                        "url": ""
+                    }
+                ],
+                "format": "249 - audio only (audio_quality_low)",
+                "http_headers": {}
+            }
+        """;
 
     /* MISSING "asr" key */
     @NotNull
-    static final String INVALID_FORMAT  = """
-        {
-            "format_id": "249",
-            "url": "",
-            "source_preference": -1,
-            "quality": -1,
-            "language": null,
-            "language_preference": -1,
-            "preference": null,
-            "filesize": 1553825,
-            "format_note": "audio_quality_low",
-            "audio_channels": 2,
-            "tbr": 51.733,
-            "ext": "webm",
-            "vcodec": "none",
-            "acodec": "opus",
-            "container": "webm_dash",
-            "protocol": "http_dash_segments",
-            "fragments": [
-                {
-                    "url": ""
-                }
-            ],
-            "format": "249 - audio only (audio_quality_low)",
-            "http_headers": {}
-        }
-    """;
+    static final String INVALID_FORMAT = """
+            {
+                "format_id": "249",
+                "url": "",
+                "source_preference": -1,
+                "quality": -1,
+                "language": null,
+                "language_preference": -1,
+                "preference": null,
+                "filesize": 1553825,
+                "format_note": "audio_quality_low",
+                "audio_channels": 2,
+                "tbr": 51.733,
+                "ext": "webm",
+                "vcodec": "none",
+                "acodec": "opus",
+                "container": "webm_dash",
+                "protocol": "http_dash_segments",
+                "fragments": [
+                    {
+                        "url": ""
+                    }
+                ],
+                "format": "249 - audio only (audio_quality_low)",
+                "http_headers": {}
+            }
+        """;
 
     @Test
     void testValidJsonConstructor() {
@@ -97,24 +95,23 @@ public class TestAudio {
     void testInvalidJsonConstructor() {
         JsonObject invalidJson = GSON.fromJson( INVALID_FORMAT, JsonObject.class );
 
-        Assertions.assertThrows( 
-            NullPointerException.class, 
-            () -> new Audio(invalidJson)
+        Assertions.assertThrows(
+            NullPointerException.class,
+            () -> new Audio( invalidJson )
         );
     }
 
     @Test
-    void testValidArrayConctructor() {
-        @NotNull
-        final String[] VALID_ARRAY = {
-            "140", 
-            "m4a", 
-            "audio", 
-            "only", 
-            "audio_quality_medium", 
-            "129k", 
-            "m4a_dash container", 
-            "mp4a.40.2 (44100Hz)", 
+    void testValidArrayConstructor() {
+        @NotNull final String[] VALID_ARRAY = {
+            "140",
+            "m4a",
+            "audio",
+            "only",
+            "audio_quality_medium",
+            "129k",
+            "m4a_dash container",
+            "mp4a.40.2 (44100Hz)",
             "3.71MiB"
         };
 
@@ -134,17 +131,17 @@ public class TestAudio {
     void testNotEnoughArgArrayConstructor() {
         @NotNull
         String[] NOT_ENOUGH_ARGUMENTS_ARRAY = {
-            "140", 
-            "m4a", 
-            "audio", 
-            "only", 
-            "audio_quality_medium", 
-            "m4a_dash container", 
-            "mp4a.40.2 (44100Hz)", 
+            "140",
+            "m4a",
+            "audio",
+            "only",
+            "audio_quality_medium",
+            "m4a_dash container",
+            "mp4a.40.2 (44100Hz)",
             "3.71MiB"
         };
 
-        Assertions.assertThrows( 
+        Assertions.assertThrows(
             InsufficientElementsException.class,
             () -> new Audio( NOT_ENOUGH_ARGUMENTS_ARRAY )
         );
@@ -153,34 +150,32 @@ public class TestAudio {
     @Test
     void testWrongTypeArrayConstructor() {
         /* 129k -> 129b */
-        @NotNull
-        final String[] WRONG_BITRATE_FORMAT_ARRAY = {
-            "140", 
-            "m4a", 
-            "audio", 
-            "only", 
-            "audio_quality_medium", 
-            "129b", 
-            "m4a_dash container", 
-            "mp4a.40.2 (44100Hz)", 
+        @NotNull final String[] WRONG_BITRATE_FORMAT_ARRAY = {
+            "140",
+            "m4a",
+            "audio",
+            "only",
+            "audio_quality_medium",
+            "129b",
+            "m4a_dash container",
+            "mp4a.40.2 (44100Hz)",
             "3.71MiB"
         };
-        Assertions.assertThrows( 
-            PatternMismatchException.class, 
+        Assertions.assertThrows(
+            PatternMismatchException.class,
             () -> new Audio( WRONG_BITRATE_FORMAT_ARRAY )
         );
 
         /* 44100Hz -> 44100GHz */
-        @NotNull
-        final String[] WRONG_SAMPLE_RATE_FORMAT_ARRAY = {
-            "140", 
-            "m4a", 
-            "audio", 
-            "only", 
-            "audio_quality_medium", 
-            "129k", 
-            "m4a_dash container", 
-            "mp4a.40.2 (44100GHz)", 
+        @NotNull final String[] WRONG_SAMPLE_RATE_FORMAT_ARRAY = {
+            "140",
+            "m4a",
+            "audio",
+            "only",
+            "audio_quality_medium",
+            "129k",
+            "m4a_dash container",
+            "mp4a.40.2 (44100GHz)",
             "3.71MiB"
         };
         Assertions.assertThrows(

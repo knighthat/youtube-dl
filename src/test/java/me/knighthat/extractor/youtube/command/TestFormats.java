@@ -6,7 +6,6 @@ import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
-
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -28,11 +27,10 @@ public class TestFormats extends CommandTestTemplate {
 
     @Override
     protected void testBuilderAddFlags() {
-        @NotNull
-        final String toBeIncluded = "--force-ipv4";
+        @NotNull final String toBeIncluded = "--force-ipv4";
 
         Formats formats = YouTube.formats( URL )
-                                 .flags( Flag.noValue(toBeIncluded ) )
+                                 .flags( Flag.noValue( toBeIncluded ) )
                                  .build();
         Set<String> actualSet = super.cmdToSet( formats );
         Assertions.assertTrue( actualSet.contains( toBeIncluded ) );
@@ -43,30 +41,28 @@ public class TestFormats extends CommandTestTemplate {
 
     @Override
     protected void testBuilderAddHeaders() {
-        @NotNull
-        final String field = "ContentType", value = "application/json", cmobined = field + ":" + value;
+        @NotNull final String field = "ContentType", value = "application/json", combined = field + ":" + value;
 
         Formats formats = YouTube.formats( URL )
                                  .headers( Header.key( field ).value( value ) )
                                  .build();
         Set<String> actualSet = super.cmdToSet( formats );
         Assertions.assertTrue( actualSet.contains( "--add-header" ) );
-        Assertions.assertTrue( actualSet.contains( cmobined ));
+        Assertions.assertTrue( actualSet.contains( combined ) );
 
-        Set<String> expectedSet = super.commandContains( "--add-header", cmobined );
+        Set<String> expectedSet = super.commandContains( "--add-header", combined );
         Assertions.assertEquals( expectedSet, actualSet );
     }
 
     @Override
     protected void testBuilderAddUserAgent() {
-        @NotNull
-        final String key = "--user-agent", value = UserAgent.FIREFOX_LINUX.toString();
+        @NotNull final String key = "--user-agent", value = UserAgent.FIREFOX_LINUX.toString();
 
         Formats formats = YouTube.formats( URL )
                                  .userAgent( UserAgent.FIREFOX_LINUX )
                                  .build();
         Set<String> actualSet = super.cmdToSet( formats );
-        Assertions.assertTrue( actualSet.contains( "--user-agent") );
+        Assertions.assertTrue( actualSet.contains( "--user-agent" ) );
         Assertions.assertTrue( actualSet.contains( value ) );
 
         Set<String> expectedSet = super.commandContains( key, value );
@@ -83,7 +79,7 @@ public class TestFormats extends CommandTestTemplate {
                                  .build();
         Set<String> actualSet = super.cmdToSet( formats );
         Assertions.assertTrue( actualSet.contains( key ) );
-        Assertions.assertTrue( actualSet.contains( value ));
+        Assertions.assertTrue( actualSet.contains( value ) );
 
         Set<String> expectedSet = super.commandContains( key, value );
         Assertions.assertEquals( expectedSet, actualSet );

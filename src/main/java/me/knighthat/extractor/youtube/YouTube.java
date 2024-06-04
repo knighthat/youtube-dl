@@ -67,7 +67,7 @@ public class YouTube {
     }
 
     /**
-     * A class represents youtube's subtitle.
+     * A class represents YouTube's subtitle.
      */
     public interface Subtitle extends me.knighthat.youtubedl.response.subtitle.Subtitle {
 
@@ -88,15 +88,15 @@ public class YouTube {
     public interface Channel {
 
         /**
-         * Id of a channel remains even when
-         * the handle* has been changed by the owner
+         * ID of a channel remains even when
+         * the owner has changed the handle
          *
          * @return channel's persistent id.
          */
         @NotNull String id();
 
         /**
-         * YouTube channels are allowed to have unique
+         * YouTube's channels are allowed to have unique
          * strings that give viewer a better way to
          * find their channels.
          * <p>

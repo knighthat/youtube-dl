@@ -1,17 +1,15 @@
 package me.knighthat.extractor.youtube.response.format;
 
-import java.math.BigInteger;
-
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import me.knighthat.youtubedl.exception.InsufficientElementsException;
+import me.knighthat.youtubedl.exception.PatternMismatchException;
+import me.knighthat.youtubedl.response.format.Format;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import me.knighthat.youtubedl.exception.InsufficientElementsException;
-import me.knighthat.youtubedl.exception.PatternMismatchException;
-import me.knighthat.youtubedl.response.format.Format;
+import java.math.BigInteger;
 
 public class TestVideo {
 
@@ -20,65 +18,65 @@ public class TestVideo {
 
     @NotNull
     static final String VALID_FORMAT = """
-        {
-            "format_id": "394",
-            "url": "",
-            "source_preference": -1,
-            "quality": 0,
-            "language": null,
-            "language_preference": -1,
-            "preference": null,
-            "filesize": 1809891,
-            "format_note": "144p",
-            "fps": 24,
-            "height": 144,
-            "tbr": 60.269,
-            "width": 256,
-            "ext": "mp4",
-            "vcodec": "av01.0.00M.08",
-            "acodec": "none",
-            "container": "mp4_dash",
-            "protocol": "http_dash_segments",
-            "fragments": [
-                {
-                    "url": ""
-                }
-            ],
-            "format": "394 - 256x144 (144p)",
-            "http_headers": {}
-        }
-    """;
+            {
+                "format_id": "394",
+                "url": "",
+                "source_preference": -1,
+                "quality": 0,
+                "language": null,
+                "language_preference": -1,
+                "preference": null,
+                "filesize": 1809891,
+                "format_note": "144p",
+                "fps": 24,
+                "height": 144,
+                "tbr": 60.269,
+                "width": 256,
+                "ext": "mp4",
+                "vcodec": "av01.0.00M.08",
+                "acodec": "none",
+                "container": "mp4_dash",
+                "protocol": "http_dash_segments",
+                "fragments": [
+                    {
+                        "url": ""
+                    }
+                ],
+                "format": "394 - 256x144 (144p)",
+                "http_headers": {}
+            }
+        """;
 
     /* MISSING "fps" */
     @NotNull
     static final String INVALID_FORMAT = """
-        {
-            "format_id": "394",
-            "url": "",
-            "source_preference": -1,
-            "quality": 0,
-            "language": null,
-            "language_preference": -1,
-            "preference": null,
-            "filesize": 1809891,
-            "format_note": "144p",
-            "height": 144,
-            "tbr": 60.269,
-            "width": 256,
-            "ext": "mp4",
-            "vcodec": "av01.0.00M.08",
-            "acodec": "none",
-            "container": "mp4_dash",
-            "protocol": "http_dash_segments",
-            "fragments": [
-                {
-                    "url": ""
-                }
-            ],
-            "format": "394 - 256x144 (144p)",
-            "http_headers": {}
-        }
-    """;
+            {
+                "format_id": "394",
+                "url": "",
+                "source_preference": -1,
+                "quality": 0,
+                "language": null,
+                "language_preference": -1,
+                "preference": null,
+                "filesize": 1809891,
+                "format_note": "144p",
+                "height": 144,
+                "tbr": 60.269,
+                "width": 256,
+                "ext": "mp4",
+                "vcodec": "av01.0.00M.08",
+                "acodec": "none",
+                "container": "mp4_dash",
+                "protocol": "http_dash_segments",
+                "fragments": [
+                    {
+                        "url": ""
+                    }
+                ],
+                "format": "394 - 256x144 (144p)",
+                "http_headers": {}
+            }
+        """;
 
     @Test
     void testValidJsonConstructor() {
@@ -99,28 +97,27 @@ public class TestVideo {
     @Test
     void testInvalidJsonConstructor() {
         JsonObject invalidJson = GSON.fromJson( INVALID_FORMAT, JsonObject.class );
-        Assertions.assertThrows( 
-            NullPointerException.class, 
-            () -> new Video(invalidJson)
+        Assertions.assertThrows(
+            NullPointerException.class,
+            () -> new Video( invalidJson )
         );
     }
 
     @Test
-    void testValidArrayConctructor() {
-        @NotNull
-        final String[] VALID_ARRAY = {
-            "400", 
-            "mp4", 
-            "2560x1440", 
-            "1440p", 
-            "5314k", 
-            "mp4_dash container", 
-            "av01.0.12M.08", 
-            "24fps", 
-            "video only", 
+    void testValidArrayConstructor() {
+        @NotNull final String[] VALID_ARRAY = {
+            "400",
+            "mp4",
+            "2560x1440",
+            "1440p",
+            "5314k",
+            "mp4_dash container",
+            "av01.0.12M.08",
+            "24fps",
+            "video only",
             "152.20MiB"
         };
-        Assertions.assertDoesNotThrow( () -> new Video( VALID_ARRAY ));
+        Assertions.assertDoesNotThrow( () -> new Video( VALID_ARRAY ) );
 
         Video video = new Video( VALID_ARRAY );
         Assertions.assertEquals( Format.Type.VIDEO_ONLY, video.type() );
@@ -138,18 +135,18 @@ public class TestVideo {
         /* MISSING "filesize" */
         @NotNull
         String[] NOT_ENOUGH_ARGUMENTS_ARRAY = {
-            "400", 
-            "mp4", 
-            "2560x1440", 
-            "1440p", 
-            "5314k", 
-            "mp4_dash container", 
-            "av01.0.12M.08", 
-            "24fps", 
-            "video only", 
-        };
+            "400",
+            "mp4",
+            "2560x1440",
+            "1440p",
+            "5314k",
+            "mp4_dash container",
+            "av01.0.12M.08",
+            "24fps",
+            "video only",
+            };
 
-        Assertions.assertThrows( 
+        Assertions.assertThrows(
             InsufficientElementsException.class,
             () -> new Video( NOT_ENOUGH_ARGUMENTS_ARRAY )
         );
@@ -158,36 +155,34 @@ public class TestVideo {
     @Test
     void testWrongTypeArrayConstructor() {
         /* 5314k -> 5314b */
-        @NotNull
-        final String[] WRONG_BITRATE_FORMAT_ARRAY = {
-            "400", 
-            "mp4", 
-            "2560x1440", 
-            "1440p", 
-            "5314b", 
-            "mp4_dash container", 
-            "av01.0.12M.08", 
-            "24fps", 
-            "video only", 
+        @NotNull final String[] WRONG_BITRATE_FORMAT_ARRAY = {
+            "400",
+            "mp4",
+            "2560x1440",
+            "1440p",
+            "5314b",
+            "mp4_dash container",
+            "av01.0.12M.08",
+            "24fps",
+            "video only",
             "152.20MiB"
         };
-        Assertions.assertThrows( 
-            PatternMismatchException.class, 
+        Assertions.assertThrows(
+            PatternMismatchException.class,
             () -> new Video( WRONG_BITRATE_FORMAT_ARRAY )
         );
 
         /* 24fps -> 24 */
-        @NotNull
-        final String[] WRONG_FPS_FORMAT_ARRAY = {
-            "400", 
-            "mp4", 
-            "2560x1440", 
-            "1440p", 
-            "5314k", 
-            "mp4_dash container", 
-            "av01.0.12M.08", 
-            "24", 
-            "video only", 
+        @NotNull final String[] WRONG_FPS_FORMAT_ARRAY = {
+            "400",
+            "mp4",
+            "2560x1440",
+            "1440p",
+            "5314k",
+            "mp4_dash container",
+            "av01.0.12M.08",
+            "24",
+            "video only",
             "152.20MiB"
         };
         Assertions.assertThrows(

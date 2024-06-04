@@ -93,7 +93,7 @@ public class TestMix {
     }
 
     @Test
-    void testValidArrayConctructor() {
+    void testValidArrayConstructor() {
         @NotNull final String[] VALID_ARRAY = {
             "18",
             "mp4",
