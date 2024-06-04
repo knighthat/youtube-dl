@@ -1,22 +1,8 @@
 package me.knighthat.extractor.youtube.command;
 
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.logging.Level;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
@@ -32,6 +18,18 @@ import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
 import me.knighthat.youtubedl.response.format.Format;
 import me.knighthat.youtubedl.response.subtitle.Subtitle;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.logging.Level;
 
 /**
  * VideoImpl
@@ -41,19 +39,19 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     @NotNull
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat( "yyyyMMdd" );
     @NotNull
-    private static final Gson GSON = new Gson();
+    private static final Gson             GSON        = new Gson();
 
     private static @NotNull Set<YouTube.DownloadableSubtitle> subtitleSet( @NotNull JsonObject json, boolean isAutomatic ) {
         Set<YouTube.DownloadableSubtitle> subtitles = new HashSet<>();
 
         for (String language : json.keySet()) {
-            for (JsonElement formatKey : json.getAsJsonArray(language)) {
+            for (JsonElement formatKey : json.getAsJsonArray( language )) {
                 JsonObject jsonFormat = formatKey.getAsJsonObject();
 
-                try {   
+                try {
                     subtitles.add( new YouTubeSubtitleImpl( language, isAutomatic, jsonFormat ) );
-                } catch (UnsupportedSubtitleFormatException e) {
-                    Logger.exception("failed to parse subtitle!", e, Level.WARNING);
+                } catch ( UnsupportedSubtitleFormatException e ) {
+                    Logger.exception( "failed to parse subtitle!", e, Level.WARNING );
                 }
             }
         }
@@ -64,7 +62,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     private static @NotNull Set<Format> formatSet( @NotNull JsonObject json ) {
         Set<Format> formats = new HashSet<>();
 
-        for ( JsonElement element : json.getAsJsonArray( "formats" ) ) {
+        for (JsonElement element : json.getAsJsonArray( "formats" )) {
             JsonObject formatJson = element.getAsJsonObject();
 
             boolean vcodecNull = formatJson.get( "vcodec" )
@@ -84,10 +82,10 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
                     format = new me.knighthat.extractor.youtube.response.format.Video( formatJson );
 
                 formats.add( format );
-            } catch ( NullPointerException ignored ) {
-                String msg = "failed to parsed json:\n" + GSON.toJson(formatJson);
-                Logger.exception(msg, ignored, Level.WARNING);
-            } 
+            } catch ( NullPointerException e ) {
+                String msg = "failed to parsed json:\n" + GSON.toJson( formatJson );
+                Logger.exception( msg, e, Level.WARNING );
+            }
         }
 
         return formats;
@@ -96,13 +94,13 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private VideoImpl(
-        @NotNull String url, 
-        @NotNull Set<Flag> flags, 
+        @NotNull String url,
+        @NotNull Set<Flag> flags,
         @NotNull Set<Header> headers,
-        @Nullable UserAgent userAgent, 
+        @Nullable UserAgent userAgent,
         @Nullable GeoConfig geoConfig
     ) {
-        super(url, flags, headers, userAgent, geoConfig);
+        super( url, flags, headers, userAgent, geoConfig );
     }
 
     @Override
@@ -127,7 +125,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         } catch ( ParseException e ) {
             String message = json.get( "upload_date" ).getAsString();
             Logger.exception( "failed to parse date" + message, e, Level.WARNING );
-            
+
             return Optional::empty;
         }
 
@@ -147,30 +145,30 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
             }
             */
             JsonObject thumbJson = element.getAsJsonObject();
-            thumbnails.add( new Thumbnail(thumbJson) );
+            thumbnails.add( new Thumbnail( thumbJson ) );
         }
 
         /* CAPTION */
         Set<YouTube.DownloadableSubtitle> subtitles = new HashSet<>();
-        if (json.has("automatic_captions")) 
-            subtitles.addAll( subtitleSet( json.getAsJsonObject( "automatic_captions" ), true) );
-        if (json.has("subtitles")) 
-            subtitles.addAll(subtitleSet(json.getAsJsonObject( "subtitles" ), false));
+        if ( json.has( "automatic_captions" ) )
+            subtitles.addAll( subtitleSet( json.getAsJsonObject( "automatic_captions" ), true ) );
+        if ( json.has( "subtitles" ) )
+            subtitles.addAll( subtitleSet( json.getAsJsonObject( "subtitles" ), false ) );
 
         Set<Format> formats = formatSet( json );
 
         return () -> Optional.of(
             new YouTubeVideoImpl(
-                json.get( "id" ).getAsString(), 
-                json.get( "title" ).getAsString(), 
-                thumbnails, 
-                subtitles, 
-                formats, 
-                json.get("description").getAsString(), 
-                uploadDate, 
-                json.get( "duration" ).getAsLong(), 
-                GSON.fromJson( json.get( "view_count" ), BigInteger.class ), 
-                GSON.fromJson( json.get( "like_count" ), BigInteger.class ), 
+                json.get( "id" ).getAsString(),
+                json.get( "title" ).getAsString(),
+                thumbnails,
+                subtitles,
+                formats,
+                json.get( "description" ).getAsString(),
+                uploadDate,
+                json.get( "duration" ).getAsLong(),
+                GSON.fromJson( json.get( "view_count" ), BigInteger.class ),
+                GSON.fromJson( json.get( "like_count" ), BigInteger.class ),
                 channel
             )
         );
@@ -178,7 +176,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
     public static class Builder extends me.knighthat.youtubedl.command.VideoImpl.Builder implements Video.Builder {
 
-        private Builder(@NotNull String url) { super(url); }
+        private Builder( @NotNull String url ) { super( url ); }
 
         @Override
         public @NotNull Builder flags( @NotNull Flag... flags ) {
@@ -205,12 +203,12 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         }
 
         @Override
+        public @NotNull OptionalResponse<YouTube.Video> execute() { return this.build().execute(); }
+
+        @Override
         public @NotNull Video build() {
             return new VideoImpl( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() );
         }
-
-        @Override
-        public @NotNull OptionalResponse<YouTube.Video> execute() { return this.build().execute(); }
     }
 
     private record YouTubeVideoImpl(
@@ -236,9 +234,9 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
         private YouTubeChannelImpl( @NotNull JsonObject json ) {
             this(
-                json.get( "channel_id" ).getAsString(), 
-                json.get( "uploader_id" ).getAsString(), 
-                json.get("channel").getAsString()
+                json.get( "channel_id" ).getAsString(),
+                json.get( "uploader_id" ).getAsString(),
+                json.get( "channel" ).getAsString()
             );
         }
 
@@ -261,7 +259,7 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
                 language,
                 Subtitle.Format.match( json.get( "ext" ).getAsString() ),
                 isAutomatic,
-                json.get("url").getAsString()
+                json.get( "url" ).getAsString()
             );
         }
     }

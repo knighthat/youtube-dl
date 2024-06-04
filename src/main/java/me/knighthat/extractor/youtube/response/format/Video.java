@@ -1,11 +1,6 @@
 package me.knighthat.extractor.youtube.response.format;
 
-import java.math.BigInteger;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.google.gson.JsonObject;
-
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -13,7 +8,9 @@ import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.extractor.youtube.YouTube;
+import org.jetbrains.annotations.NotNull;
+
+import java.math.BigInteger;
 
 /**
  * VideoOnly
@@ -26,23 +23,23 @@ public class Video implements YouTube.Format.Video {
     @ToString.Exclude
     private final Format.Type type;
     @NotNull
-    private final String code;
+    private final String      code;
     @NotNull
-    private final String extension;
-    private final int tbr;
+    private final String      extension;
+    private final int         tbr;
     @NotNull
-    private final String vCodec;
+    private final String      vCodec;
     @NotNull
-    private final String resolution;
-    private final float fps;
+    private final String      resolution;
+    private final float       fps;
     @NotNull
-    private final BigInteger size;
+    private final BigInteger  size;
 
     {
         this.type = me.knighthat.youtubedl.response.format.Format.Type.VIDEO_ONLY;
     }
 
-    public Video(String @NotNull [] arr) {
+    public Video( String @NotNull [] arr ) {
         /* [400, mp4, 2560x1440, 1440p, 5314k, mp4_dash container, av01.0.12M.08, 24fps, video only, 152.20MiB] */
         if ( arr.length < 10 )
             throw new InsufficientElementsException( "VideoOnly", arr.length, 10 );
@@ -50,7 +47,7 @@ public class Video implements YouTube.Format.Video {
         this.code = arr[0];
         this.extension = arr[1];
         this.tbr = FormatUtils.tbrParser( arr, 4 );
-        this.fps = FormatUtils.fpsParser(arr, 7);
+        this.fps = FormatUtils.fpsParser( arr, 7 );
         this.vCodec = arr[6];
         this.resolution = FormatUtils.resolutionParser( arr, 3 );
         this.size = FormatUtils.sizeParser( arr, arr.length - 1 );
@@ -84,14 +81,14 @@ public class Video implements YouTube.Format.Video {
         "format": "394 - 256x144 (144p)",
         "http_headers": {}
         */
-        for ( String key : new String[] { "format_id", "ext", "tbr", "vcodec", "format_note", "fps", "filesize" } )
-            if ( !json.has(key) )
-                throw new NullPointerException(key + " does not exist!");
+        for (String key : new String[]{ "format_id", "ext", "tbr", "vcodec", "format_note", "fps", "filesize" })
+            if ( !json.has( key ) )
+                throw new NullPointerException( key + " does not exist!" );
 
         this.code = json.get( "format_id" ).getAsString();
         this.extension = json.get( "ext" ).getAsString();
         float tbr = json.get( "tbr" ).getAsFloat();
-        this.tbr = Math.round( tbr) ;
+        this.tbr = Math.round( tbr );
         this.vCodec = json.get( "vcodec" ).getAsString();
         this.resolution = json.get( "format_note" ).getAsString();
         this.fps = json.get( "fps" ).getAsFloat();

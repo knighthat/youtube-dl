@@ -16,7 +16,7 @@ public interface Subtitle {
 
     default @NotNull Locale locale() { return new Locale( language() ); }
 
-    public enum Format {
+    enum Format {
         VTT,
         TTML,
         SRV3,

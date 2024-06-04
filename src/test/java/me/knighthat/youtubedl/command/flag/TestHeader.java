@@ -24,18 +24,18 @@ public class TestHeader {
 
     @Test
     public void testKeyPairsChaining() {
-        Header header = (Header) Header.chain()
-                                       .key( "Authorization" ).value( "Bearer <access_token>" )
-                                       .key( "Cookie" ).value( "sessionid=abc123; csrftoken=xyz456" )
-                                       .key( "Content-Type" ).value( "application/json" )
-                                       .build();
+        Header header = Header.chain()
+                              .key( "Authorization" ).value( "Bearer <access_token>" )
+                              .key( "Cookie" ).value( "sessionid=abc123; csrftoken=xyz456" )
+                              .key( "Content-Type" ).value( "application/json" )
+                              .build();
         String[] actual = header.flags();
         Set<String> actualSet = new HashSet<>( Arrays.asList( actual ) );
 
         String[] expected = {
-                "--add-header", "Authorization:Bearer <access_token>",
-                "--add-header", "Cookie:sessionid=abc123; csrftoken=xyz456",
-                "--add-header", "Content-Type:application/json"
+            "--add-header", "Authorization:Bearer <access_token>",
+            "--add-header", "Cookie:sessionid=abc123; csrftoken=xyz456",
+            "--add-header", "Content-Type:application/json"
         };
         Set<String> expectedSet = new HashSet<>( Arrays.asList( expected ) );
 

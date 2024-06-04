@@ -1,9 +1,6 @@
 package me.knighthat.extractor.asiancrush.response.format;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.google.gson.JsonObject;
-
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -11,29 +8,30 @@ import me.knighthat.extractor.asiancrush.AsianCrush;
 import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents media from AsianCrush
  */
 @Getter
 @Accessors( fluent = true )
-public class Movie implements AsianCrush.Movie{
+public class Movie implements AsianCrush.Movie {
 
     @NotNull
     @ToString.Exclude
     private final Format.Type type;
     @NotNull
-    private final String code;
+    private final String      code;
     @NotNull
-    private final String extension;
-    private final int tbr;
+    private final String      extension;
+    private final int         tbr;
     @NotNull
-    private final String vCodec;
+    private final String      vCodec;
     @NotNull
-    private final String aCodec;
+    private final String      aCodec;
     @NotNull
-    private final String resolution;
-    private final float fps;
+    private final String      resolution;
+    private final float       fps;
 
     {
         this.type = me.knighthat.youtubedl.response.format.Format.Type.MIXED;
@@ -70,9 +68,9 @@ public class Movie implements AsianCrush.Movie{
         "http_headers": {},
         "format": "hls-361 - 426x240" 
         */
-        for ( String key : new String[] { "format_id", "ext", "tbr", "vcodec", "acodec", "fps", "height" } ) 
-            if ( !json.has(key) )
-                throw new NullPointerException(key + " does not exist!");
+        for (String key : new String[]{ "format_id", "ext", "tbr", "vcodec", "acodec", "fps", "height" })
+            if ( !json.has( key ) )
+                throw new NullPointerException( key + " does not exist!" );
 
         this.code = json.get( "format_id" ).getAsString();
         this.extension = json.get( "ext" ).getAsString();

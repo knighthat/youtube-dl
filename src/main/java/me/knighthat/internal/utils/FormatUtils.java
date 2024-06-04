@@ -23,7 +23,7 @@ public final class FormatUtils {
     @NotNull
     private static final Pattern QUALITY_PATTERN       = Pattern.compile( "^\\d+k$" );
     @NotNull
-    private static final Pattern SIZE_PATTERN          = Pattern.compile( SIZE_UNIT + SIZE_UNIT );
+    private static final Pattern SIZE_PATTERN          = Pattern.compile( SIZE_FORMAT + SIZE_UNIT );
     @NotNull
     private static final Pattern SAMPLING_RATE_PATTERN = Pattern.compile( "\\d+ *Hz" );
     @NotNull

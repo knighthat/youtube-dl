@@ -1,32 +1,31 @@
 package me.knighthat.extractor.youtube.response.format;
 
+import me.knighthat.internal.utils.FormatUtils;
+import me.knighthat.youtubedl.exception.PatternMismatchException;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import me.knighthat.youtubedl.exception.PatternMismatchException;
 
 public class TestFormatUtils {
 
     @Test
     void testFpsParser() {
-        @NotNull
-        final String[] SAMPLES = { 
-            "24fps", 
-            "13.4fps", 
-            "123.123.123fps", 
-            "abcfps", 
-            "123abc" 
+        @NotNull final String[] SAMPLES = {
+            "24fps",
+            "13.4fps",
+            "123.123.123fps",
+            "abcfps",
+            "123abc"
         };
 
         /* Valid */
-        Assertions.assertDoesNotThrow( 
+        Assertions.assertDoesNotThrow(
             () -> FormatUtils.fpsParser( SAMPLES, 0 )
         );
         Assertions.assertDoesNotThrow(
             () -> FormatUtils.fpsParser( SAMPLES, 1 )
         );
-        
+
         /* Invalid format */
         Assertions.assertThrows(
             PatternMismatchException.class,
@@ -37,15 +36,14 @@ public class TestFormatUtils {
             () -> FormatUtils.fpsParser( SAMPLES, 3 )
         );
         Assertions.assertThrows(
-            PatternMismatchException.class, 
+            PatternMismatchException.class,
             () -> FormatUtils.fpsParser( SAMPLES, 4 )
         );
     }
 
     @Test
     void testResolutionParser() {
-        @NotNull
-        final String[] SAMPLES = {
+        @NotNull final String[] SAMPLES = {
             "1440p",
             "123c",
             "abcp"
@@ -53,24 +51,23 @@ public class TestFormatUtils {
 
         /* Valid */
         Assertions.assertDoesNotThrow(
-            () -> FormatUtils.reolutionParser( SAMPLES, 0 )
+            () -> FormatUtils.resolutionParser( SAMPLES, 0 )
         );
 
         /* Invalid format */
         Assertions.assertThrows(
-            PatternMismatchException.class, 
-            () -> FormatUtils.reolutionParser( SAMPLES, 1 )
+            PatternMismatchException.class,
+            () -> FormatUtils.resolutionParser( SAMPLES, 1 )
         );
         Assertions.assertThrows(
-            PatternMismatchException.class, 
-            () -> FormatUtils.reolutionParser( SAMPLES, 2 )
+            PatternMismatchException.class,
+            () -> FormatUtils.resolutionParser( SAMPLES, 2 )
         );
     }
 
     @Test
     void testTbrParser() {
-        @NotNull
-        final String[] SAMPLES = {
+        @NotNull final String[] SAMPLES = {
             "123k",
             "123b",
             "abck"
@@ -94,8 +91,7 @@ public class TestFormatUtils {
 
     @Test
     void testSizeParser() {
-        @NotNull
-        final String[] SAMPLES = {
+        @NotNull final String[] SAMPLES = {
             "1234KiB",
             "1MB",
             "abcMiB"
@@ -108,19 +104,18 @@ public class TestFormatUtils {
 
         /* Invalid format */
         Assertions.assertThrows(
-            PatternMismatchException.class, 
+            PatternMismatchException.class,
             () -> FormatUtils.sizeParser( SAMPLES, 1 )
         );
         Assertions.assertThrows(
-            PatternMismatchException.class, 
+            PatternMismatchException.class,
             () -> FormatUtils.sizeParser( SAMPLES, 2 )
         );
     }
 
     @Test
     void testSampleRateParser() {
-        @NotNull
-        final String[] SAMPLES = {
+        @NotNull final String[] SAMPLES = {
             "44100Hz",
             "opus  (48000Hz)",
             "mp4a.40.2 (44100Hz)",
@@ -141,11 +136,11 @@ public class TestFormatUtils {
 
         /* Invalid format */
         Assertions.assertThrows(
-            PatternMismatchException.class, 
+            PatternMismatchException.class,
             () -> FormatUtils.sampleRateParser( SAMPLES, 3 )
         );
         Assertions.assertThrows(
-            PatternMismatchException.class, 
+            PatternMismatchException.class,
             () -> FormatUtils.sampleRateParser( SAMPLES, 4 )
         );
     }

@@ -1,9 +1,6 @@
 package me.knighthat.extractor.youtube.response.format;
 
-import org.jetbrains.annotations.NotNull;
-
 import com.google.gson.JsonObject;
-
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -11,6 +8,7 @@ import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Mix
@@ -23,18 +21,18 @@ public class Mix implements YouTube.Format.Mix {
     @ToString.Exclude
     private final Format.Type type;
     @NotNull
-    private final String code;
+    private final String      code;
     @NotNull
-    private final String extension;
-    private final int tbr;
+    private final String      extension;
+    private final int         tbr;
     @NotNull
-    private final String vCodec;
+    private final String      vCodec;
     @NotNull
-    private final String aCodec;
-    private final int sampleRate;
+    private final String      aCodec;
+    private final int         sampleRate;
     @NotNull
-    private final String resolution;
-    private final float fps;
+    private final String      resolution;
+    private final float       fps;
 
     {
         this.type = me.knighthat.youtubedl.response.format.Format.Type.MIXED;
@@ -78,14 +76,14 @@ public class Mix implements YouTube.Format.Mix {
         "protocol": "https",
         "http_headers": {}
         */
-        for ( String key : new String[] { "format_id", "ext", "tbr", "vcodec", "acodec", "asr", "format_note", "fps" } ) 
-            if ( !json.has(key) )
-                throw new NullPointerException(key + " does not exist!");
+        for (String key : new String[]{ "format_id", "ext", "tbr", "vcodec", "acodec", "asr", "format_note", "fps" })
+            if ( !json.has( key ) )
+                throw new NullPointerException( key + " does not exist!" );
 
         this.code = json.get( "format_id" ).getAsString();
         this.extension = json.get( "ext" ).getAsString();
         float tbr = json.get( "tbr" ).getAsFloat();
-        this.tbr = Math.round( tbr) ;
+        this.tbr = Math.round( tbr );
         this.vCodec = json.get( "vcodec" ).getAsString();
         this.aCodec = json.get( "acodec" ).getAsString();
         this.sampleRate = json.get( "asr" ).getAsInt();

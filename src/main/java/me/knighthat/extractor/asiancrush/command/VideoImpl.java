@@ -1,18 +1,8 @@
 package me.knighthat.extractor.asiancrush.command;
 
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.logging.Level;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 import me.knighthat.extractor.asiancrush.AsianCrush;
 import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.youtubedl.command.JsonImpl;
@@ -23,6 +13,14 @@ import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.logging.Logger;
 import me.knighthat.youtubedl.response.OptionalResponse;
 import me.knighthat.youtubedl.response.format.Format;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.logging.Level;
 
 public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implements Video {
 
@@ -32,13 +30,13 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private VideoImpl(
-        @NotNull String url, 
-        @NotNull Set<Flag> flags, 
+        @NotNull String url,
+        @NotNull Set<Flag> flags,
         @NotNull Set<Header> headers,
-        @Nullable UserAgent userAgent, 
+        @Nullable UserAgent userAgent,
         @Nullable GeoConfig geoConfig
     ) {
-        super(url, flags, headers, userAgent, geoConfig);
+        super( url, flags, headers, userAgent, geoConfig );
     }
 
     @Override
@@ -47,31 +45,31 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         Header[] headers = this.headers().toArray( Header[]::new );
 
         JsonElement videoJson = JsonImpl.builder( url() )
-                                    .flags( flags )
-                                    .headers( headers )
-                                    .userAgent( userAgent() )
-                                    .geoConfig( geoConfig() )
-                                    .execute()
-                                    .result();
+                                        .flags( flags )
+                                        .headers( headers )
+                                        .userAgent( userAgent() )
+                                        .geoConfig( geoConfig() )
+                                        .execute()
+                                        .result();
         if ( !(videoJson instanceof JsonObject json) )
             return Optional::empty;
 
         Set<Format> formats = new HashSet<>();
-        for ( JsonElement element : json.getAsJsonArray( "formats" ) ) {
+        for (JsonElement element : json.getAsJsonArray( "formats" )) {
             JsonObject formatJson = element.getAsJsonObject();
-            
+
             try {
                 formats.add( new Mix( formatJson ) );
-            } catch ( NullPointerException ignored ) {
-                String msg = "failed to parsed json:\n" + GSON.toJson(formatJson);
-                Logger.exception(msg, ignored, Level.WARNING);
-            } 
+            } catch ( NullPointerException e ) {
+                String msg = "failed to parsed json:\n" + GSON.toJson( formatJson );
+                Logger.exception( msg, e, Level.WARNING );
+            }
         }
 
         return () -> Optional.of(
             new Movie(
-                json.get( "id" ).getAsString(), 
-                json.get( "title" ).getAsString(), 
+                json.get( "id" ).getAsString(),
+                json.get( "title" ).getAsString(),
                 formats
             )
         );
@@ -82,39 +80,39 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
         private Builder( @NotNull String url ) { super( url ); }
 
         @Override
-        public @NotNull Builder flags( @NotNull Flag... flags ) { 
+        public @NotNull Builder flags( @NotNull Flag... flags ) {
             super.flags( flags );
-            return this; 
+            return this;
         }
 
         @Override
-        public @NotNull Builder headers(@NotNull Header... headers) {
+        public @NotNull Builder headers( @NotNull Header... headers ) {
             super.headers( headers );
             return this;
         }
 
         @Override
-        public @NotNull Builder userAgent(@Nullable UserAgent userAgent) {
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
             super.userAgent( userAgent );
             return this;
         }
 
         @Override
-        public @NotNull Builder geoConfig(@Nullable GeoConfig geoConfig) {
+        public @NotNull Builder geoConfig( @Nullable GeoConfig geoConfig ) {
             super.geoConfig( geoConfig );
             return this;
         }
 
         @Override
+        public @NotNull OptionalResponse<AsianCrush.Video> execute() { return this.build().execute(); }
+
+        @Override
         public @NotNull Video build() {
             return new VideoImpl( getUrl(), getFlags(), getHeaders(), getUserAgent(), getGeoConfig() );
         }
-    
-        @Override
-        public @NotNull OptionalResponse<AsianCrush.Video> execute() { return this.build().execute(); }
     }
 
-    private static record Movie(
+    private record Movie(
         @NotNull String id,
         @NotNull String title,
         @NotNull @Unmodifiable Set<Format> formats

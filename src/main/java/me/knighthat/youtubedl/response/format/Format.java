@@ -13,7 +13,7 @@ public interface Format {
 
     @NotNull String extension();
 
-    public enum Type {
+    enum Type {
         VIDEO_ONLY,
         AUDIO_ONLY,
         MIXED

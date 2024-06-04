@@ -28,7 +28,7 @@ public class GeoConfig implements Flag {
     /**
      * An array represents the geographical configurations
      * that will be sent along with the request.
-     * 
+     *
      * @return an array of arguments following [key, value] format
      */
     @Override
@@ -59,7 +59,7 @@ public class GeoConfig implements Flag {
         /**
          * Include a fake X-Forwarded-For inside the header
          * to fool the server about its origin.
-         * 
+         *
          * @return same builder instance with updated value
          */
         public @NotNull Builder bypass() {
@@ -71,10 +71,10 @@ public class GeoConfig implements Flag {
          * Bypass region-lock with a different country code.
          * <p>
          * Country code must follow ISO 3166 - 2 letters country code.
-         * Read more: https://www.iso.org/iso-3166-country-codes.html
-         * 
+         * Read more: <a href="https://www.iso.org/iso-3166-country-codes.html">ISO-3166</a>
+         *
          * @param countryCode unique code of a country that follows ISO 3166 format
-         * 
+         *
          * @return same builder instance with updated value
          */
         public @NotNull Builder countryCode( @NotNull String countryCode ) {
@@ -89,8 +89,8 @@ public class GeoConfig implements Flag {
 
         /**
          * Finalize the configuration and pack it in {@link me.knighthat.youtubedl.command.flag.GeoConfig} class.
-         * 
-         * @return finalized {@link me.knighthat.youtubedl.command.flag.GeoConfig} class 
+         *
+         * @return finalized {@link me.knighthat.youtubedl.command.flag.GeoConfig} class
          */
         public @NotNull GeoConfig build() { return new GeoConfig( bypass, countryCode ); }
     }

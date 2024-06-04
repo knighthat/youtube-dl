@@ -1,19 +1,5 @@
 package me.knighthat.youtubedl.command;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -23,29 +9,35 @@ import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
 import me.knighthat.youtubedl.logging.Logger;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
 
 @Getter
 @Accessors( fluent = true )
 abstract class CommandImpl implements Command {
 
     @NotNull
-    String url;
+    private final String      url;
     @NotNull
-    @Unmodifiable
-    Set<Flag> flags;
+    private final Set<Flag>   flags;
     @NotNull
-    @Unmodifiable
-    Set<Header> headers;
+    private final Set<Header> headers;
     @Nullable
-    UserAgent userAgent;
+    private final UserAgent   userAgent;
     @Nullable
-    GeoConfig geoConfig;
+    private final GeoConfig   geoConfig;
 
     protected CommandImpl(
-        @NotNull String url, 
+        @NotNull String url,
         @NotNull Set<Flag> flags,
-        @NotNull Set<Header> headers, 
-        @Nullable UserAgent userAgent, 
+        @NotNull Set<Header> headers,
+        @Nullable UserAgent userAgent,
         @Nullable GeoConfig geoConfig
     ) {
         this.url = url;
@@ -75,6 +67,12 @@ abstract class CommandImpl implements Command {
         return outputs;
     }
 
+    @Override
+    public @NotNull @Unmodifiable Set<Flag> flags() { return Collections.unmodifiableSet( this.flags ); }
+
+    @Override
+    public @NotNull @Unmodifiable Set<Header> headers() { return Collections.unmodifiableSet( this.headers ); }
+
     public String @NotNull [] command() {
         List<String> command = new ArrayList<>();
         command.add( YoutubeDL.getYtdlPath() );
@@ -98,12 +96,6 @@ abstract class CommandImpl implements Command {
         return command.toArray( String[]::new );
     }
 
-    @Override
-    public @NotNull @Unmodifiable Set<Flag> flags() { return Collections.unmodifiableSet( this.flags ); }
-
-    @Override
-    public @NotNull @Unmodifiable Set<Header> headers() { return Collections.unmodifiableSet( this.headers ); }
-
     @Getter( AccessLevel.PROTECTED )
     @Accessors( fluent = false )
     static abstract class Builder implements Command.Builder {
@@ -121,19 +113,19 @@ abstract class CommandImpl implements Command {
         }
 
         @Override
-        public Command.@NotNull Builder flags( @NotNull Flag... flags ) {
+        public @NotNull Builder flags( @NotNull Flag... flags ) {
             this.flags.addAll( Arrays.asList( flags ) );
             return this;
         }
 
         @Override
-        public Command.@NotNull Builder headers( @NotNull Header... headers) {
+        public @NotNull Builder headers( @NotNull Header... headers ) {
             this.headers.addAll( Arrays.asList( headers ) );
             return this;
         }
 
         @Override
-        public Command.@NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
+        public @NotNull Builder userAgent( @Nullable UserAgent userAgent ) {
             this.userAgent = userAgent;
             return this;
         }

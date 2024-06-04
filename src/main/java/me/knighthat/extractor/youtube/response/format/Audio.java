@@ -1,11 +1,6 @@
 package me.knighthat.extractor.youtube.response.format;
 
-import java.math.BigInteger;
-
-import org.jetbrains.annotations.NotNull;
-
 import com.google.gson.JsonObject;
-
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
@@ -13,7 +8,9 @@ import me.knighthat.extractor.youtube.YouTube;
 import me.knighthat.internal.utils.FormatUtils;
 import me.knighthat.youtubedl.exception.InsufficientElementsException;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.extractor.youtube.YouTube;
+import org.jetbrains.annotations.NotNull;
+
+import java.math.BigInteger;
 
 /**
  * Audio
@@ -26,21 +23,21 @@ public class Audio implements YouTube.Format.Audio {
     @ToString.Exclude
     private final Format.Type type;
     @NotNull
-    private final String code;
+    private final String      code;
     @NotNull
-    private final String extension;
-    private final int tbr;
+    private final String      extension;
+    private final int         tbr;
     @NotNull
-    private final String aCodec;
-    private final int sampleRate;
+    private final String      aCodec;
+    private final int         sampleRate;
     @NotNull
-    private final BigInteger size;
+    private final BigInteger  size;
 
     {
         this.type = me.knighthat.youtubedl.response.format.Format.Type.AUDIO_ONLY;
     }
 
-    public Audio ( String @NotNull [] arr ) {
+    public Audio( String @NotNull [] arr ) {
         /* [140, m4a, audio, only, audio_quality_medium, 129k, m4a_dash container, mp4a.40.2 (44100Hz), 3.71MiB] */
         if ( arr.length < 9 )
             throw new InsufficientElementsException( "AudioOnly", arr.length, 9 );
@@ -52,8 +49,8 @@ public class Audio implements YouTube.Format.Audio {
         this.sampleRate = FormatUtils.sampleRateParser( arr, 7 );
         this.size = FormatUtils.sizeParser( arr, arr.length - 1 );
     }
-    
-    public Audio ( @NotNull JsonObject json ) {
+
+    public Audio( @NotNull JsonObject json ) {
         /*
         "format_id": "249",
         "url": "",
@@ -80,14 +77,14 @@ public class Audio implements YouTube.Format.Audio {
         "format": "249 - audio only (audio_quality_low)",
         "http_headers": {}
         */
-        for ( String key : new String[] { "format_id", "ext", "tbr", "acodec", "asr", "filesize" } )
-            if ( !json.has(key) )
-                throw new NullPointerException(key + " does not exist!");   
+        for (String key : new String[]{ "format_id", "ext", "tbr", "acodec", "asr", "filesize" })
+            if ( !json.has( key ) )
+                throw new NullPointerException( key + " does not exist!" );
 
         this.code = json.get( "format_id" ).getAsString();
         this.extension = json.get( "ext" ).getAsString();
         float tbr = json.get( "tbr" ).getAsFloat();
-        this.tbr = Math.round( tbr) ;
+        this.tbr = Math.round( tbr );
         this.aCodec = json.get( "acodec" ).getAsString();
         this.sampleRate = json.get( "asr" ).getAsInt();
         this.size = BigInteger.valueOf( json.get( "filesize" ).getAsLong() );

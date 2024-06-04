@@ -1,18 +1,17 @@
 package me.knighthat.extractor.youtube.command;
 
+import me.knighthat.youtubedl.YoutubeDL;
+import me.knighthat.youtubedl.command.Command;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.NotNull;
-
-import me.knighthat.youtubedl.YoutubeDL;
-import me.knighthat.youtubedl.command.Command;
-
 abstract class CommandTestTemplate {
 
     @NotNull
-    static String URL = "https://youtube.com/watch?v=12312312312";
+    static final String URL = "https://youtube.com/watch?v=12312312312";
 
     protected abstract void testBuilderInit();
 
@@ -30,7 +29,7 @@ abstract class CommandTestTemplate {
 
     protected @NotNull Set<String> commandContains( @NotNull String... args ) {
         // +1 for youtube-dl executable, +1 for url
-        String[] result = new String[ args.length + 2 ];
+        String[] result = new String[args.length + 2];
         result[0] = YoutubeDL.getYtdlPath();
         System.arraycopy( args, 0, result, 1, args.length );
         result[result.length - 1] = URL;
