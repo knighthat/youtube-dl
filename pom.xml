@@ -45,11 +45,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/TestYouTube.java</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>
