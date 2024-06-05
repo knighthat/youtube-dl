@@ -1,11 +1,9 @@
 package me.knighthat.extractor.asiancrush.command;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.knighthat.extractor.asiancrush.AsianCrush;
 import me.knighthat.extractor.youtube.response.format.Mix;
-import me.knighthat.youtubedl.command.JsonImpl;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
@@ -24,9 +22,6 @@ import java.util.logging.Level;
 
 public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implements Video {
 
-    @NotNull
-    private static final Gson GSON = new Gson();
-
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private VideoImpl(
@@ -41,38 +36,35 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
     @Override
     public @NotNull OptionalResponse<AsianCrush.Video> execute() {
-        Flag[] flags = this.flags().toArray( Flag[]::new );
-        Header[] headers = this.headers().toArray( Header[]::new );
+        Optional<AsianCrush.Video> result = Optional.empty();
 
-        JsonElement videoJson = JsonImpl.builder( url() )
-                                        .flags( flags )
-                                        .headers( headers )
-                                        .userAgent( userAgent() )
-                                        .geoConfig( geoConfig() )
-                                        .execute()
-                                        .result();
-        if ( !(videoJson instanceof JsonObject json) )
-            return Optional::empty;
+        try {
+            JsonObject json = super.getJson();
 
-        Set<Format> formats = new HashSet<>();
-        for (JsonElement element : json.getAsJsonArray( "formats" )) {
-            JsonObject formatJson = element.getAsJsonObject();
+            /* FORMATS */
+            Set<Format> formats = new HashSet<>();
+            for (JsonElement element : json.getAsJsonArray( "formats" )) {
+                JsonObject formatJson = element.getAsJsonObject();
 
-            try {
                 formats.add( new Mix( formatJson ) );
-            } catch ( NullPointerException e ) {
-                String msg = "failed to parsed json:\n" + GSON.toJson( formatJson );
-                Logger.exception( msg, e, Level.WARNING );
             }
+
+            result = Optional.of(
+                new Movie(
+                    json.get( "id" ).getAsString(),
+                    json.get( "title" ).getAsString(),
+                    formats
+                )
+            );
+
+        } catch ( IllegalStateException e ) {
+            Logger.exception( "couldn't get video information from: " + url(), e, Level.SEVERE );
+        } catch ( NullPointerException e ) {
+            Logger.exception( "failed to parse json!", e, Level.WARNING );
         }
 
-        return () -> Optional.of(
-            new Movie(
-                json.get( "id" ).getAsString(),
-                json.get( "title" ).getAsString(),
-                formats
-            )
-        );
+        Optional<AsianCrush.Video> finalResult = result;
+        return () -> finalResult;
     }
 
     public static class Builder extends me.knighthat.youtubedl.command.VideoImpl.Builder implements Video.Builder {

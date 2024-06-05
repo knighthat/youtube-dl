@@ -1,35 +1,35 @@
 package me.knighthat.extractor.youtube.command;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import me.knighthat.extractor.youtube.response.format.Audio;
+import me.knighthat.extractor.youtube.response.format.Mix;
+import me.knighthat.extractor.youtube.response.format.Video;
+import me.knighthat.internal.utils.FormatUtils;
+import me.knighthat.youtubedl.command.FormatsImpl;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
 import me.knighthat.youtubedl.command.flag.UserAgent;
-import me.knighthat.youtubedl.command.FormatsImpl;
 import me.knighthat.youtubedl.response.ListResponse;
 import me.knighthat.youtubedl.response.format.Format;
-import me.knighthat.extractor.youtube.response.format.Video;
-import me.knighthat.extractor.youtube.response.format.Audio;
-import me.knighthat.extractor.youtube.response.format.Mix;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Formats extends FormatsImpl {
 
     public static @NotNull Builder builder( @NotNull String url ) { return new Builder( url ); }
 
     private Formats(
-        @NotNull String url, 
-        @NotNull Set<Flag> flags, 
+        @NotNull String url,
+        @NotNull Set<Flag> flags,
         @NotNull Set<Header> headers,
-        @Nullable UserAgent userAgent, 
+        @Nullable UserAgent userAgent,
         @Nullable GeoConfig geoConfig
     ) {
-        super(url, flags, headers, userAgent, geoConfig);
+        super( url, flags, headers, userAgent, geoConfig );
     }
 
     @Override
@@ -50,15 +50,12 @@ public class Formats extends FormatsImpl {
             if ( !Character.isDigit( output.charAt( 0 ) ) )
                 continue;
 
-            // [249          webm       audio only audio_quality_low   57k ,  webm_dash container,  opus  (48000Hz),  2.48MiB]
-            String[] parts = output.trim().split( "," );
-            // [249, webm, audio, only, audio_quality_low, 57k]
-            String[] info = parts[0].trim().split( "\\s+" );
-
-            String[] all = new String[parts.length + info.length - 1];
-            System.arraycopy( info, 0, all, 0, info.length );
-            System.arraycopy( parts, 1, all, info.length, parts.length - 1 );
-
+            /*
+            Input: 249          webm       audio only audio_quality_low   57k ,  webm_dash container,  opus  (48000Hz),  2.48MiB
+            Output: [249, webm, audio, only, audio_quality_low, 57k,   webm_dash container,   opus  (48000Hz),   2.48MiB]
+             */
+            String[] all = FormatUtils.split( output );
+            
             Format format;
             if ( output.contains( "video only" ) )
                 format = new Video( all );

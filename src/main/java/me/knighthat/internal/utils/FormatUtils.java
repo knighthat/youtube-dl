@@ -93,4 +93,15 @@ public final class FormatUtils {
         smplStr = smplStr.substring( matcher.start(), matcher.end() - 2 );
         return Integer.parseInt( smplStr );
     }
+
+    public static String @NotNull [] split( @NotNull String str ) {
+        String[] parts = str.trim().split( "," );
+        String[] info = parts[0].trim().split( "\\s+" );
+
+        String[] all = new String[parts.length + info.length - 1];
+        System.arraycopy( info, 0, all, 0, info.length );
+        System.arraycopy( parts, 1, all, info.length, parts.length - 1 );
+
+        return all;
+    }
 }

@@ -8,7 +8,6 @@ import me.knighthat.extractor.youtube.response.format.Audio;
 import me.knighthat.extractor.youtube.response.format.Mix;
 import me.knighthat.extractor.youtube.response.thumbnail.Thumbnail;
 import me.knighthat.internal.annotation.Second;
-import me.knighthat.youtubedl.command.JsonImpl;
 import me.knighthat.youtubedl.command.flag.Flag;
 import me.knighthat.youtubedl.command.flag.GeoConfig;
 import me.knighthat.youtubedl.command.flag.Header;
@@ -46,6 +45,12 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
         for (String language : json.keySet()) {
             for (JsonElement formatKey : json.getAsJsonArray( language )) {
+                /*
+                {
+                  "ext": "json3",
+                  "url": ""
+                 }
+                 */
                 JsonObject jsonFormat = formatKey.getAsJsonObject();
 
                 try {
@@ -105,73 +110,99 @@ public class VideoImpl extends me.knighthat.youtubedl.command.VideoImpl implemen
 
     @Override
     public @NotNull OptionalResponse<YouTube.Video> execute() {
-        Flag[] flags = this.flags().toArray( Flag[]::new );
-        Header[] headers = this.headers().toArray( Header[]::new );
+        Optional<YouTube.Video> result = Optional.empty();
 
-        JsonElement videoJson = JsonImpl.builder( url() )
-                                        .flags( flags )
-                                        .headers( headers )
-                                        .userAgent( userAgent() )
-                                        .geoConfig( geoConfig() )
-                                        .execute()
-                                        .result();
-        if ( !(videoJson instanceof JsonObject json) )
-            return Optional::empty;
-
-        /* UPLOAD DATE */
-        Date uploadDate;
         try {
-            uploadDate = DATE_FORMAT.parse( json.get( "upload_date" ).getAsString() );
-        } catch ( ParseException e ) {
-            String message = json.get( "upload_date" ).getAsString();
-            Logger.exception( "failed to parse date" + message, e, Level.WARNING );
+            JsonObject json = super.getJson();
 
-            return Optional::empty;
-        }
+            /* UPLOAD DATE */
+            Date uploadDate = DATE_FORMAT.parse( json.get( "upload_date" ).getAsString() );
 
-        /* CHANNEL */
-        YouTube.Channel channel = new YouTubeChannelImpl( json );
+            /* CHANNEL */
+            YouTube.Channel channel = new YouTubeChannelImpl( json );
 
-        /* THUMBNAILS */
-        Set<YouTube.Thumbnail> thumbnails = new HashSet<>();
-        for (JsonElement element : json.getAsJsonArray( "thumbnails" )) {
-            /*
-            {
-              "height": 94,
-              "url": "https://i.ytimg.com/vi/videoId/hqdefault.jpg",
-              "width": 168,
-              "resolution": "168x94",
-              "id": "0"
+            /* THUMBNAILS */
+            Set<YouTube.Thumbnail> thumbnails = new HashSet<>();
+            for (JsonElement element : json.getAsJsonArray( "thumbnails" )) {
+                /*
+                {
+                  "height": 94,
+                  "url": "https://i.ytimg.com/vi/videoId/hqdefault.jpg",
+                  "width": 168,
+                  "resolution": "168x94",
+                  "id": "0"
+                }
+                */
+                JsonObject thumbJson = element.getAsJsonObject();
+                thumbnails.add( new Thumbnail( thumbJson ) );
             }
-            */
-            JsonObject thumbJson = element.getAsJsonObject();
-            thumbnails.add( new Thumbnail( thumbJson ) );
+
+            /* CAPTION */
+            Set<YouTube.DownloadableSubtitle> subtitles = new HashSet<>();
+
+            // automatic captions
+            if ( json.has( "automatic_captions" ) ) {
+                JsonObject autoCaptionJson = json.getAsJsonObject( "automatic_captions" );
+                Set<YouTube.DownloadableSubtitle> autoCaptions = subtitleSet( autoCaptionJson, true );
+                subtitles.addAll( autoCaptions );
+            }
+
+            // artificial captions
+            if ( json.has( "subtitles" ) ) {
+                JsonObject captionJson = json.getAsJsonObject( "subtitles" );
+                Set<YouTube.DownloadableSubtitle> captions = subtitleSet( captionJson, false );
+                subtitles.addAll( captions );
+            }
+
+            /* FORMATS */
+            Set<Format> formats = new HashSet<>();
+            for (JsonElement element : json.getAsJsonArray( "formats" )) {
+                JsonObject formatJson = element.getAsJsonObject();
+
+                boolean hasVideo = !formatJson.get( "vcodec" )
+                                              .getAsString()
+                                              .equalsIgnoreCase( "none" );
+                boolean hasAudio = !formatJson.get( "acodec" )
+                                              .getAsString()
+                                              .equalsIgnoreCase( "none" );
+
+                Format format;
+                if ( hasVideo && hasAudio )
+                    format = new Mix( formatJson );
+                else if ( hasAudio )
+                    format = new Audio( formatJson );
+                else
+                    format = new me.knighthat.extractor.youtube.response.format.Video( formatJson );
+
+                formats.add( format );
+            }
+
+            result = Optional.of(
+                new YouTubeVideoImpl(
+                    json.get( "id" ).getAsString(),
+                    json.get( "title" ).getAsString(),
+                    thumbnails,
+                    subtitles,
+                    formats,
+                    json.get( "description" ).getAsString(),
+                    uploadDate,
+                    json.get( "duration" ).getAsLong(),
+                    GSON.fromJson( json.get( "view_count" ), BigInteger.class ),
+                    GSON.fromJson( json.get( "like_count" ), BigInteger.class ),
+                    channel
+                )
+            );
+
+        } catch ( IllegalStateException e ) {
+            Logger.exception( "couldn't get video information from: " + url(), e, Level.SEVERE );
+        } catch ( ParseException e ) {
+            Logger.exception( "", e, Level.WARNING );
+        } catch ( NullPointerException e ) {
+            Logger.exception( "failed to parse json!", e, Level.WARNING );
         }
 
-        /* CAPTION */
-        Set<YouTube.DownloadableSubtitle> subtitles = new HashSet<>();
-        if ( json.has( "automatic_captions" ) )
-            subtitles.addAll( subtitleSet( json.getAsJsonObject( "automatic_captions" ), true ) );
-        if ( json.has( "subtitles" ) )
-            subtitles.addAll( subtitleSet( json.getAsJsonObject( "subtitles" ), false ) );
-
-        Set<Format> formats = formatSet( json );
-
-        return () -> Optional.of(
-            new YouTubeVideoImpl(
-                json.get( "id" ).getAsString(),
-                json.get( "title" ).getAsString(),
-                thumbnails,
-                subtitles,
-                formats,
-                json.get( "description" ).getAsString(),
-                uploadDate,
-                json.get( "duration" ).getAsLong(),
-                GSON.fromJson( json.get( "view_count" ), BigInteger.class ),
-                GSON.fromJson( json.get( "like_count" ), BigInteger.class ),
-                channel
-            )
-        );
+        Optional<YouTube.Video> finalResult = result;
+        return () -> finalResult;
     }
 
     public static class Builder extends me.knighthat.youtubedl.command.VideoImpl.Builder implements Video.Builder {
