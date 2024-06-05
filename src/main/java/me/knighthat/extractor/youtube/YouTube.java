@@ -1,11 +1,13 @@
 package me.knighthat.extractor.youtube;
 
-import me.knighthat.extractor.youtube.command.*;
+import me.knighthat.extractor.youtube.command.Subtitles;
+import me.knighthat.extractor.youtube.command.SubtitlesImpl;
+import me.knighthat.extractor.youtube.command.Thumbnails;
+import me.knighthat.extractor.youtube.command.ThumbnailsImpl;
+import me.knighthat.extractor.youtube.command.VideoImpl;
 import me.knighthat.internal.annotation.Second;
-import me.knighthat.youtubedl.command.Json;
-import me.knighthat.youtubedl.command.JsonImpl;
-import me.knighthat.youtubedl.command.Stream;
-import me.knighthat.youtubedl.command.StreamImpl;
+import me.knighthat.youtubedl.command.Formats;
+import me.knighthat.youtubedl.command.*;
 import me.knighthat.youtubedl.response.format.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
