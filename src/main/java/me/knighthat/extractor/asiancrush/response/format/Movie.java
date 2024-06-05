@@ -54,8 +54,8 @@ public class Movie implements AsianCrush.Movie {
     public Movie( @NotNull JsonObject json ) {
         /*
         "format_id": "hls-361",
-        "url": "https://asiancrush-asiancrush.cdn-ak.matchpoint.tv/cinedigm/1000000030080/650b488ef1039d36ff29b1b1/hls/235.m3u8",
-        "manifest_url": "https://asiancrush-asiancrush.cdn-ak.matchpoint.tv/cinedigm/1000000030080/650b488ef1039d36ff29b1b1/hls/master.m3u8",
+        "url": "",
+        "manifest_url": "",
         "tbr": 361.96,
         "ext": "mp4",
         "fps": 23.976,

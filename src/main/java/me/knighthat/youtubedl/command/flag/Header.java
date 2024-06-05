@@ -26,7 +26,7 @@ public class Header implements Flag {
     public static @NotNull Builder key( @NotNull String key ) { return new Builder( key ); }
 
     /**
-     * Let you combine multiple key/value pairs together
+     * Let you combine multiple key/value pairs
      * into 1 single instance of {@link me.knighthat.youtubedl.command.flag.Header}.
      * <p>
      * Start with {@link me.knighthat.youtubedl.command.flag.Header.Key}, then it
